@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="hi"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>₹9 दक्षिणा अर्पित करें</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;
+  font-family:'Tiro Devanagari Hindi',Poppins,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:radial-gradient(1200px 600px at 50% -10%,#3b2a63 0%,#1a1338 40%,#0d0a1f 100%);
+  color:#f3f0ff;
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 20px 40px;
+  text-align:center;
+}
+h1{font-size:21px;font-weight:700;background:linear-gradient(90deg,#ffd98a,#ff9d6c);-webkit-background-clip:text;background-clip:text;color:transparent;margin:6px 0 10px}
+p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-height:1.6}
+.qr-wrap{
+  background:#fff;border-radius:12px;padding:14px 14px 16px;
+  margin-bottom:18px;
+}
+.qr-wrap img{width:100%;border-radius:8px;display:block}
+.note{margin:0 auto 10px;font-size:12.5px;color:#4a4368;max-width:300px;line-height:1.6;text-align:center}
+
+.form-card{
+  margin-top:28px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,217,138,0.2);
+  border-radius:16px;
+  padding:20px;
+  max-width:320px;width:100%;
+  text-align:left;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+.form-card h2{font-size:15px;color:#ffd98a;margin:0 0 14px;text-align:center}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12.5px;color:#cdc4ec;margin-bottom:5px}
+.field input{
+  width:100%;padding:11px 13px;border-radius:10px;
+  border:1px solid rgba(255,217,138,0.3);
+  background:rgba(255,255,255,0.08);
+  color:#fff;font-size:14.5px;font-family:inherit;outline:none;
+}
+.field input::placeholder{color:#8a80ab}
+.field .hint{font-size:11px;color:#8a80ab;margin-top:4px}
+.submit-btn{
+  margin-top:6px;
+  display:inline-block;width:100%;
+  background:linear-gradient(135deg,#ffd98a,#d4af37);
+  color:#241a3f;font-weight:700;font-size:15px;
+  padding:14px 0;border-radius:12px;
+  border:none;cursor:pointer;
+}
+.submit-btn:disabled{opacity:.6;cursor:default}
+.err{color:#ff9d9d;font-size:12.5px;margin-top:8px;display:none}
+
+.status-card{
+  margin-top:22px;
+  max-width:320px;width:100%;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,217,138,0.2);
+  border-radius:16px;
+  padding:20px;
+  display:none;
+}
+.status-card p{font-size:13.5px;color:#d8cdf0;line-height:1.6;margin:0 0 14px}
+.status-card .badge{
+  display:inline-block;font-size:12px;font-weight:600;
+  padding:4px 12px;border-radius:20px;margin-bottom:10px;
+}
+.badge.pending{background:rgba(255,193,90,0.18);color:#ffd98a;border:1px solid rgba(255,217,138,.4)}
+.badge.approved{background:rgba(120,220,150,0.18);color:#8ff0ac;border:1px solid rgba(143,240,172,.4)}
+.badge.notfound{background:rgba(255,120,120,0.18);color:#ff9d9d;border:1px solid rgba(255,157,157,.4)}
+.check-btn{
+  width:100%;padding:12px 0;border-radius:12px;border:1px solid rgba(255,217,138,0.35);
+  background:rgba(255,217,138,0.12);color:#ffd98a;font-weight:700;font-size:14px;
+  font-family:inherit;cursor:pointer;
+}
+.check-btn:disabled{opacity:.6}
+</style></head><body>
+
+<h1>चैट जारी रखने के लिए ₹9 दक्षिणा अर्पित करें (30 दिन)</h1>
+<p class="sub">आपकी 3 प्रश्नों की निःशुल्क सीमा पूरी हो गई है। नीचे अपना विवरण भरें, फिर ₹9 का QR कोड स्कैन करके दक्षिणा अर्पित करें, और बटन दबाकर पूर्ण करें।</p>
+
+<div class="form-card" id="formCard">
+  <form id="subForm">
+    <div class="field">
+      <label for="fName">नाम</label>
+      <input id="fName" type="text" placeholder="अपना नाम लिखें" required>
+    </div>
+    <div class="field">
+      <label for="fPhone">मोबाइल नंबर</label>
+      <input id="fPhone" type="tel" placeholder="10 अंकों का नंबर" pattern="[0-9]{10}" required>
+    </div>
+    <div class="field">
+      <label for="fEmail">ईमेल (वैकल्पिक)</label>
+      <input id="fEmail" type="email" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label for="fUtr">UPI UTR / रेफरेंस नंबर</label>
+      <input id="fUtr" type="text" placeholder="भुगतान रसीद में मौजूद नंबर" required>
+    </div>
+    <div class="qr-wrap">
+      <p class="note">किसी भी UPI ऐप से स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
+      <img src="payment-qr.jpg" alt="UPI QR Code for Dakshina">
+    </div>
+    <button type="submit" class="submit-btn" id="submitBtn">दक्षिणा अर्पित कर दी है, पूर्ण करें</button>
+    <div class="err" id="formErr"></div>
+  </form>
+</div>
+
+<div class="status-card" id="statusCard">
+  <div id="statusBadge" class="badge pending">स्वीकृति लंबित</div>
+  <p id="statusText">आपकी जानकारी प्राप्त हो गई है। भुगतान सत्यापन के बाद आपको यहीं स्वीकृति दिखेगी — कृपया कुछ समय बाद स्थिति जांचें।</p>
+  <button class="check-btn" id="checkBtn">स्थिति जांचें</button>
+</div>
+
+<script>
+// n8n webhook URLs (same n8n account as the chat webhook in index.html)
+var SUBSCRIBE_WEBHOOK = "https://yogidineshjindal.app.n8n.cloud/webhook/gita-subscribe";
+var SUBSCRIPTION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+var STATUS_WEBHOOK = "https://yogidineshjindal.app.n8n.cloud/webhook/gita-subscribe-status";
+
+var form = document.getElementById("subForm");
+var formCard = document.getElementById("formCard");
+var statusCard = document.getElementById("statusCard");
+var statusBadge = document.getElementById("statusBadge");
+var statusText = document.getElementById("statusText");
+var checkBtn = document.getElementById("checkBtn");
+var submitBtn = document.getElementById("submitBtn");
+var formErr = document.getElementById("formErr");
+
+// If we already have a phone number saved from a previous visit, skip straight to status.
+var savedPhone = localStorage.getItem("krishna_phone");
+if (savedPhone) {
+  formCard.style.display = "none";
+  statusCard.style.display = "block";
+  checkStatus(savedPhone);
+}
+
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+  formErr.style.display = "none";
+  var name = document.getElementById("fName").value.trim();
+  var phone = document.getElementById("fPhone").value.trim();
+  var email = document.getElementById("fEmail").value.trim();
+  var utr = document.getElementById("fUtr").value.trim();
+  if (!name || !phone || !utr) return;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "भेजा जा रहा है...";
+  try {
+    var res = await fetch(SUBSCRIBE_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: name, phone: phone, email: email, utr: utr, submittedAt: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error("server error");
+    localStorage.setItem("krishna_phone", phone);
+    formCard.style.display = "none";
+    statusCard.style.display = "block";
+  } catch (err) {
+    formErr.textContent = "भेजने में समस्या हुई, कृपया दोबारा प्रयास करें।";
+    formErr.style.display = "block";
+  }
+  submitBtn.disabled = false;
+  submitBtn.textContent = "जानकारी भेजें";
+});
+
+checkBtn.addEventListener("click", function () {
+  var phone = localStorage.getItem("krishna_phone");
+  if (phone) checkStatus(phone);
+});
+
+async function checkStatus(phone) {
+  checkBtn.disabled = true;
+  checkBtn.textContent = "जांच हो रही है...";
+  try {
+    var res = await fetch(STATUS_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: phone })
+    });
+    var data = await res.json();
+    var status = data.status;
+    var until = 0;
+    if (status === "approved") {
+      // Expiry comes from n8n (data.expiresAt, ISO date). Fallback: 30 days from now,
+      // without extending a subscription that is still running.
+      until = data.expiresAt ? Date.parse(data.expiresAt) : NaN;
+      if (isNaN(until)) {
+        var existing = parseInt(localStorage.getItem("krishna_unlocked_until") || "0", 10) || 0;
+        until = existing > Date.now() ? existing : Date.now() + SUBSCRIPTION_MS;
+      }
+      if (until <= Date.now()) status = "expired";
+    }
+    if (status === "approved") {
+      statusBadge.className = "badge approved";
+      statusBadge.textContent = "स्वीकृत";
+      statusText.textContent = "आपकी दक्षिणा स्वीकृत हो गई है। चैट खोली जा रही है...";
+      localStorage.setItem("krishna_unlocked_until", String(until));
+      localStorage.removeItem("krishna_unlocked");
+      setTimeout(function () {
+        window.location.href = "index.html";
+      }, 900);
+      return;
+    } else if (status === "expired") {
+      localStorage.removeItem("krishna_unlocked_until");
+      localStorage.removeItem("krishna_unlocked");
+      localStorage.removeItem("krishna_phone");
+      statusBadge.className = "badge notfound";
+      statusBadge.textContent = "अवधि समाप्त";
+      statusText.textContent = "आपकी 30 दिन की सदस्यता समाप्त हो गई है। कृपया ₹9 दोबारा अर्पित करें।";
+      setTimeout(function () {
+        statusCard.style.display = "none";
+        formCard.style.display = "block";
+      }, 1800);
+    } else if (status === "not_found") {
+      statusBadge.className = "badge notfound";
+      statusBadge.textContent = "जानकारी नहीं मिली";
+      statusText.textContent = "आपकी जानकारी नहीं मिली। कृपया फॉर्म दोबारा भरें।";
+      localStorage.removeItem("krishna_phone");
+      setTimeout(function () {
+        statusCard.style.display = "none";
+        formCard.style.display = "block";
+      }, 1500);
+    } else {
+      statusBadge.className = "badge pending";
+      statusBadge.textContent = "स्वीकृति लंबित";
+      statusText.textContent = "अभी तक भुगतान की पुष्टि नहीं हुई है। कृपया कुछ समय बाद फिर से जांचें।";
+    }
+  } catch (err) {
+    statusText.textContent = "जांच करने में समस्या हुई, कृपया दोबारा प्रयास करें।";
+  }
+  checkBtn.disabled = false;
+  checkBtn.textContent = "स्थिति जांचें";
+}
+</script>
+</body></html>

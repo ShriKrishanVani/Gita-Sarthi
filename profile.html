@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="hi"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>प्रोफ़ाइल | Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:'Tiro Devanagari Hindi',Poppins,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:#f3f0ff;
+  background:linear-gradient(180deg, rgba(8,6,16,0.55) 0%, rgba(6,4,12,0.9) 60%, rgba(5,3,10,0.98) 100%),#0d0912;
+  min-height:100dvh;
+  padding:0 0 40px;
+}
+.topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 16px;
+  position:sticky;top:0;z-index:5;
+  background:rgba(10,7,20,0.75);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,217,138,0.15);
+}
+.back-btn{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(255,217,138,0.3);
+  background:rgba(255,217,138,0.08);color:#ffd98a;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:18px;flex-shrink:0;
+}
+.topbar h1{font-size:16px;margin:0;font-weight:600;color:#ffd98a}
+.profile-hero{text-align:center;padding:32px 20px 20px}
+.photo-frame{
+  width:150px;height:150px;border-radius:50%;
+  margin:0 auto 16px;
+  border:3px solid rgba(255,217,138,0.5);
+  box-shadow:0 0 30px rgba(255,196,84,0.35);
+  overflow:hidden;
+  position:relative;
+  background:#150f28;
+}
+/* fills the circle completely: no side gaps */
+.photo-frame img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:50% 30%;
+  display:block;
+}
+.profile-name{
+  font-size:23px;font-weight:700;color:#fff;
+  text-shadow:0 0 18px rgba(255,196,84,0.4);
+  margin-bottom:4px;
+}
+.profile-title{font-size:13.5px;color:#ffd98a;letter-spacing:.3px}
+.section{max-width:520px;margin:0 auto;padding:18px 20px}
+.section h2{
+  font-size:15px;color:#ffd98a;margin:0 0 10px;
+  display:flex;align-items:center;gap:8px;
+}
+.section h2::before{content:"";width:4px;height:16px;background:#ffd98a;border-radius:2px;display:inline-block}
+.section p{font-size:14.5px;line-height:1.75;color:#e5dfff;margin:0 0 10px}
+.placeholder-note{
+  font-size:12px;color:#9a90bb;font-style:italic;
+  border:1px dashed rgba(255,217,138,0.3);border-radius:10px;
+  padding:10px 12px;margin-top:6px;
+}
+.divider-line{
+  width:60px;height:1.5px;margin:26px auto;
+  background:linear-gradient(90deg,transparent,#ffd98a,transparent);
+}
+.social-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.social-chip{
+  font-size:12.5px;padding:8px 14px;border-radius:20px;
+  background:rgba(255,217,138,0.1);border:1px solid rgba(255,217,138,0.3);
+  color:#ffd98a;text-decoration:none;
+}
+.bio-text{
+  font-size:14.5px;line-height:1.8;color:#e5dfff;margin:0 0 12px;
+}
+.ach-group{margin-bottom:18px}
+.ach-group:last-child{margin-bottom:0}
+.ach-group h3{
+  font-size:13px;color:#ffe9c2;margin:0 0 8px;font-weight:600;
+}
+.ach-list{list-style:none;margin:0;padding:0}
+.ach-list li{
+  font-size:13.5px;line-height:1.65;color:#e5dfff;
+  padding:7px 0 7px 24px;position:relative;
+  border-bottom:1px solid rgba(255,217,138,0.08);
+}
+.ach-list li:last-child{border-bottom:none}
+.ach-list li::before{
+  content:"🪔";position:absolute;left:0;top:6px;font-size:12px;
+}
+</style></head><body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn" title="वापस जाएँ / Back">&#8592;</a>
+  <h1>प्रोफ़ाइल | Profile</h1>
+</div>
+
+<div class="profile-hero">
+  <div class="photo-frame" id="photoFrame"><img src="profile-photo.jpg" alt="Yogi Dinesh Jindal"></div>
+  <div class="profile-name">योगी दिनेश जिंदल</div>
+  <div class="profile-title">Yogi Dinesh Jindal</div>
+</div>
+
+<div class="section">
+  <h2>परिचय / About</h2>
+  <p class="bio-text">
+    योगी दिनेश जिंदल जी आर्ट ऑफ लिविंग के वरिष्ठ शिक्षक हैं, जिन्होंने अपना जीवन समाज के आध्यात्मिक एवं मानसिक उत्थान के लिए समर्पित कर दिया है। वर्षों की साधना और सेवा से उन्होंने ध्यान और योग की गहराई में प्रवेश किया, और आज वे हैप्पीनेस प्रोग्राम, सहज समाधि ध्यान योग, VTP और श्री श्री योग जैसे कार्यक्रमों के माध्यम से हजारों लोगों को भीतर की शांति की ओर मार्गदर्शन दे चुके हैं।
+  </p>
+  <p class="bio-text">
+    उनका मानना है कि सच्ची सफलता बाहरी उपलब्धियों से नहीं, बल्कि मन की स्थिरता और आत्मा की शांति से मिलती है। तीन बार श्री अमरनाथ यात्रा और एक बार कैलाश मानसरोवर की पैदल यात्रा उनकी इसी आंतरिक साधना और श्रद्धा की परिचायक है।
+  </p>
+  <p class="bio-text">
+    एक जीवन प्रशिक्षक और मार्गदर्शक के रूप में, योगी जी क्रोध प्रबंधन, भय से मुक्ति, मानवीय संबंधों और जीवन में आने वाली चुनौतियों का सामना करने जैसे विषयों पर लोगों का मार्गदर्शन करते हैं। बहुत से लोग केवल आधे घंटे की बातचीत में ही अपनी उलझनों का समाधान पा लेते हैं और भीतर की शांति की ओर पहला कदम रखते हैं।
+  </p>
+</div>
+
+<div class="divider-line"></div>
+
+<div class="section">
+  <h2>उपलब्धियाँ / Achievements</h2>
+
+  <div class="ach-group">
+    <h3>🕉️ आध्यात्मिक सेवा</h3>
+    <ul class="ach-list">
+      <li>आर्ट ऑफ लिविंग फाउंडेशन के वरिष्ठ शिक्षक — हैप्पीनेस प्रोग्राम, सहज समाधि ध्यान योग, VTP एवं श्री श्री योग सिखाते हैं</li>
+      <li>क्रोध प्रबंधन, भय से मुक्ति एवं मानवीय संबंधों पर जीवन-मार्गदर्शन देने वाले प्रेरक वक्ता एवं गुरु</li>
+      <li>समाज के आध्यात्मिक एवं मानसिक उत्थान हेतु निरंतर कार्यरत</li>
+    </ul>
+  </div>
+
+  <div class="ach-group">
+    <h3>🚩 तीर्थ यात्राएँ</h3>
+    <ul class="ach-list">
+      <li>तीन बार पैदल श्री अमरनाथ यात्रा पूर्ण की</li>
+      <li>एक बार कैलाश मानसरोवर यात्रा पूर्ण की</li>
+    </ul>
+  </div>
+
+  <div class="ach-group">
+    <h3>🪷 आत्म-अनुशासन एवं संकल्प शक्ति</h3>
+    <ul class="ach-list">
+      <li>अब तक 8 हाफ मैराथन (21 किलोमीटर) पूर्ण की, नियमित साधना एवं मनोबल का प्रतीक</li>
+      <li>15,000 फीट की ऊँचाई से स्काईडाइविंग — निर्भयता की जीवंत मिसाल</li>
+      <li>2018 में, 53 वर्ष की आयु में माउंट एवरेस्ट बेस कैंप की चढ़ाई पूर्ण की</li>
+      <li>2024 में हरियाणा मास्टर्स एथलेटिक गेम्स की 60+ वर्ग वॉक रेस में कांस्य पदक</li>
+    </ul>
+  </div>
+
+  <div class="ach-group">
+    <h3>🙏 समाज एवं धर्म सेवा</h3>
+    <ul class="ach-list">
+      <li>जिला अध्यक्ष, विश्व हिंदू परिषद (VHP), अंबाला</li>
+      <li>अंबाला को एक विकसित एवं आध्यात्मिक रूप से जागृत शहर बनाने के स्वप्न पर कार्यरत</li>
+    </ul>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<div class="section">
+  <h2>संपर्क / Connect</h2>
+  <div class="social-row">
+    <a href="https://youtube.com/yogidineshjindal" target="_blank" rel="noopener" class="social-chip">YouTube</a>
+    <a href="https://www.facebook.com/share/1C5UAKo8ny/" target="_blank" rel="noopener" class="social-chip">Facebook</a>
+    <a href="https://www.instagram.com/yogidineshjindal" target="_blank" rel="noopener" class="social-chip">Instagram</a>
+  </div>
+</div>
+
+</body></html>
