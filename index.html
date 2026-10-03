@@ -689,8 +689,71 @@ function addVerse(bubble,v){
   if(v.meaning){var m=document.createElement("div");m.className="v-mean";m.textContent=v.meaning;c.appendChild(m);}
   bubble.appendChild(c);
 }
-function play(b64){var a=new Audio("data:audio/wav;base64,"+b64);a.play();}
-function addPlay(bubble,b64){var pb=document.createElement("button");pb.className="playbtn";pb.textContent=t("listenBtn");pb.onclick=function(){play(b64);};bubble.appendChild(document.createElement("br"));bubble.appendChild(pb);}
+var ttsEl=new Audio();
+try{ if(window.speechSynthesis) window.speechSynthesis.getVoices(); }catch(e){}
+var SILENT_WAV="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA=";
+function unlockAudio(){
+  // Called on mic press (a real user gesture) so the browser lets us auto-play the reply later.
+  try{ ttsEl.src=SILENT_WAV; var p=ttsEl.play(); if(p&&p.catch)p.catch(function(){}); }catch(e){}
+  try{ if(window.speechSynthesis){ var u=new SpeechSynthesisUtterance(" "); u.volume=0; window.speechSynthesis.speak(u); } }catch(e){}
+}
+function stopSpeaking(){
+  try{ ttsEl.onended=null; ttsEl.pause(); }catch(e){}
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+}
+function speakText(text){
+  if(!window.speechSynthesis||!text)return;
+  try{
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(String(text).replace(/\s+/g," "));
+    var lang=(currentLang==="en")?"en-IN":"hi-IN";
+    u.lang=lang; u.rate=0.95;
+    var vs=window.speechSynthesis.getVoices()||[];
+    var pref=lang.split("-")[0];
+    var v=vs.filter(function(x){return x.lang===lang;})[0]||vs.filter(function(x){return (x.lang||"").indexOf(pref)===0;})[0];
+    if(v)u.voice=v;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function speakVerse(v){
+  // Reads the shloka (Sanskrit) and then its meaning aloud. Queued after the
+  // reply, so it does NOT cancel anything that is already speaking.
+  if(!v||!window.speechSynthesis)return;
+  try{
+    var vs=window.speechSynthesis.getVoices()||[];
+    var hi=vs.filter(function(x){return x.lang==="hi-IN";})[0]||vs.filter(function(x){return (x.lang||"").indexOf("hi")===0;})[0];
+    function say(txt,lang,rate){
+      txt=String(txt||"").replace(/[\u0964\u0965]+/g,", ").replace(/\s+/g," ").trim();
+      if(!txt)return;
+      var u=new SpeechSynthesisUtterance(txt);
+      u.lang=lang; u.rate=rate;
+      if(lang==="hi-IN"&&hi)u.voice=hi;
+      window.speechSynthesis.speak(u);
+    }
+    say(v.sa,"hi-IN",0.8);
+    if(v.meaning)say(v.meaning,(currentLang==="en")?"en-IN":"hi-IN",0.95);
+  }catch(e){}
+}
+function play(b64,fallbackText,verse){
+  function fallback(){ if(fallbackText)speakText(fallbackText); if(verse)speakVerse(verse); }
+  try{
+    stopSpeaking();
+    ttsEl.onended=verse?function(){ ttsEl.onended=null; speakVerse(verse); }:null;
+    ttsEl.src="data:audio/wav;base64,"+b64;
+    var p=ttsEl.play();
+    if(p&&p.catch)p.catch(function(){ ttsEl.onended=null; fallback(); });
+  }catch(e){ ttsEl.onended=null; fallback(); }
+}
+function speakReply(text,b64,verse){
+  if(b64)play(b64,text,verse);
+  else { speakText(text); if(verse)speakVerse(verse); }
+}
+function addSpeakBtn(bubble,text,b64,verse){
+  var pb=document.createElement("button");pb.className="playbtn";pb.textContent=t("listenBtn");
+  pb.onclick=function(){ speakReply(text,b64,verse); };
+  bubble.appendChild(document.createElement("br"));bubble.appendChild(pb);
+}
+function addPlay(bubble,b64,text,verse){var pb=document.createElement("button");pb.className="playbtn";pb.textContent=t("listenBtn");pb.onclick=function(){play(b64,text,verse);};bubble.appendChild(document.createElement("br"));bubble.appendChild(pb);}
 function addPlayLocal(bubble,blob){
   // Lets the user hear the exact audio that was captured & sent, so a bad
   // capture (mic issue) can be told apart from a bad transcript (backend/STT issue).
@@ -1053,7 +1116,7 @@ function stopRecording(e){
   }
 }
 
-mic.addEventListener("pointerdown",function(e){startRecording(e);});
+mic.addEventListener("pointerdown",function(e){stopSpeaking();unlockAudio();startRecording(e);});
 mic.addEventListener("pointerup",function(e){stopRecording(e);});
 mic.addEventListener("pointercancel",function(e){stopRecording(e);});
 mic.addEventListener("lostpointercapture",function(){
@@ -1171,7 +1234,10 @@ async function sendVoice(blob,filename){
     L.textContent=reply;
     var vv=normVerse(data);addVerse(L,vv);
     saveHistory("bot",reply,L,vv);
-    if(data.audioBase64){addPlay(L,data.audioBase64);play(data.audioBase64);}
+    if(data.reply){
+      if(data.audioBase64) addPlay(L,data.audioBase64,reply,vv); else addSpeakBtn(L,reply,null,vv);
+      speakReply(reply,data.audioBase64,vv);
+    }
   }catch(e){
     userBubble.textContent=t("voiceFallback");
     addPlayLocal(userBubble,blob);
