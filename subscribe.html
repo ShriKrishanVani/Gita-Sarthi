@@ -80,6 +80,12 @@ p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-heigh
   font-family:inherit;cursor:pointer;
 }
 .check-btn:disabled{opacity:.6}
+.pay-btn{display:none;width:100%;text-decoration:none;text-align:center;margin:0 0 12px;
+  background:linear-gradient(135deg,#27a36a,#1b7f52);color:#fff;font-weight:700;font-size:15px;
+  padding:14px 10px;border-radius:12px}
+.copy-btn{margin-left:6px;padding:3px 10px;border-radius:8px;border:1px solid #b9b2d6;background:#f3f0ff;color:#3b2a63;font-size:12px;cursor:pointer;font-family:inherit}
+.upi-id{margin-top:10px}
+.qr-wrap .note{max-width:none}
 </style></head><body>
 
 <h1>चैट जारी रखने के लिए ₹9 दक्षिणा अर्पित करें (30 दिन)</h1>
@@ -104,8 +110,13 @@ p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-heigh
       <input id="fUtr" type="text" placeholder="भुगतान रसीद में मौजूद नंबर" required>
     </div>
     <div class="qr-wrap">
-      <p class="note">किसी भी UPI ऐप से स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
+      <a id="upiBtn" class="pay-btn" href="#">📲 UPI ऐप से सीधे ₹9 अर्पित करें</a>
+      <p class="note" id="inAppHint" style="display:none;color:#9a5b00">यदि ऐप न खुले तो पेज को Chrome में खोलें।</p>
+      <p class="note" id="orScan">या किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
       <img src="payment-qr.jpg" alt="UPI QR Code for Dakshina">
+      <p class="note upi-id">UPI ID: <b>9896550913@idfcfirst</b>
+        <button type="button" class="copy-btn" id="copyUpi">कॉपी</button></p>
+      <p class="note" style="margin-top:6px">भुगतान नोट में <b id="payCodeShow"></b> लिखा रहने दें।</p>
     </div>
     <button type="submit" class="submit-btn" id="submitBtn">दक्षिणा अर्पित कर दी है, पूर्ण करें</button>
     <div class="err" id="formErr"></div>
@@ -123,6 +134,43 @@ p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-heigh
 var SUBSCRIBE_WEBHOOK = "https://shrikrishanvani.app.n8n.cloud/webhook/gita-subscribe";
 var SUBSCRIPTION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 var STATUS_WEBHOOK = "https://shrikrishanvani.app.n8n.cloud/webhook/gita-subscribe-status";
+
+// ---- UPI direct-pay link (works with GPay, PhonePe, Paytm, BHIM) ----
+var UPI_ID = "9896550913@idfcfirst";
+var PAYEE = "Dinesh Kant Jindal";
+var AMOUNT = "9.00";
+
+// Short code kept per device; it goes into the payment note so n8n can match the bank email.
+var payCode = localStorage.getItem("krishna_paycode");
+if (!payCode) {
+  payCode = "KV" + Math.random().toString(36).slice(2, 6).toUpperCase();
+  localStorage.setItem("krishna_paycode", payCode);
+}
+document.getElementById("payCodeShow").textContent = payCode;
+
+var upiLink = "upi://pay?pa=" + UPI_ID +
+  "&pn=" + encodeURIComponent(PAYEE) +
+  "&am=" + AMOUNT + "&cu=INR" +
+  "&tn=" + encodeURIComponent("KrishnaVani " + payCode);
+
+var upiBtn = document.getElementById("upiBtn");
+upiBtn.href = upiLink;
+if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  upiBtn.style.display = "block";            // phone: show the one-tap button (QR stays below)
+  if (/FBAN|FBAV|Instagram|Line\//i.test(navigator.userAgent)) {
+    document.getElementById("inAppHint").style.display = "block";
+  }
+} else {
+  document.getElementById("orScan").textContent = "किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।";
+}
+
+document.getElementById("copyUpi").addEventListener("click", function () {
+  var btn = this;
+  if (navigator.clipboard) navigator.clipboard.writeText(UPI_ID);
+  btn.textContent = "कॉपी हो गया";
+  setTimeout(function () { btn.textContent = "कॉपी"; }, 1500);
+});
+// ---------------------------------------------------------------------
 
 var form = document.getElementById("subForm");
 var formCard = document.getElementById("formCard");
@@ -156,7 +204,7 @@ form.addEventListener("submit", async function (e) {
     var res = await fetch(SUBSCRIBE_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name, phone: phone, email: email, utr: utr, submittedAt: new Date().toISOString() })
+      body: JSON.stringify({ name: name, phone: phone, email: email, utr: utr, paycode: payCode, submittedAt: new Date().toISOString() })
     });
     if (!res.ok) throw new Error("server error");
     localStorage.setItem("krishna_phone", phone);
@@ -167,7 +215,7 @@ form.addEventListener("submit", async function (e) {
     formErr.style.display = "block";
   }
   submitBtn.disabled = false;
-  submitBtn.textContent = "जानकारी भेजें";
+  submitBtn.textContent = "दक्षिणा अर्पित कर दी है, पूर्ण करें";
 });
 
 checkBtn.addEventListener("click", function () {
