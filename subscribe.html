@@ -110,13 +110,14 @@ p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-heigh
       <input id="fUtr" type="text" placeholder="भुगतान रसीद में मौजूद नंबर" required>
     </div>
     <div class="qr-wrap">
-      <a id="upiBtn" class="pay-btn" href="#">📲 UPI ऐप से सीधे ₹9 अर्पित करें</a>
+      <a id="upiBtn" class="pay-btn" href="#">📲 UPI ऐप खोलें और ₹9 अर्पित करें</a>
+      <p class="note" id="amtHint" style="display:none;font-weight:700;color:#1b7f52">ऐप खुलने पर रकम में ₹9 लिखें।</p>
       <p class="note" id="inAppHint" style="display:none;color:#9a5b00">यदि ऐप न खुले तो पेज को Chrome में खोलें।</p>
       <p class="note" id="orScan">या किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
       <img src="payment-qr.jpg" alt="UPI QR Code for Dakshina">
+      <p class="note">फ़ोन पर हैं तो QR का स्क्रीनशॉट लें, फिर UPI ऐप में स्कैनर खोलकर गैलरी से चुनें।</p>
       <p class="note upi-id">UPI ID: <b>9896550913@idfcfirst</b>
         <button type="button" class="copy-btn" id="copyUpi">कॉपी</button></p>
-      <p class="note" style="margin-top:6px">भुगतान नोट में <b id="payCodeShow"></b> लिखा रहने दें।</p>
     </div>
     <button type="submit" class="submit-btn" id="submitBtn">दक्षिणा अर्पित कर दी है, पूर्ण करें</button>
     <div class="err" id="formErr"></div>
@@ -146,17 +147,18 @@ if (!payCode) {
   payCode = "KV" + Math.random().toString(36).slice(2, 6).toUpperCase();
   localStorage.setItem("krishna_paycode", payCode);
 }
-document.getElementById("payCodeShow").textContent = payCode;
 
+// Same fields as the QR that already works. A locked amount (am) / note (tn) on a
+// personal UPI ID made Google Pay show a false "limit exceeded" error, so the payer types ₹9.
 var upiLink = "upi://pay?pa=" + UPI_ID +
   "&pn=" + encodeURIComponent(PAYEE) +
-  "&am=" + AMOUNT + "&cu=INR" +
-  "&tn=" + encodeURIComponent("KrishnaVani " + payCode);
+  "&cu=INR";
 
 var upiBtn = document.getElementById("upiBtn");
 upiBtn.href = upiLink;
 if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
   upiBtn.style.display = "block";            // phone: show the one-tap button (QR stays below)
+  document.getElementById("amtHint").style.display = "block";
   if (/FBAN|FBAV|Instagram|Line\//i.test(navigator.userAgent)) {
     document.getElementById("inAppHint").style.display = "block";
   }
