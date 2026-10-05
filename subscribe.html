@@ -110,14 +110,10 @@ p.sub{font-size:14px;color:#cdc4ec;max-width:320px;margin:0 auto 26px;line-heigh
       <input id="fUtr" type="text" placeholder="भुगतान रसीद में मौजूद नंबर" required>
     </div>
     <div class="qr-wrap">
-      <a id="upiBtn" class="pay-btn" href="#">📲 UPI ऐप खोलें और ₹9 अर्पित करें</a>
-      <p class="note" id="amtHint" style="display:none;font-weight:700;color:#1b7f52">ऐप खुलने पर रकम में ₹9 लिखें।</p>
-      <p class="note" id="inAppHint" style="display:none;color:#9a5b00">यदि ऐप न खुले तो पेज को Chrome में खोलें।</p>
-      <p class="note" id="orScan">या किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
+      <p class="note">किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।</p>
       <img src="payment-qr.jpg" alt="UPI QR Code for Dakshina">
-      <p class="note">फ़ोन पर हैं तो QR का स्क्रीनशॉट लें, फिर UPI ऐप में स्कैनर खोलकर गैलरी से चुनें।</p>
-      <p class="note upi-id">UPI ID: <b>9896550913@idfcfirst</b>
-        <button type="button" class="copy-btn" id="copyUpi">कॉपी</button></p>
+      <a class="pay-btn" id="saveQr" href="payment-qr.jpg" download="krishna-vani-qr.jpg" style="display:block;margin-top:12px;background:linear-gradient(135deg,#3b2a63,#2a1d4d)">⬇️ QR गैलरी में सेव करें</a>
+      <p class="note">सेव करने के बाद UPI ऐप (GPay, PhonePe, Paytm) में स्कैनर खोलें और गैलरी से यह QR चुनें। सेव न हो तो QR पर देर तक दबाकर "छवि सहेजें" चुनें।</p>
     </div>
     <button type="submit" class="submit-btn" id="submitBtn">दक्षिणा अर्पित कर दी है, पूर्ण करें</button>
     <div class="err" id="formErr"></div>
@@ -136,43 +132,11 @@ var SUBSCRIBE_WEBHOOK = "https://shrikrishanvani.app.n8n.cloud/webhook/gita-subs
 var SUBSCRIPTION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 var STATUS_WEBHOOK = "https://shrikrishanvani.app.n8n.cloud/webhook/gita-subscribe-status";
 
-// ---- UPI direct-pay link (works with GPay, PhonePe, Paytm, BHIM) ----
-var UPI_ID = "9896550913@idfcfirst";
-var PAYEE = "Dinesh Kant Jindal";
-var AMOUNT = "9.00";
-
-// Short code kept per device; it goes into the payment note so n8n can match the bank email.
 var payCode = localStorage.getItem("krishna_paycode");
 if (!payCode) {
   payCode = "KV" + Math.random().toString(36).slice(2, 6).toUpperCase();
   localStorage.setItem("krishna_paycode", payCode);
 }
-
-// Same fields as the QR that already works. A locked amount (am) / note (tn) on a
-// personal UPI ID made Google Pay show a false "limit exceeded" error, so the payer types ₹9.
-var upiLink = "upi://pay?pa=" + UPI_ID +
-  "&pn=" + encodeURIComponent(PAYEE) +
-  "&cu=INR";
-
-var upiBtn = document.getElementById("upiBtn");
-upiBtn.href = upiLink;
-if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-  upiBtn.style.display = "block";            // phone: show the one-tap button (QR stays below)
-  document.getElementById("amtHint").style.display = "block";
-  if (/FBAN|FBAV|Instagram|Line\//i.test(navigator.userAgent)) {
-    document.getElementById("inAppHint").style.display = "block";
-  }
-} else {
-  document.getElementById("orScan").textContent = "किसी भी UPI ऐप से यह QR स्कैन करके ₹9 दक्षिणा अर्पित करें।";
-}
-
-document.getElementById("copyUpi").addEventListener("click", function () {
-  var btn = this;
-  if (navigator.clipboard) navigator.clipboard.writeText(UPI_ID);
-  btn.textContent = "कॉपी हो गया";
-  setTimeout(function () { btn.textContent = "कॉपी"; }, 1500);
-});
-// ---------------------------------------------------------------------
 
 var form = document.getElementById("subForm");
 var formCard = document.getElementById("formCard");
