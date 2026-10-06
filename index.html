@@ -428,7 +428,7 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
       </div>
     </div>
     <h3 id="paywallTitle">निःशुल्क सीमा पूरी हुई</h3>
-    <p id="paywallText">आपने 3 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।</p>
+    <p id="paywallText">आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।</p>
     <a class="modal-btn" href="subscribe.html" target="_blank" rel="noopener" id="paywallBtn">कृपया, सिर्फ ₹9 दक्षिणा दें।</a>
   </div>
 </div>
@@ -505,7 +505,7 @@ var TXT = {
     micError:"माइक एक्सेस नहीं मिला: ",
     listenBtn:String.fromCodePoint(128266)+" सुनें",
     paywallTitle:"निःशुल्क सीमा पूरी हुई",
-    paywallText:"आपने 3 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
+    paywallText:"आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
     paywallBtn:"कृपया, सिर्फ ₹9 दक्षिणा दें।",
     menuProfile:"प्रोफ़ाइल",
     menuLang:"भाषा / Language",
@@ -550,7 +550,7 @@ var TXT = {
     micError:"Mic access denied: ",
     listenBtn:String.fromCodePoint(128266)+" Listen",
     paywallTitle:"Free limit reached",
-    paywallText:"You've asked 3 questions. Continue the conversation for 30 days for just ₹9.",
+    paywallText:"You've asked 5 questions. Continue the conversation for 30 days for just ₹9.",
     paywallBtn:"Pay ₹9 to continue",
     menuProfile:"Profile",
     menuLang:"भाषा / Language",
@@ -766,7 +766,7 @@ function addPlayLocal(bubble,blob){
   bubble.appendChild(pb);
 }
 
-var FREE_LIMIT = 3;
+var FREE_LIMIT = 5;
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
 function saveCount(){ lsSet("krishna_msgcount", String(msgCount)); }
 function bumpCount(){
