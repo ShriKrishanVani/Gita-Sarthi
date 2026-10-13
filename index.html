@@ -356,6 +356,14 @@ body.chatting #hero .topics-label,
 body.chatting #hero .topics-grid,
 body.chatting #hero .hero-quote{display:none}
 body.chatting #chat{display:flex;flex:1;min-height:0}
+.aarti-home-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;max-width:420px;margin:12px auto 0;
+  padding:13px 16px;border-radius:14px;text-decoration:none;font-size:14px;font-weight:600;
+  color:var(--gold-deep);background:rgba(250,244,228,0.95);border:1px solid rgba(184,146,60,0.5);
+  box-shadow:0 6px 14px rgba(74,90,99,.12);
+}
+.aarti-home-btn:active{transform:scale(.98)}
+body.chatting #hero .aarti-home-btn{display:none}
 </style></head><body>
 
 <div id="dust"></div>
@@ -373,6 +381,7 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
     </button>
     <div class="account-dropdown" id="menuDropdown">
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
+      <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
       <button class="account-item" id="menuSupportBtn">सहायता / Support</button>
       <button class="account-item" id="menuInstallBtn">ऐप इंस्टॉल करें</button>
@@ -395,6 +404,8 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
     <div class="topic-card" data-hi="सफलता पाने का सही मार्ग क्या है, कृपया मार्गदर्शन दीजिए।" data-en="What is the right path to success?"><span class="emoji">🏆</span><span data-t-hi="सफलता" data-t-en="Success">सफलता</span></div>
     <div class="topic-card" data-hi="आध्यात्मिक विकास कैसे करूँ, कृपया मार्गदर्शन दीजिए।" data-en="How do I grow spiritually?"><span class="emoji">🪷</span><span data-t-hi="आध्यात्मिक विकास" data-t-en="Spiritual Growth">आध्यात्मिक विकास</span></div>
   </div>
+
+  <a class="aarti-home-btn" id="aartiHomeBtn" href="aarti.html">🪔 <span id="aartiHomeText">श्री कृष्ण आरती</span></a>
 
 </div>
 
@@ -508,6 +519,8 @@ var TXT = {
     paywallText:"आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
     paywallBtn:"कृपया, सिर्फ ₹9 दक्षिणा दें।",
     menuProfile:"प्रोफ़ाइल",
+    menuAarti:"🪔 आरती / Aarti",
+    aartiHome:"श्री कृष्ण आरती",
     menuLang:"भाषा / Language",
     menuSupport:"सहायता / Support",
     menuInstall:"ऐप इंस्टॉल करें",
@@ -553,6 +566,8 @@ var TXT = {
     paywallText:"You've asked 5 questions. Continue the conversation for 30 days for just ₹9.",
     paywallBtn:"Pay ₹9 to continue",
     menuProfile:"Profile",
+    menuAarti:"🪔 Aarti / आरती",
+    aartiHome:"Shri Krishna Aarti",
     menuLang:"भाषा / Language",
     menuSupport:"सहायता / Support",
     menuInstall:"Install App",
@@ -599,6 +614,8 @@ function applyStaticText(){
   document.getElementById("paywallText").textContent = t("paywallText");
   document.getElementById("paywallBtn").textContent = t("paywallBtn");
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
+  document.getElementById("menuAartiBtn").textContent = t("menuAarti");
+  document.getElementById("aartiHomeText").textContent = t("aartiHome");
   document.getElementById("menuLangBtn").textContent = t("menuLang");
   document.getElementById("menuSupportBtn").textContent = t("menuSupport");
   document.getElementById("menuInstallBtn").textContent = t("menuInstall");
@@ -1290,6 +1307,10 @@ document.getElementById("menuLangBtn").addEventListener("click",function(){
 
 document.getElementById("menuProfileBtn").addEventListener("click",function(){
   window.location.href = "profile.html";
+});
+
+document.getElementById("menuAartiBtn").addEventListener("click",function(){
+  window.location.href = "aarti.html";
 });
 
 document.getElementById("menuSupportBtn").addEventListener("click",function(){
