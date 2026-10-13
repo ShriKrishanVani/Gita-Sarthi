@@ -381,6 +381,7 @@ body.chatting #hero .aarti-home-btn{display:none}
     </button>
     <div class="account-dropdown" id="menuDropdown">
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
+      <button class="account-item" id="menuGitaBtn">📖 गीता / Gita</button>
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
       <button class="account-item" id="menuSupportBtn">सहायता / Support</button>
@@ -521,6 +522,7 @@ var TXT = {
     menuProfile:"प्रोफ़ाइल",
     menuAarti:"🪔 आरती / Aarti",
     aartiHome:"श्री कृष्ण भक्ति संग्रह",
+    menuGita:"📖 गीता / Gita",
     menuLang:"भाषा / Language",
     menuSupport:"सहायता / Support",
     menuInstall:"ऐप इंस्टॉल करें",
@@ -568,6 +570,7 @@ var TXT = {
     menuProfile:"Profile",
     menuAarti:"🪔 Aarti / आरती",
     aartiHome:"Shri Krishna Bhakti Collection",
+    menuGita:"📖 Gita / गीता",
     menuLang:"भाषा / Language",
     menuSupport:"सहायता / Support",
     menuInstall:"Install App",
@@ -616,6 +619,7 @@ function applyStaticText(){
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
   document.getElementById("menuAartiBtn").textContent = t("menuAarti");
   document.getElementById("aartiHomeText").textContent = t("aartiHome");
+  document.getElementById("menuGitaBtn").textContent = t("menuGita");
   document.getElementById("menuLangBtn").textContent = t("menuLang");
   document.getElementById("menuSupportBtn").textContent = t("menuSupport");
   document.getElementById("menuInstallBtn").textContent = t("menuInstall");
@@ -1307,6 +1311,10 @@ document.getElementById("menuLangBtn").addEventListener("click",function(){
 
 document.getElementById("menuProfileBtn").addEventListener("click",function(){
   window.location.href = "profile.html";
+});
+
+document.getElementById("menuGitaBtn").addEventListener("click",function(){
+  window.location.href = "gita.html";
 });
 
 document.getElementById("menuAartiBtn").addEventListener("click",function(){
