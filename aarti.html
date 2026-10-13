@@ -2,7 +2,7 @@
 <html lang="hi" data-theme="dark"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>श्री कृष्ण आरती | Aarti</title>
+<title>श्री कृष्ण भक्ति | आरती, भजन, मंत्र</title>
 <meta name="theme-color" content="#0D1431" id="themeColor">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
@@ -169,6 +169,25 @@ button{font-family:inherit;color:inherit}
   .flame,.glow,.enter{animation:none}
   .row,.toast{transition:none}
 }
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:2px;margin:0 -2px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;height:40px;padding:0 18px;border-radius:20px;border:1px solid var(--line);background:var(--chip);cursor:pointer;
+  font-family:'Tiro Devanagari Hindi',serif;font-size:16.5px;color:var(--text);white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.listen{display:flex;justify-content:center;margin-top:18px}
+.listen a{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:20px;border:1px solid var(--line);
+  background:var(--chip);color:var(--text);text-decoration:none;font-size:13.5px;font-weight:500}
+.listen a:active{background:var(--gold-soft)}
+.yt{position:relative;width:100%;aspect-ratio:16/9;margin-top:18px;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.japa{text-align:center;margin:0 0 18px}
+.jbtn{width:132px;height:132px;border-radius:50%;border:1.5px solid var(--gold);cursor:pointer;user-select:none;
+  background:radial-gradient(circle at 35% 30%,var(--gold-soft),transparent 75%),var(--chip);
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.jbtn:active{transform:scale(.97)}
+.jbtn b{font-size:36px;font-weight:600;color:var(--gold);line-height:1}
+.jbtn small{font-size:11.5px;color:var(--muted)}
+.jmeta{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:10px;font-size:13px;color:var(--muted)}
 </style></head><body>
 
 <div class="topbar">
@@ -206,6 +225,7 @@ button{font-family:inherit;color:inherit}
     <h1 id="heroTitle">श्री कृष्ण आरती</h1>
     <p id="heroSub">किसी भी आरती को खोलकर पूरा पढ़ें।</p>
   </header>
+  <div class="tabs" id="tabs" role="tablist"></div>
   <div id="groups"></div>
 </div>
 
@@ -233,13 +253,344 @@ button{font-family:inherit;color:inherit}
     <button class="pill" id="fontUp" aria-label="Larger text">A+</button>
     <button class="pill" id="shareBtn" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg><span id="shareTxt">Share</span></button>
   </div>
+  <div class="japa hidden" id="japa"><button class="jbtn" id="jBtn" aria-label="Count"><b id="jCount">0</b><small id="jLbl"></small></button>
+    <div class="jmeta"><span id="jMala"></span><button class="pill" id="jReset"></button></div></div>
   <div class="lyrics" id="dLyrics"></div>
+  <div id="listen"></div>
   <div class="closing" id="closing"></div>
   <div class="pager" id="pager"></div>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
 
+<script>
+/* ------------------------------------------------------------------
+   bhakti-data.js — Chalisa, Bhajan and Mantra data for aarti.html
+   HOW TO ADD ONE MORE:
+   1) Copy one block inside items, set cat: "chalisa" | "bhajan" | "mantra" | "aarti"
+   2) Add a line for it in meta (icon + group key)
+   3) Optional: yt:"VIDEO_ID" (the part after v= in a YouTube link) embeds the
+      official video. Without it, a "listen on YouTube" search button shows.
+   Only traditional / public-domain texts are included here.
+------------------------------------------------------------------- */
+var BHAKTI = {
+groups: [
+  {cat:"bhajan",  key:"b-krishna", title:{hi:"श्री कृष्ण भजन", en:"Shri Krishna Bhajans"}},
+  {cat:"mantra",  key:"m-krishna", title:{hi:"श्री कृष्ण मंत्र", en:"Shri Krishna Mantras"}},
+  {cat:"mantra",  key:"m-gita",    title:{hi:"गीता के श्लोक", en:"Gita Verses"}},
+],
+meta: {
+  "om-jai-jagdish":{icon:"🪔", group:"krishna"},
+  "banke-bihari":{icon:"🎵", group:"krishna"},
+  "bal-krishna":{icon:"👶", group:"krishna"},
+  "bhog-aarti":{icon:"🍚", group:"krishna"},
+  "jagannath-mangal":{icon:"🛕", group:"krishna"},
+  "mere-to-girdhar":{icon:"🦚", group:"b-krishna"},
+  "baso-more-nainan":{icon:"👀", group:"b-krishna"},
+  "maiya-makhan":{icon:"🧈", group:"b-krishna"},
+  "krishna-govind-hare":{icon:"🎶", group:"b-krishna"},
+  "hare-krishna-mantra":{icon:"📿", group:"m-krishna"},
+  "om-namo-bhagavate":{icon:"🕉️", group:"m-krishna"},
+  "krishna-gayatri":{icon:"☀️", group:"m-krishna"},
+  "krishnaya-vasudevaya":{icon:"🙏", group:"m-krishna"},
+  "karmanye":{icon:"📖", group:"m-gita"},
+  "yada-yada":{icon:"⚖️", group:"m-gita"},
+  "maiya-mohi-dau":{icon:"🍼", group:"b-krishna"},
+  "madhurashtakam":{icon:"🍯", group:"b-krishna"},
+  "vasudevasutam":{icon:"🙏", group:"m-krishna"},
+  "kasturi-tilakam":{icon:"🦚", group:"m-krishna"},
+  "sarva-dharman":{icon:"🤲", group:"m-gita"},
+},
+items: [
+{ id:"mere-to-girdhar", cat:"bhajan",
+  title:{hi:"मेरे तो गिरधर गोपाल", en:"Mere To Girdhar Gopal"},
+  sub:{hi:"संत मीराबाई", en:"Saint Meerabai"}, refrain:[0],
+  verses:[
+`मेरे तो गिरधर गोपाल, दूसरो न कोई ।
+जाके सिर मोर मुकुट, मेरो पति सोई ॥`,
+`तात मात भ्रात बंधु, आपनो न कोई ।
+छाँड़ि दई कुल की कानि, कहा करिहै कोई ॥`,
+`संतन ढिग बैठि बैठि, लोक लाज खोई ।
+अँसुवन जल सींचि सींचि, प्रेम बेलि बोई ॥`,
+`अब तो बेल फैल गई, आणँद फल होई ।
+दासी मीरा लाल गिरधर, तारो अब मोही ॥`
+]},
+{ id:"baso-more-nainan", cat:"bhajan",
+  title:{hi:"बसो मोरे नैनन में नंदलाल", en:"Baso More Nainan Mein Nandlal"},
+  sub:{hi:"संत मीराबाई", en:"Saint Meerabai"}, refrain:[0],
+  verses:[
+`बसो मोरे नैनन में नंदलाल ।
+मोहनी मूरति साँवरी सूरति, नैना बने बिशाल ॥`,
+`अधर सुधारस मुरली राजत, उर बैजंती माल ।
+छुद्र घंटिका कटि तट सोभित, नूपुर सबद रसाल ॥`,
+`मीरा प्रभु संतन सुखदाई, भगत बछल गोपाल ॥`
+]},
+{ id:"maiya-makhan", cat:"bhajan",
+  title:{hi:"मैया मैं नहिं माखन खायो", en:"Maiya Main Nahin Makhan Khayo"},
+  sub:{hi:"महाकवि सूरदास", en:"Poet Surdas"}, refrain:[0],
+  verses:[
+`मैया मैं नहिं माखन खायो ।
+भोर भयो गैयन के पाछे, मधुबन मोहिं पठायो ॥
+चार पहर बंसीबट भटक्यो, साँझ परे घर आयो ॥`,
+`मैं बालक बहियन को छोटो, छींको किहि बिधि पायो ।
+ग्वाल बाल सब बैर परे हैं, बरबस मुख लपटायो ॥`,
+`तू जननी मन की अति भोरी, इनके कहें पतियायो ।
+जिय तेरे कछु भेद उपजि है, जानि परायो जायो ॥`,
+`यह लै अपनी लकुटि कमरिया, बहुतहिं नाच नचायो ।
+सूरदास तब बिहँसि जसोदा, लै उर कंठ लगायो ॥`
+]},
+{ id:"krishna-govind-hare", cat:"bhajan",
+  title:{hi:"श्री कृष्ण गोविन्द हरे मुरारे", en:"Shri Krishna Govind Hare Murare"},
+  sub:{hi:"पारंपरिक भजन", en:"Traditional bhajan"}, refrain:[0],
+  verses:[
+`श्री कृष्ण गोविन्द हरे मुरारे ।
+हे नाथ नारायण वासुदेवा ॥`,
+`पितु मात स्वामी सखा हमारे ।
+हे नाथ नारायण वासुदेवा ॥`
+]},
+{ id:"hare-krishna-mantra", cat:"mantra",
+  title:{hi:"हरे कृष्ण महामंत्र", en:"Hare Krishna Maha Mantra"},
+  sub:{hi:"108 बार जप के लिए", en:"For 108-count japa"}, refrain:[0],
+  verses:[
+`हरे कृष्ण हरे कृष्ण, कृष्ण कृष्ण हरे हरे ।
+हरे राम हरे राम, राम राम हरे हरे ॥`
+]},
+{ id:"om-namo-bhagavate", cat:"mantra",
+  title:{hi:"ॐ नमो भगवते वासुदेवाय", en:"Om Namo Bhagavate Vasudevaya"},
+  sub:{hi:"द्वादशाक्षर मंत्र", en:"The twelve-syllable mantra"}, refrain:[0],
+  verses:[`ॐ नमो भगवते वासुदेवाय ॥`]
+},
+{ id:"krishna-gayatri", cat:"mantra",
+  title:{hi:"कृष्ण गायत्री मंत्र", en:"Krishna Gayatri Mantra"},
+  sub:{hi:"श्री कृष्ण का ध्यान मंत्र", en:"Meditation mantra of Shri Krishna"}, refrain:[0],
+  verses:[
+`ॐ देवकीनन्दनाय विद्महे,
+वासुदेवाय धीमहि ।
+तन्नो कृष्णः प्रचोदयात् ॥`
+]},
+{ id:"krishnaya-vasudevaya", cat:"mantra",
+  title:{hi:"कृष्णाय वासुदेवाय", en:"Krishnaya Vasudevaya"},
+  sub:{hi:"श्री कृष्ण प्रणाम मंत्र", en:"Pranam mantra to Shri Krishna"}, refrain:[0],
+  verses:[
+`कृष्णाय वासुदेवाय हरये परमात्मने ।
+प्रणतक्लेशनाशाय गोविन्दाय नमो नमः ॥`
+]},
+{ id:"karmanye", cat:"mantra",
+  title:{hi:"कर्मण्येवाधिकारस्ते", en:"Karmanye Vadhikaraste"},
+  sub:{hi:"श्रीमद्भगवद्गीता 2.47", en:"Bhagavad Gita 2.47"}, refrain:[0],
+  verses:[
+`कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।
+मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥`
+]},
+{ id:"yada-yada", cat:"mantra",
+  title:{hi:"यदा यदा हि धर्मस्य", en:"Yada Yada Hi Dharmasya"},
+  sub:{hi:"श्रीमद्भगवद्गीता 4.7–4.8", en:"Bhagavad Gita 4.7–4.8"}, refrain:[0],
+  verses:[
+`यदा यदा हि धर्मस्य ग्लानिर्भवति भारत ।
+अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम् ॥`,
+`परित्राणाय साधूनां विनाशाय च दुष्कृताम् ।
+धर्मसंस्थापनार्थाय सम्भवामि युगे युगे ॥`
+]},
+{ id:"sarva-dharman", cat:"mantra",
+  title:{hi:"सर्वधर्मान्परित्यज्य", en:"Sarva Dharman Parityajya"},
+  sub:{hi:"श्रीमद्भगवद्गीता 18.66", en:"Bhagavad Gita 18.66"}, refrain:[0],
+  verses:[
+`सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज ।
+अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ॥`
+]},,
+{ id:"maiya-mohi-dau", cat:"bhajan",
+  title:{hi:"मैया मोहि दाऊ बहुत खिझायो", en:"Maiya Mohi Dau Bahut Khijayo"},
+  sub:{hi:"महाकवि सूरदास", en:"Poet Surdas"}, refrain:[0],
+  verses:[
+`मैया मोहि दाऊ बहुत खिझायो ।
+मोसों कहत मोल को लीन्हो, तोहि जसुमति कब जायो ॥`,
+`कहा कहौं इहि रिस के मारे, खेलन हौं नहिं जात ।
+पुनि पुनि कहत कौन है माता, को है तेरो तात ॥`,
+`गोरे नंद जसोदा गोरी, तू कत स्याम सरीर ।
+चुटकी दै दै हँसत ग्वाल सब, सिखै देत बलबीर ॥`,
+`तू मोही कौं मारन सीखी, दाउहि कबहुँ न खीझै ।
+मोहन-मुख रिस की ये बातैं, जसुमति सुनि सुनि रीझै ॥`,
+`सुनहु कान्ह बलभद्र चबाई, जनमत ही कौ धूत ।
+सूर स्याम मोहि गोधन की सौं, हौं माता तू पूत ॥`
+]},
+{ id:"madhurashtakam", cat:"bhajan",
+  title:{hi:"मधुराष्टकम्", en:"Madhurashtakam"},
+  sub:{hi:"श्री वल्लभाचार्य कृत — अधरं मधुरं", en:"By Shri Vallabhacharya — Adharam Madhuram"}, refrain:[0],
+  verses:[
+`अधरं मधुरं वदनं मधुरं, नयनं मधुरं हसितं मधुरम् ।
+हृदयं मधुरं गमनं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`वचनं मधुरं चरितं मधुरं, वसनं मधुरं वलितं मधुरम् ।
+चलितं मधुरं भ्रमितं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`वेणुर्मधुरो रेणुर्मधुरः, पाणिर्मधुरः पादौ मधुरौ ।
+नृत्यं मधुरं सख्यं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`गीतं मधुरं पीतं मधुरं, भुक्तं मधुरं सुप्तं मधुरम् ।
+रूपं मधुरं तिलकं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`करणं मधुरं तरणं मधुरं, हरणं मधुरं रमणं मधुरम् ।
+वमितं मधुरं शमितं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`गुञ्जा मधुरा माला मधुरा, यमुना मधुरा वीची मधुरा ।
+सलिलं मधुरं कमलं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`गोपी मधुरा लीला मधुरा, युक्तं मधुरं मुक्तं मधुरम् ।
+दृष्टं मधुरं शिष्टं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`,
+`गोपा मधुरा गावो मधुरा, यष्टिर्मधुरा सृष्टिर्मधुरा ।
+दलितं मधुरं फलितं मधुरं, मधुराधिपतेरखिलं मधुरम् ॥`
+]},
+{ id:"vasudevasutam", cat:"mantra",
+  title:{hi:"वसुदेवसुतं देवं", en:"Vasudevasutam Devam"},
+  sub:{hi:"श्री कृष्ण वंदना", en:"Salutation to Shri Krishna"}, refrain:[0],
+  verses:[
+`वसुदेवसुतं देवं कंसचाणूरमर्दनम् ।
+देवकीपरमानन्दं कृष्णं वन्दे जगद्गुरुम् ॥`
+]},
+{ id:"kasturi-tilakam", cat:"mantra",
+  title:{hi:"कस्तूरी तिलकं ललाटपटले", en:"Kasturi Tilakam Lalatapatale"},
+  sub:{hi:"श्री गोपाल का ध्यान", en:"Meditation on Shri Gopal"}, refrain:[0],
+  verses:[
+`कस्तूरी तिलकं ललाटपटले वक्षःस्थले कौस्तुभं,
+नासाग्रे वरमौक्तिकं करतले वेणुः करे कङ्कणम् ।
+सर्वाङ्गे हरिचन्दनं सुललितं कण्ठे च मुक्तावलिः,
+गोपस्त्रीपरिवेष्टितो विजयते गोपालचूडामणिः ॥`
+]},
+{ id:"om-jai-jagdish", cat:"aarti",
+  title:{hi:"ॐ जय जगदीश हरे", en:"Om Jai Jagdish Hare"},
+  sub:{hi:"श्री हरि (श्री कृष्ण) की आरती", en:"Aarti of Shri Hari (Shri Krishna)"}, refrain:[0],
+  verses:[
+`ॐ जय जगदीश हरे, स्वामी जय जगदीश हरे ।
+भक्त जनों के संकट, दास जनों के संकट,
+क्षण में दूर करे ॥
+ॐ जय जगदीश हरे ॥`,
+
+`जो ध्यावे फल पावे, दुख बिनसे मन का ।
+स्वामी दुख बिनसे मन का ।
+सुख सम्पति घर आवे, सुख सम्पति घर आवे,
+कष्ट मिटे तन का ॥
+ॐ जय जगदीश हरे ॥`,
+
+`मात पिता तुम मेरे, शरण गहूं मैं किसकी ।
+स्वामी शरण गहूं मैं किसकी ।
+तुम बिन और न दूजा, तुम बिन और न दूजा,
+आस करूं मैं जिसकी ॥
+ॐ जय जगदीश हरे ॥`,
+
+`तुम पूरण परमात्मा, तुम अन्तर्यामी ।
+स्वामी तुम अन्तर्यामी ।
+पारब्रह्म परमेश्वर, पारब्रह्म परमेश्वर,
+तुम सब के स्वामी ॥
+ॐ जय जगदीश हरे ॥`,
+
+`तुम करुणा के सागर, तुम पालन-कर्ता ।
+स्वामी तुम पालन-कर्ता ।
+मैं मूरख फलकामी, मैं सेवक तुम स्वामी,
+कृपा करो भर्ता ॥
+ॐ जय जगदीश हरे ॥`,
+
+`तुम हो एक अगोचर, सबके प्राणपति ।
+स्वामी सबके प्राणपति ।
+किस विधि मिलूँ दयामय, किस विधि मिलूँ दयामय,
+तुमको मैं कुमति ॥
+ॐ जय जगदीश हरे ॥`,
+
+`दीन-बन्धु दुख-हर्ता, ठाकुर तुम मेरे ।
+स्वामी रक्षक तुम मेरे ।
+अपने हाथ उठाओ, अपने शरण लगाओ,
+द्वार पड़ा तेरे ॥
+ॐ जय जगदीश हरे ॥`,
+
+`विषय-विकार मिटाओ, पाप हरो देवा ।
+स्वामी पाप हरो देवा ।
+श्रद्धा भक्ति बढ़ाओ, श्रद्धा भक्ति बढ़ाओ,
+संतन की सेवा ॥
+ॐ जय जगदीश हरे ॥`
+]},
+{ id:"banke-bihari", cat:"aarti",
+  title:{hi:"श्री बाँके बिहारी तेरी आरती गाऊँ", en:"Shri Banke Bihari Teri Aarti Gaun"},
+  sub:{hi:"वृंदावन के श्री बाँके बिहारी जी की आरती", en:"Aarti of Shri Banke Bihari, Vrindavan"}, refrain:[0],
+  verses:[
+`श्री बाँके बिहारी तेरी आरती गाऊँ,
+हे गिरिधर तेरी आरती गाऊँ ।
+आरती गाऊँ प्यारे, तुमको रिझाऊँ,
+श्यामसुन्दर तेरी आरती गाऊँ ॥`,
+`मोर मुकुट प्यारे शीश पे सोहे,
+प्यारी बंसी मेरो मन मोहे ।
+देख छवि बलिहारी मैं जाऊँ ॥
+श्री बाँके बिहारी तेरी आरती गाऊँ ॥`,
+`चरणों से निकली गंगा प्यारी,
+जिसने सारी दुनिया तारी ।
+मैं उन चरणों के दर्शन पाऊँ ॥
+श्री बाँके बिहारी तेरी आरती गाऊँ ॥`,
+`दास अनाथ के नाथ आप हो,
+दुःख-सुख जीवन प्यारे साथ आप हो ।
+हरि चरणों में शीश झुकाऊँ ॥
+श्री बाँके बिहारी तेरी आरती गाऊँ ॥`,
+`श्री हरिदास के प्यारे तुम हो,
+मेरे मोहन जीवन धन हो ।
+देख युगल छवि बलि-बलि जाऊँ ॥
+श्री बाँके बिहारी तेरी आरती गाऊँ ॥`
+]},
+{ id:"bal-krishna", cat:"aarti",
+  title:{hi:"आरती बाल कृष्ण की कीजै", en:"Aarti Bal Krishna Ki Keejai"},
+  sub:{hi:"श्री बाल कृष्ण (लड्डू गोपाल) की आरती", en:"Aarti of Bal Krishna (Laddu Gopal)"}, refrain:[0],
+  verses:[
+`आरती बाल कृष्ण की कीजै,
+अपना जन्म सफल कर लीजै ॥`,
+`श्री यशोदा का परम दुलारा,
+बाबा के अँखियन का तारा ।
+गोपियन के प्राणन से प्यारा,
+इन पर प्राण न्योछावर कीजै ॥
+आरती बाल कृष्ण की कीजै ॥`,
+`बलदाऊ के छोटे भैया,
+कनुआ कहि कहि बोले मैया ।
+परम मुदित मन लेत बलैया,
+यह छवि नैनन में भर लीजै ॥
+आरती बाल कृष्ण की कीजै ॥`,
+`श्री राधावर कुँवर कन्हैया,
+ब्रज जन को नवनीत खवैया ।
+देखत ही मन लेत चुरैया,
+अपनो सर्वस इनको दीजै ॥
+आरती बाल कृष्ण की कीजै ॥`,
+`तोतली बोलन मधुर सुहावै,
+सखन संग खेलत सुख पावै ।
+सोई सुकृती जो इनको ध्यावै,
+अब इनको अपना कर लीजै ॥
+आरती बाल कृष्ण की कीजै ॥`
+]},
+{ id:"bhog-aarti", cat:"aarti",
+  title:{hi:"आओ भोग लगाओ प्यारे मोहन", en:"Aao Bhog Lagao Pyare Mohan"},
+  sub:{hi:"श्री कृष्ण की भोग आरती", en:"Bhog aarti of Shri Krishna"}, refrain:[0],
+  verses:[
+`आओ भोग लगाओ प्यारे मोहन ॥`,
+`भिलनी के बेर सुदामा के तंदुल,
+रुचि रुचि भोग लगाओ प्यारे मोहन ॥`,
+`दुर्योधन को मेवा त्यागो,
+साग विदुर घर खायो प्यारे मोहन ॥`,
+`जो कोई तुम्हारा भोग लगावे,
+सुख सम्पत्ति घर आवे प्यारे मोहन ॥`,
+`ऐसा भोग लगाओ प्यारे मोहन,
+सब अमृत हो जाए प्यारे मोहन ॥`,
+`जो कोई ऐसा भोग को खावे,
+सो तेरा हो जाए प्यारे मोहन ॥
+आओ भोग लगाओ प्यारे मोहन ॥`
+]},
+{ id:"jagannath-mangal", cat:"aarti",
+  title:{hi:"आरती श्री जगन्नाथ मंगलकारी", en:"Aarti Shri Jagannath Mangalkari"},
+  sub:{hi:"श्री जगन्नाथ जी (श्री कृष्ण) की मंगल आरती", en:"Mangal aarti of Shri Jagannath (Krishna)"}, refrain:[0],
+  verses:[
+`आरती श्री जगन्नाथ मंगलकारी,
+आरती श्री बैकुंठ मंगलकारी ।
+मंगलकारी नाथ आपदा हरी ॥`,
+`कंचन को धूप दीप ज्योत जगमगी,
+अगर कपूर बाती भाव से धरी ॥
+आरती श्री जगन्नाथ मंगलकारी ॥`,
+`घरन घरन घंटा बाजे, बाजे बाँसुरी,
+झाँझ और मृदंग बाजे, ताल खंजरी ॥
+आरती श्री जगन्नाथ मंगलकारी ॥`,
+`निरखत मुखारविंद, परसत चरनारविंद आपदा हरी,
+जगन्नाथ स्वामी के भोग लागो बैकुंठपुरी ॥
+आरती श्री जगन्नाथ मंगलकारी,
+आरती श्री बैकुंठ मंगलकारी ॥`
+]}
+]};
+
+</script>
 <script>
 /* ------------------------------------------------------------------
    HOW TO ADD A NEW AARTI
@@ -322,60 +673,6 @@ var AARTIS = [
 
 `नंद-नंदन ब्रजभान किशोरी,
 परमानंद स्वामी अविचल जोरी ॥`
-    ]
-  },
-  {
-    id: "om-jai-jagdish",
-    title: {hi:"ॐ जय जगदीश हरे", en:"Om Jai Jagdish Hare"},
-    sub:   {hi:"श्री हरि विष्णु / श्री कृष्ण की आरती", en:"Aarti of Shri Hari Vishnu / Krishna"},
-    refrain: [0],
-    verses: [
-`ॐ जय जगदीश हरे, स्वामी जय जगदीश हरे ।
-भक्त जनों के संकट, दास जनों के संकट,
-क्षण में दूर करे ॥
-ॐ जय जगदीश हरे ॥`,
-
-`जो ध्यावे फल पावे, दुख बिनसे मन का ।
-स्वामी दुख बिनसे मन का ।
-सुख सम्पति घर आवे, सुख सम्पति घर आवे,
-कष्ट मिटे तन का ॥
-ॐ जय जगदीश हरे ॥`,
-
-`मात पिता तुम मेरे, शरण गहूं मैं किसकी ।
-स्वामी शरण गहूं मैं किसकी ।
-तुम बिन और न दूजा, तुम बिन और न दूजा,
-आस करूं मैं जिसकी ॥
-ॐ जय जगदीश हरे ॥`,
-
-`तुम पूरण परमात्मा, तुम अन्तर्यामी ।
-स्वामी तुम अन्तर्यामी ।
-पारब्रह्म परमेश्वर, पारब्रह्म परमेश्वर,
-तुम सब के स्वामी ॥
-ॐ जय जगदीश हरे ॥`,
-
-`तुम करुणा के सागर, तुम पालन-कर्ता ।
-स्वामी तुम पालन-कर्ता ।
-मैं मूरख फलकामी, मैं सेवक तुम स्वामी,
-कृपा करो भर्ता ॥
-ॐ जय जगदीश हरे ॥`,
-
-`तुम हो एक अगोचर, सबके प्राणपति ।
-स्वामी सबके प्राणपति ।
-किस विधि मिलूँ दयामय, किस विधि मिलूँ दयामय,
-तुमको मैं कुमति ॥
-ॐ जय जगदीश हरे ॥`,
-
-`दीन-बन्धु दुख-हर्ता, ठाकुर तुम मेरे ।
-स्वामी रक्षक तुम मेरे ।
-अपने हाथ उठाओ, अपने शरण लगाओ,
-द्वार पड़ा तेरे ॥
-ॐ जय जगदीश हरे ॥`,
-
-`विषय-विकार मिटाओ, पाप हरो देवा ।
-स्वामी पाप हरो देवा ।
-श्रद्धा भक्ति बढ़ाओ, श्रद्धा भक्ति बढ़ाओ,
-संतन की सेवा ॥
-ॐ जय जगदीश हरे ॥`
     ]
   },
   {
@@ -482,167 +779,6 @@ var AARTIS = [
 जय भगवद्गीते ॥`
     ]
   },
-  {
-    id: "shyam-baba",
-    title: {hi:"ॐ जय श्री श्याम हरे", en:"Om Jai Shri Shyam Hare"},
-    sub:   {hi:"श्री श्याम बाबा (खाटू श्याम जी) की आरती", en:"Aarti of Shri Shyam Baba (Khatu Shyam ji)"},
-    refrain: [0],
-    verses: [
-`ॐ जय श्री श्याम हरे,
-बाबा जय श्री श्याम हरे ।
-खाटू धाम विराजत,
-अनुपम रूप धरे ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`रत्न जड़ित सिंहासन, सिर पर चंवर ढुरे ।
-तन केसरिया बागो, कुण्डल श्रवण पड़े ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`गल पुष्पों की माला, सिर पर मुकुट धरे ।
-खेवत धूप अग्नि पर, दीपक ज्योति जले ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`मोदक खीर चूरमा, सुवरण थाल भरे ।
-सेवक भोग लगावत, सेवा नित्य करे ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`झांझ कटोरा और घड़ियावल, शंख मृदंग घुरे ।
-भक्त आरती गावे, जय जयकार करे ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`जो ध्यावे फल पावे, सब दुःख से उबरे ।
-सेवक जन निज मुख से, श्री श्याम श्याम उचरे ॥
-ॐ जय श्री श्याम हरे ॥`,
-
-`श्री श्याम बिहारी जी की आरती, जो कोई नर गावे ।
-कहत भक्त जन, मनवांछित फल पावे ॥
-ॐ जय श्री श्याम हरे ॥`
-    ]
-  },
-  {
-    id: "satyanarayan",
-    title: {hi:"जय लक्ष्मी रमणा", en:"Jai Lakshmi Ramana"},
-    sub:   {hi:"श्री सत्यनारायण भगवान की आरती", en:"Aarti of Shri Satyanarayan Bhagwan"},
-    refrain: [0],
-    verses: [
-`जय लक्ष्मी रमणा, स्वामी जय लक्ष्मी रमणा ।
-सत्यनारायण स्वामी, जन पातक हरणा ॥
-जय लक्ष्मी रमणा ॥`,
-
-`रत्न जड़ित सिंहासन, अद्भुत छवि राजे ।
-नारद करत निराजन, घंटा ध्वनि बाजे ॥
-जय लक्ष्मी रमणा ॥`,
-
-`प्रकट भये कलि कारण, द्विज को दरस दियो ।
-बूढ़ो ब्राह्मण बनकर, कंचन महल कियो ॥
-जय लक्ष्मी रमणा ॥`,
-
-`दुर्बल भील कठारो, जिन पर कृपा करी ।
-चन्द्रचूड़ एक राजा, तिनकी विपति हरी ॥
-जय लक्ष्मी रमणा ॥`,
-
-`वैश्य मनोरथ पायो, श्रद्धा तज दीन्ही ।
-सो फल भोग्यो प्रभुजी, फिर स्तुति कीन्ही ॥
-जय लक्ष्मी रमणा ॥`,
-
-`भाव भक्ति के कारण, छिन-छिन रूप धरयो ।
-श्रद्धा धारण कीन्ही, तिनको काज सरयो ॥
-जय लक्ष्मी रमणा ॥`,
-
-`ग्वाल-बाल संग राजा, वन में भक्ति करी ।
-मनवांछित फल दीन्हो, दीनदयाल हरी ॥
-जय लक्ष्मी रमणा ॥`,
-
-`चढ़त प्रसाद सवायो, कदली फल मेवा ।
-धूप दीप तुलसी से, राजी सत्यदेवा ॥
-जय लक्ष्मी रमणा ॥`,
-
-`श्री सत्यनारायण जी की आरती, जो कोई नर गावे ।
-तन मन सुख संपत्ति, मनवांछित फल पावे ॥
-जय लक्ष्मी रमणा ॥`
-    ]
-  },
-  {
-    id: "tulsi-mata",
-    title: {hi:"जय जय तुलसी माता", en:"Jai Jai Tulsi Mata"},
-    sub:   {hi:"श्री तुलसी माता की आरती (श्री हरि की प्रिय)", en:"Aarti of Tulsi Mata (dear to Shri Hari)"},
-    refrain: [0],
-    verses: [
-`जय जय तुलसी माता,
-मैया जय जय तुलसी माता ।
-सब जग की सुखदाता, वर दाता ॥
-जय जय तुलसी माता ॥`,
-
-`सब योगों के ऊपर, सब रोगों के ऊपर ।
-रुज से रक्षा करके, भव त्राता ॥
-जय जय तुलसी माता ॥`,
-
-`बटु पुत्री है श्यामा, सुर बल्ली है ग्राम्या ।
-विष्णु प्रिय जो तुमको सेवे, सो नर तर जाता ॥
-जय जय तुलसी माता ॥`,
-
-`हरि के शीश विराजत, त्रिभुवन से हो वंदित ।
-पतित जनों की तारिणी, तुम हो विख्याता ॥
-जय जय तुलसी माता ॥`,
-
-`लेकर जन्म विजन में, आई दिव्य भवन में ।
-मानव लोक तुम्हीं से, सुख-सम्पति पाता ॥
-जय जय तुलसी माता ॥`,
-
-`हरि को तुम अति प्यारी, श्यामवर्ण सुकुमारी ।
-प्रेम अजब है उनका, तुमसे कैसा नाता ॥
-हमारी विपद हरो तुम, कृपा करो माता ॥
-जय जय तुलसी माता ॥`
-    ]
-  },
-  {
-    id: "lakshmi-mata",
-    title: {hi:"ॐ जय लक्ष्मी माता", en:"Om Jai Lakshmi Mata"},
-    sub:   {hi:"श्री महालक्ष्मी जी की आरती", en:"Aarti of Shri Mahalakshmi ji"},
-    refrain: [0],
-    verses: [
-`ॐ जय लक्ष्मी माता,
-मैया जय लक्ष्मी माता ।
-तुमको निसदिन सेवत,
-हर विष्णु विधाता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`उमा, रमा, ब्रह्माणी, तुम ही जग माता ।
-मैया तुम ही जग माता ।
-सूर्य चन्द्रमा ध्यावत, नारद ऋषि गाता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`दुर्गा रूप निरंजनी, सुख सम्पत्ति दाता ।
-मैया सुख सम्पत्ति दाता ।
-जो कोई तुमको ध्यावत, ऋद्धि-सिद्धि धन पाता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`तुम पाताल निवासिनी, तुम ही शुभदाता ।
-मैया तुम ही शुभदाता ।
-कर्म-प्रभाव-प्रकाशिनी, भवनिधि की त्राता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`जिस घर में तुम रहतीं, तहँ सब सद्गुण आता ।
-मैया तहँ सब सद्गुण आता ।
-सब सम्भव हो जाता, मन नहीं घबराता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`तुम बिन यज्ञ न होते, वस्त्र न कोई पाता ।
-मैया वस्त्र न कोई पाता ।
-खान-पान का वैभव, सब तुमसे आता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`शुभ-गुण मन्दिर सुन्दर, क्षीरोदधि जाता ।
-मैया क्षीरोदधि जाता ।
-रत्न चतुर्दश तुम बिन, कोई नहीं पाता ॥
-ॐ जय लक्ष्मी माता ॥`,
-
-`महालक्ष्मी जी की आरती, जो कोई नर गाता ।
-मैया जो कोई नर गाता ।
-उर आनन्द समाता, पाप उतर जाता ॥
-ॐ जय लक्ष्मी माता ॥`
-    ]
-  }
 ];
 
 var META = {
@@ -651,21 +787,26 @@ var META = {
   "radha-ji":      {icon:"🌹", group:"krishna"},
   "govardhan":     {icon:"⛰️", group:"krishna"},
   "gita-ji":       {icon:"📖", group:"krishna"},
-  "shyam-baba":    {icon:"🏹", group:"krishna"},
-  "om-jai-jagdish":{icon:"🪔", group:"hari"},
-  "satyanarayan":  {icon:"🐚", group:"hari"},
-  "tulsi-mata":    {icon:"🌿", group:"hari"},
-  "lakshmi-mata":  {icon:"🪷", group:"hari"}
 };
 var GROUPS = [
-  {key:"krishna", title:{hi:"श्री कृष्ण एवं राधा जी", en:"Shri Krishna & Radha ji"}},
-  {key:"hari",    title:{hi:"श्री हरि, तुलसी और लक्ष्मी जी", en:"Shri Hari, Tulsi & Lakshmi ji"}}
+  {key:"krishna", title:{hi:"श्री कृष्ण एवं राधा जी", en:"Shri Krishna & Radha ji"}}
 ];
 
+if(window.BHAKTI){
+  AARTIS = AARTIS.concat(BHAKTI.items);
+  for(var mk in BHAKTI.meta) META[mk] = BHAKTI.meta[mk];
+  GROUPS = GROUPS.concat(BHAKTI.groups);
+}
+function catOf(x){ return x.cat || "aarti"; }
+var CATS = [
+  {key:"aarti",  hi:"आरती",   en:"Aarti"},
+  {key:"bhajan", hi:"भजन",    en:"Bhajan"},
+  {key:"mantra", hi:"मंत्र",   en:"Mantra"}
+];
 var UI = {
-  hi:{title:"श्री कृष्ण आरती", sub:"किसी भी आरती को खोलकर पूरा पढ़ें।", closing:"जय श्री कृष्ण 🙏",
+  hi:{title:"श्री कृष्ण भक्ति", sub:"आरती, भजन और मंत्र — खोलकर पूरा पढ़ें।", listen:"YouTube पर सुनें", tap:"जप के लिए छुएँ", mala:"माला", reset:"रीसेट", catWord:{aarti:"आरती",chalisa:"चालीसा",bhajan:"भजन",mantra:"मंत्र"}, closing:"जय श्री कृष्ण 🙏",
       prev:"पिछली आरती", next:"अगली आरती", share:"शेयर", copied:"कॉपी हो गया", shareTxt:"श्री कृष्ण वाणी ऐप से", all:"सभी आरतियाँ"},
-  en:{title:"Shri Krishna Aarti", sub:"Tap any aarti to read it in full.", closing:"Jai Shri Krishna 🙏",
+  en:{title:"Shri Krishna Bhakti", sub:"Aarti, bhajan and mantra — tap to read in full.", listen:"Listen on YouTube", tap:"tap to chant", mala:"Malas", reset:"Reset", catWord:{aarti:"aarti",chalisa:"chalisa",bhajan:"bhajan",mantra:"mantra"}, closing:"Jai Shri Krishna 🙏",
       prev:"Previous", next:"Next", share:"Share", copied:"Copied", shareTxt:"via Shri Krishna Vani app", all:"All aartis"}
 };
 
@@ -676,6 +817,8 @@ var lang = lsGet("krishna_lang") === "en" ? "en" : "hi";
 var fontSize = parseInt(lsGet("aarti_font"),10) || 20;
 var theme = lsGet("aarti_theme") === "light" ? "light" : "dark";
 var current = null;
+var activeCat = lsGet("bhakti_cat") || "aarti";
+var jCount = 0;
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 
@@ -707,12 +850,15 @@ function rowHtml(a){
 function renderList(){
   $("heroTitle").textContent = UI[lang].title;
   $("heroSub").textContent = UI[lang].sub;
-  var html = GROUPS.map(function(g){
-    var items = ORDER.filter(function(a){ return (META[a.id]||{}).group === g.key; });
+  $("tabs").innerHTML = CATS.map(function(c){
+    return '<button class="tab" role="tab" data-cat="'+c.key+'" aria-selected="'+(c.key===activeCat)+'">'+esc(c[lang])+'</button>';
+  }).join("");
+  var html = GROUPS.filter(function(g){ return (g.cat||"aarti") === activeCat; }).map(function(g){
+    var items = ORDER.filter(function(a){ return (META[a.id]||{}).group === g.key && catOf(a) === activeCat; });
     if(!items.length) return "";
     return '<section class="group"><h2>'+esc(g.title[lang])+'</h2><ul class="rows">'+items.map(rowHtml).join("")+'</ul></section>';
   }).join("");
-  var others = ORDER.filter(function(a){ return !META[a.id]; });
+  var others = ORDER.filter(function(a){ return !META[a.id] && catOf(a) === activeCat; });
   if(others.length){
     html += '<section class="group"><h2>'+esc(UI[lang].all)+'</h2><ul class="rows">'+others.map(rowHtml).join("")+'</ul></section>';
   }
@@ -728,12 +874,26 @@ function renderDetail(a){
     return (i ? ORN : "") + '<p class="'+cls+'">'+esc(v)+'</p>';
   }).join("");
   $("closing").textContent = UI[lang].closing;
-  var idx = ORDER.indexOf(a), n = ORDER.length;
-  var prev = ORDER[(idx-1+n)%n], next = ORDER[(idx+1)%n];
+  var LIST = ORDER.filter(function(x){ return catOf(x) === catOf(a); });
+  var idx = LIST.indexOf(a), n = LIST.length;
+  var prev = LIST[(idx-1+n)%n], next = LIST[(idx+1)%n];
   $("pager").innerHTML =
     '<button class="pg prev" data-id="'+esc(prev.id)+'"><small>← '+esc(UI[lang].prev)+'</small><span>'+esc(prev.title[lang])+'</span></button>' +
     '<button class="pg next" data-id="'+esc(next.id)+'"><small>'+esc(UI[lang].next)+' →</small><span>'+esc(next.title[lang])+'</span></button>';
   document.documentElement.style.setProperty("--fs", fontSize+"px");
+  var isM = catOf(a) === "mantra";
+  $("japa").classList.toggle("hidden", !isM);
+  jCount = 0; renderJapa();
+  var q = encodeURIComponent(a.title.hi + " " + UI.hi.catWord[catOf(a)]);
+  $("listen").innerHTML = a.yt
+    ? '<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(a.yt)+'" title="'+esc(a.title[lang])+'" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>'
+    : '<div class="listen"><a href="https://www.youtube.com/results?search_query='+q+'" target="_blank" rel="noopener">▶ '+esc(UI[lang].listen)+'</a></div>';
+}
+function renderJapa(){
+  $("jCount").textContent = jCount % 108;
+  $("jLbl").textContent = UI[lang].tap;
+  $("jMala").textContent = UI[lang].mala + ": " + Math.floor(jCount/108);
+  $("jReset").textContent = UI[lang].reset;
 }
 
 /* keep the screen awake while someone is reading an aarti */
@@ -765,6 +925,7 @@ function route(){
   window.scrollTo(0,0);
   if(a){
     current = a;
+    activeCat = catOf(a); lsSet("bhakti_cat", activeCat);
     renderDetail(a);
     show("detailView");
     $("crumb").textContent = UI[lang].title;
@@ -772,6 +933,7 @@ function route(){
     wakeOn();
   } else {
     current = null;
+    renderList();
     show("listView");
     $("crumb").textContent = "";
     document.title = UI[lang].title;
@@ -780,6 +942,8 @@ function route(){
 }
 
 document.addEventListener("click", function(e){
+  var tb = e.target.closest(".tab");
+  if(tb){ activeCat = tb.getAttribute("data-cat"); lsSet("bhakti_cat", activeCat); renderList(); return; }
   var t = e.target.closest(".row, .pg");
   if(t){ location.hash = encodeURIComponent(t.getAttribute("data-id")); }
 });
@@ -814,6 +978,11 @@ $("shareBtn").addEventListener("click", function(){
   }
 });
 
+$("jBtn").addEventListener("click", function(){
+  jCount++; renderJapa();
+  try{ if(navigator.vibrate) navigator.vibrate(jCount % 108 === 0 ? [60,40,60] : 12); }catch(e){}
+});
+$("jReset").addEventListener("click", function(){ jCount = 0; renderJapa(); });
 window.addEventListener("hashchange", route);
 applyTheme();
 renderList();
