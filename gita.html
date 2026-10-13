@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>श्रीमद्भगवद्गीता | सभी 18 अध्याय</title>
+<meta name="description" content="श्रीमद्भगवद्गीता के सभी 18 अध्याय — संस्कृत श्लोक, हिंदी और English अर्थ सहित।">
+<meta name="theme-color" content="#0D1431" id="themeColor">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Tiro+Devanagari+Hindi&family=Yatra+One&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="dark"]{
+  --bg:#0D1431;
+  --bg-glow:rgba(230,190,99,.16);
+  --panel:rgba(255,255,255,.05);
+  --line:rgba(230,190,99,.26);
+  --text:#F5EBD3;
+  --muted:#A9B3D4;
+  --gold:#E6BE63;
+  --gold-soft:rgba(230,190,99,.13);
+  --teal:#2BC0B0;
+  --on-gold:#0D1431;
+  --chip:rgba(255,255,255,.08);
+}
+[data-theme="light"]{
+  --bg:#EEF4F2;
+  --bg-glow:rgba(184,146,60,.18);
+  --panel:rgba(255,255,255,.82);
+  --line:rgba(138,106,38,.30);
+  --text:#1B2650;
+  --muted:#5B6882;
+  --gold:#8A6A26;
+  --gold-soft:rgba(184,146,60,.14);
+  --teal:#13857B;
+  --on-gold:#FFFFFF;
+  --chip:rgba(27,38,80,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{
+  min-height:100dvh;color:var(--text);background:var(--bg);
+  font-family:'Poppins',-apple-system,Segoe UI,Roboto,sans-serif;
+  background-image:
+    radial-gradient(120% 55% at 85% -5%,var(--bg-glow),transparent 60%),
+    radial-gradient(90% 40% at 0% 100%,rgba(43,192,176,.10),transparent 60%);
+  background-attachment:fixed;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+button{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.hidden{display:none!important}
+
+/* top bar */
+.topbar{
+  position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;
+  background:linear-gradient(180deg,var(--bg) 55%,transparent);
+}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);background:var(--chip);cursor:pointer;padding:0;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.icon-btn svg{width:19px;height:19px}
+.icon-btn:active{background:var(--gold-soft)}
+.crumb{flex:1;min-width:0;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.wrap{max-width:620px;margin:0 auto;padding:0 16px 56px}
+
+/* hero */
+.hero{padding:8px 4px 22px;text-align:center}
+.hero .om{font-family:'Tiro Devanagari Hindi',serif;font-size:44px;color:var(--gold);line-height:1;text-shadow:0 0 24px var(--bg-glow)}
+.hero h1{margin:10px 0 6px;font-family:'Yatra One','Tiro Devanagari Hindi',serif;font-weight:400;font-size:30px;line-height:1.25;color:var(--gold)}
+.hero p{margin:0;font-size:14px;color:var(--muted);line-height:1.6}
+
+/* chapter list */
+.chlist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.chbtn{
+  width:100%;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;
+  padding:13px 14px;border-radius:16px;border:1px solid var(--line);background:var(--panel);
+}
+.chbtn:active{background:var(--gold-soft);transform:scale(.99)}
+.chnum{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:var(--gold-soft);border:1px solid var(--line);color:var(--gold);font-weight:600;font-size:15px;
+}
+.chtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.chtx .t{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--text);line-height:1.35}
+.chtx .s{font-size:12.5px;color:var(--muted)}
+.chev{width:18px;height:18px;color:var(--gold);flex-shrink:0}
+
+/* reader controls */
+.ctl{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 14px;
+}
+.chip{
+  border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:7px 13px;font-size:12.5px;cursor:pointer;
+}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold);font-weight:600}
+.ctl .grow{flex:1}
+.fsz{display:flex;gap:6px}
+.fsz .chip{padding:7px 11px;min-width:40px}
+
+/* chapter header */
+.chhead{text-align:center;padding:6px 6px 16px}
+.chhead .k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.chhead h2{margin:8px 0 4px;font-family:'Yatra One','Tiro Devanagari Hindi',serif;font-weight:400;font-size:27px;color:var(--gold);line-height:1.3}
+.chhead .sub{font-size:13.5px;color:var(--muted)}
+.summary{
+  margin:6px 0 20px;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--panel);
+  font-size:14px;line-height:1.75;color:var(--text);
+}
+.summary .lbl{display:block;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px}
+
+/* verse card */
+.verse{
+  margin:0 0 16px;padding:18px 16px 14px;border-radius:18px;border:1px solid var(--line);background:var(--panel);
+  scroll-margin-top:70px;
+}
+.vhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.vref{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:4px 11px}
+.vact{display:flex;gap:6px}
+.vact button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--chip);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.vact button svg{width:16px;height:16px}
+.vact button:active{background:var(--gold-soft)}
+.speaker{text-align:center;font-family:'Tiro Devanagari Hindi',serif;font-size:calc(var(--fs) * .8);color:var(--teal);margin-bottom:6px}
+.sloka{
+  text-align:center;white-space:pre-line;font-family:'Tiro Devanagari Hindi',serif;
+  font-size:calc(var(--fs) * 1.12);line-height:1.85;color:var(--gold);
+  padding-bottom:12px;border-bottom:1px dashed var(--line);
+}
+.mean{margin-top:12px}
+.mean .lbl{display:block;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:4px}
+.mean .tx{font-size:var(--fs);line-height:1.75;color:var(--text)}
+.mean.hi .tx{font-family:'Tiro Devanagari Hindi',serif}
+.mean.en .tx{font-size:calc(var(--fs) * .9)}
+.mean .note{font-size:calc(var(--fs) * .85);color:var(--muted);font-style:italic}
+
+/* chapter pager */
+.pager{display:flex;gap:10px;margin-top:22px}
+.pg{
+  flex:1;min-width:0;text-align:left;cursor:pointer;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;gap:3px;
+}
+.pg.next{text-align:right}
+.pg small{font-size:11.5px;color:var(--muted)}
+.pg span{font-family:'Tiro Devanagari Hindi',serif;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg:active{background:var(--gold-soft)}
+.credit{margin:26px 4px 0;text-align:center;font-size:11.5px;line-height:1.7;color:var(--muted)}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;
+  background:var(--gold);color:var(--on-gold);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:500;
+  transition:.25s;pointer-events:none;z-index:50;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style></head><body>
+
+<div class="topbar">
+  <button class="icon-btn" id="backBtn" aria-label="Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </button>
+  <div class="crumb" id="crumb"></div>
+  <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark" aria-pressed="false">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+  </button>
+</div>
+
+<main class="wrap">
+  <section id="listView">
+    <div class="hero">
+      <div class="om">ॐ</div>
+      <h1 id="heroTitle"></h1>
+      <p id="heroSub"></p>
+    </div>
+    <ul class="chlist" id="chList"></ul>
+    <p class="credit" id="credit1"></p>
+  </section>
+
+  <section id="readView" class="hidden">
+    <div class="chhead">
+      <div class="k" id="rKicker"></div>
+      <h2 id="rTitle"></h2>
+      <div class="sub" id="rSub"></div>
+    </div>
+    <div class="ctl" id="ctl">
+      <button class="chip" id="tHi" aria-pressed="true"></button>
+      <button class="chip" id="tEn" aria-pressed="true"></button>
+      <span class="grow"></span>
+      <div class="fsz">
+        <button class="chip" id="fMinus" aria-label="Smaller text">A−</button>
+        <button class="chip" id="fPlus" aria-label="Larger text">A+</button>
+      </div>
+    </div>
+    <div class="summary" id="rSummary"></div>
+    <div id="verses"></div>
+    <div class="pager" id="pager"></div>
+    <p class="credit" id="credit2"></p>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="gita-data.js"></script>
+<script>
+(function(){
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+var lang = lsGet("krishna_lang") === "en" ? "en" : "hi";
+var theme = lsGet("aarti_theme") === "light" ? "light" : "dark";   /* shared with the Aarti page */
+var fs = parseInt(lsGet("gita_font"),10) || 19;
+var showHi = lsGet("gita_show_hi") !== "0";
+var showEn = lsGet("gita_show_en") !== "0";
+var cur = 0;   /* 0 = chapter list */
+
+var UI = {
+  hi:{ title:"श्रीमद्भगवद्गीता", sub:"सभी 18 अध्याय · संस्कृत श्लोक · हिंदी एवं English अर्थ",
+       chapter:"अध्याय", verses:"श्लोक", hiBtn:"हिंदी अर्थ", enBtn:"English", prev:"पिछला अध्याय", next:"अगला अध्याय",
+       sumLbl:"अध्याय सार", hiLbl:"हिंदी अर्थ", enLbl:"English Meaning", copy:"कॉपी करें", share:"शेयर करें",
+       copied:"कॉपी हो गया", seeAbove:"इस श्लोक का अर्थ श्लोक {a}–{b} के साथ ऊपर श्लोक {a} में दिया गया है।",
+       together:"श्लोक {a}–{b} का संयुक्त अर्थ",
+       credit:"हिंदी अनुवाद: स्वामी रामसुखदास · English अनुवाद: स्वामी शिवानंद · खुला (public domain) डेटासेट: github.com/gita/gita",
+       foot:"— श्रीमद्भगवद्गीता, अध्याय {c}, श्लोक {v}" },
+  en:{ title:"Srimad Bhagavad Gita", sub:"All 18 chapters · Sanskrit shlokas · Hindi & English meanings",
+       chapter:"Chapter", verses:"verses", hiBtn:"Hindi", enBtn:"English", prev:"Previous chapter", next:"Next chapter",
+       sumLbl:"Chapter summary", hiLbl:"हिंदी अर्थ", enLbl:"English Meaning", copy:"Copy", share:"Share",
+       copied:"Copied", seeAbove:"The meaning of this shloka is given together with verses {a}–{b}, under verse {a} above.",
+       together:"Combined meaning of verses {a}–{b}",
+       credit:"Hindi: Swami Ramsukhdas · English: Swami Sivananda · Public-domain dataset: github.com/gita/gita",
+       foot:"— Srimad Bhagavad Gita, Chapter {c}, Verse {v}" }
+};
+var T = function(k){ return UI[lang][k]; };
+function fill(s,o){ return s.replace(/\{(\w+)\}/g,function(_,k){ return o[k]; }); }
+
+var CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+var SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+var COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", theme);
+  $("themeIcon").innerHTML = theme === "dark" ? SUN : MOON;
+  $("themeBtn").setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+  $("themeColor").setAttribute("content", theme === "dark" ? "#0D1431" : "#EEF4F2");
+}
+function applyFont(){ document.documentElement.style.setProperty("--fs", fs + "px"); }
+
+function renderList(){
+  $("heroTitle").textContent = T("title");
+  $("heroSub").textContent = T("sub");
+  $("credit1").textContent = T("credit");
+  $("chList").innerHTML = GITA.map(function(c){
+    var title = lang === "hi" ? c.sa : c.tr;
+    var sub = lang === "hi" ? (c.tr + " · " + c.v.length + " " + T("verses")) : (c.en + " · " + c.v.length + " " + T("verses"));
+    return '<li><button class="chbtn" data-n="'+c.n+'"><span class="chnum">'+c.n+'</span>'+
+      '<span class="chtx"><span class="t">'+esc(title)+'</span><span class="s">'+esc(sub)+'</span></span>'+CHEV+'</button></li>';
+  }).join("");
+}
+
+function verseCard(ch,x){
+  var ref = ch.n + "." + x.n;
+  var h = '<article class="verse" id="v'+x.n+'"><div class="vhead"><span class="vref">'+ref+'</span>'+
+    '<span class="vact"><button data-act="copy" data-v="'+x.n+'" aria-label="'+esc(T("copy"))+'" title="'+esc(T("copy"))+'">'+COPY+'</button>'+
+    '<button data-act="share" data-v="'+x.n+'" aria-label="'+esc(T("share"))+'" title="'+esc(T("share"))+'">'+SHARE+'</button></span></div>';
+  if(x.sp) h += '<div class="speaker">'+esc(x.sp)+'</div>';
+  h += '<div class="sloka">'+esc(x.sa)+'</div>';
+  if(showHi){
+    h += '<div class="mean hi"><span class="lbl">'+esc(T("hiLbl"))+'</span>';
+    if(x.at){
+      var grp = ch.v.filter(function(y){ return y.n === x.at; })[0];
+      h += '<div class="tx note">'+esc(fill(T("seeAbove"),{a:x.at,b:grp.to}))+'</div>';
+    } else {
+      if(x.to) h += '<div class="tx note">'+esc(fill(T("together"),{a:x.n,b:x.to}))+'</div>';
+      h += '<div class="tx">'+esc(x.hi)+'</div>';
+    }
+    h += '</div>';
+  }
+  if(showEn) h += '<div class="mean en"><span class="lbl">'+esc(T("enLbl"))+'</span><div class="tx">'+esc(x.en)+'</div></div>';
+  return h + '</article>';
+}
+
+function renderChapter(n){
+  var ch = GITA[n-1];
+  $("rKicker").textContent = T("chapter") + " " + ch.n;
+  $("rTitle").textContent = ch.sa;
+  $("rSub").textContent = ch.tr + " · " + ch.en + " · " + ch.v.length + " " + T("verses");
+  $("rSummary").innerHTML = '<span class="lbl">'+esc(T("sumLbl"))+'</span>'+esc(lang === "hi" ? ch.sum_hi : ch.sum_en);
+  $("tHi").textContent = T("hiBtn"); $("tEn").textContent = T("enBtn");
+  $("tHi").setAttribute("aria-pressed", showHi); $("tEn").setAttribute("aria-pressed", showEn);
+  $("verses").innerHTML = ch.v.map(function(x){ return verseCard(ch,x); }).join("");
+  var prev = GITA[(n+16)%18], next = GITA[n%18];
+  $("pager").innerHTML =
+    (n>1 ? '<button class="pg prev" data-n="'+prev.n+'"><small>← '+esc(T("prev"))+'</small><span>'+prev.n+'. '+esc(lang==="hi"?prev.sa:prev.tr)+'</span></button>' : '') +
+    (n<18 ? '<button class="pg next" data-n="'+next.n+'"><small>'+esc(T("next"))+' →</small><span>'+next.n+'. '+esc(lang==="hi"?next.sa:next.tr)+'</span></button>' : '');
+  $("credit2").textContent = T("credit");
+  $("crumb").textContent = T("title") + " · " + T("chapter") + " " + ch.n;
+  document.title = T("chapter") + " " + ch.n + " · " + ch.sa;
+}
+
+function go(n, push){
+  cur = n;
+  if(n){
+    $("listView").classList.add("hidden"); $("readView").classList.remove("hidden");
+    renderChapter(n);
+    lsSet("gita_last", String(n));
+  } else {
+    $("readView").classList.add("hidden"); $("listView").classList.remove("hidden");
+    renderList();
+    $("crumb").textContent = ""; document.title = "श्रीमद्भगवद्गीता | " + (lang === "hi" ? "सभी 18 अध्याय" : "All 18 chapters");
+  }
+  window.scrollTo(0,0);
+  if(push){ try{ history.pushState({n:n}, "", n ? "#c=" + n : location.pathname + location.search); }catch(e){} }
+}
+
+function verseText(ch,x){
+  var t = (x.sp ? x.sp + "\n" : "") + x.sa;
+  if(x.hi) t += "\n\n" + x.hi;
+  if(x.en) t += "\n\n" + x.en;
+  return t + "\n\n" + fill(T("foot"),{c:ch.n,v:x.n});
+}
+function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(function(){ t.classList.remove("show"); },1600); }
+
+document.addEventListener("click",function(e){
+  var b = e.target.closest("[data-n]");
+  if(b){ go(parseInt(b.getAttribute("data-n"),10), true); return; }
+  var a = e.target.closest("[data-act]");
+  if(a){
+    var ch = GITA[cur-1], x = ch.v.filter(function(y){ return y.n === parseInt(a.getAttribute("data-v"),10); })[0];
+    var text = verseText(ch,x);
+    if(a.getAttribute("data-act") === "share" && navigator.share){ navigator.share({title:T("title"), text:text}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ toast(T("copied")); }); }
+  }
+});
+$("backBtn").addEventListener("click",function(){
+  if(cur){ go(0, true); } else { location.href = "index.html"; }
+});
+$("themeBtn").addEventListener("click",function(){ theme = theme === "dark" ? "light" : "dark"; lsSet("aarti_theme",theme); applyTheme(); });
+$("tHi").addEventListener("click",function(){ if(showHi && !showEn) return; showHi=!showHi; lsSet("gita_show_hi",showHi?"1":"0"); renderChapter(cur); });
+$("tEn").addEventListener("click",function(){ if(showEn && !showHi) return; showEn=!showEn; lsSet("gita_show_en",showEn?"1":"0"); renderChapter(cur); });
+$("fMinus").addEventListener("click",function(){ fs=Math.max(15,fs-1); lsSet("gita_font",fs); applyFont(); });
+$("fPlus").addEventListener("click",function(){ fs=Math.min(30,fs+1); lsSet("gita_font",fs); applyFont(); });
+window.addEventListener("popstate",function(){
+  var m = /#c=(\d+)/.exec(location.hash); var n = m ? parseInt(m[1],10) : 0;
+  go(n>=1 && n<=18 ? n : 0, false);
+});
+
+applyTheme(); applyFont();
+var m = /#c=(\d+)/.exec(location.hash), start = m ? parseInt(m[1],10) : 0;
+go(start>=1 && start<=18 ? start : 0, false);
+})();
+</script>
+</body></html>
