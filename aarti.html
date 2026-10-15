@@ -276,8 +276,6 @@ button{font-family:inherit;color:inherit}
    3) Optional: yt:"VIDEO_ID" (the part after v= in a YouTube link) embeds the
       official video. Without it, a "listen on YouTube" search button shows.
    Only traditional / public-domain texts are included here.
-   listenOnly:true (with verses:[]) shows only the "Listen on YouTube" button,
-   for songs whose lyrics are not ours to publish.
 ------------------------------------------------------------------- */
 var BHAKTI = {
 groups: [
@@ -317,6 +315,10 @@ meta: {
   "om-jai-jagdish":{icon:"🪔", group:"krishna"},
   "banke-bihari":{icon:"🎵", group:"krishna"},
   "bal-krishna":{icon:"👶", group:"krishna"},
+  "bhog-aarti":{icon:"🍚", group:"krishna"},
+  "mere-to-girdhar":{icon:"🦚", group:"b-krishna"},
+  "baso-more-nainan":{icon:"👀", group:"b-krishna"},
+  "maiya-makhan":{icon:"🧈", group:"b-krishna"},
   "krishna-govind-hare":{icon:"🎶", group:"b-krishna"},
   "hare-krishna-mantra":{icon:"📿", group:"m-krishna"},
   "om-namo-bhagavate":{icon:"🕉️", group:"m-krishna"},
@@ -324,23 +326,55 @@ meta: {
   "krishnaya-vasudevaya":{icon:"🙏", group:"m-krishna"},
   "karmanye":{icon:"📖", group:"m-gita"},
   "yada-yada":{icon:"⚖️", group:"m-gita"},
+  "maiya-mohi-dau":{icon:"🍼", group:"b-krishna"},
   "madhurashtakam":{icon:"🍯", group:"b-krishna"},
   "krishna-govind-hare-aarti":{icon:"🎶", group:"krishna"},
-  "madan-mohan":{icon:"🎧", group:"krishna"},
-  "dwarkadhish":{icon:"🎧", group:"krishna"},
-  "shyama-aan-baso":{icon:"🎧", group:"b-krishna"},
-  "tu-jap-le-radha":{icon:"🎧", group:"b-krishna"},
-  "radha-gori-gori":{icon:"🎧", group:"b-krishna"},
-  "braj-ras":{icon:"🎧", group:"b-krishna"},
-  "pyaro-vrindavan":{icon:"🎧", group:"b-krishna"},
-  "yashomati-maiya":{icon:"🎧", group:"b-krishna"},
+  "hare-krishna-kirtan":{icon:"📿", group:"b-krishna"},
   "govind-bolo":{icon:"🎶", group:"b-krishna"},
   "achyutashtakam":{icon:"🙏", group:"b-krishna"},
+  "krishnashtakam":{icon:"🌸", group:"b-krishna"},
   "vasudevasutam":{icon:"🙏", group:"m-krishna"},
   "kasturi-tilakam":{icon:"🦚", group:"m-krishna"},
   "sarva-dharman":{icon:"🤲", group:"m-gita"},
 },
 items: [
+{ id:"mere-to-girdhar", cat:"bhajan",
+  title:{hi:"मेरे तो गिरधर गोपाल", en:"Mere To Girdhar Gopal"},
+  sub:{hi:"संत मीराबाई", en:"Saint Meerabai"}, refrain:[0],
+  verses:[
+`मेरे तो गिरधर गोपाल, दूसरो न कोई ।
+जाके सिर मोर मुकुट, मेरो पति सोई ॥`,
+`तात मात भ्रात बंधु, आपनो न कोई ।
+छाँड़ि दई कुल की कानि, कहा करिहै कोई ॥`,
+`संतन ढिग बैठि बैठि, लोक लाज खोई ।
+अँसुवन जल सींचि सींचि, प्रेम बेलि बोई ॥`,
+`अब तो बेल फैल गई, आणँद फल होई ।
+दासी मीरा लाल गिरधर, तारो अब मोही ॥`
+]},
+{ id:"baso-more-nainan", cat:"bhajan",
+  title:{hi:"बसो मोरे नैनन में नंदलाल", en:"Baso More Nainan Mein Nandlal"},
+  sub:{hi:"संत मीराबाई", en:"Saint Meerabai"}, refrain:[0],
+  verses:[
+`बसो मोरे नैनन में नंदलाल ।
+मोहनी मूरति साँवरी सूरति, नैना बने बिशाल ॥`,
+`अधर सुधारस मुरली राजत, उर बैजंती माल ।
+छुद्र घंटिका कटि तट सोभित, नूपुर सबद रसाल ॥`,
+`मीरा प्रभु संतन सुखदाई, भगत बछल गोपाल ॥`
+]},
+{ id:"maiya-makhan", cat:"bhajan",
+  title:{hi:"मैया मैं नहिं माखन खायो", en:"Maiya Main Nahin Makhan Khayo"},
+  sub:{hi:"महाकवि सूरदास", en:"Poet Surdas"}, refrain:[0],
+  verses:[
+`मैया मैं नहिं माखन खायो ।
+भोर भयो गैयन के पाछे, मधुबन मोहिं पठायो ॥
+चार पहर बंसीबट भटक्यो, साँझ परे घर आयो ॥`,
+`मैं बालक बहियन को छोटो, छींको किहि बिधि पायो ।
+ग्वाल बाल सब बैर परे हैं, बरबस मुख लपटायो ॥`,
+`तू जननी मन की अति भोरी, इनके कहें पतियायो ।
+जिय तेरे कछु भेद उपजि है, जानि परायो जायो ॥`,
+`यह लै अपनी लकुटि कमरिया, बहुतहिं नाच नचायो ।
+सूरदास तब बिहँसि जसोदा, लै उर कंठ लगायो ॥`
+]},
 { id:"krishna-govind-hare", cat:"bhajan",
   title:{hi:"श्री कृष्ण गोविन्द हरे मुरारे", en:"Shri Krishna Govind Hare Murare"},
   sub:{hi:"पारंपरिक भजन", en:"Traditional bhajan"}, refrain:[0],
@@ -400,6 +434,21 @@ items: [
 `सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज ।
 अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ॥`
 ]},,
+{ id:"maiya-mohi-dau", cat:"bhajan",
+  title:{hi:"मैया मोहि दाऊ बहुत खिझायो", en:"Maiya Mohi Dau Bahut Khijayo"},
+  sub:{hi:"महाकवि सूरदास", en:"Poet Surdas"}, refrain:[0],
+  verses:[
+`मैया मोहि दाऊ बहुत खिझायो ।
+मोसों कहत मोल को लीन्हो, तोहि जसुमति कब जायो ॥`,
+`कहा कहौं इहि रिस के मारे, खेलन हौं नहिं जात ।
+पुनि पुनि कहत कौन है माता, को है तेरो तात ॥`,
+`गोरे नंद जसोदा गोरी, तू कत स्याम सरीर ।
+चुटकी दै दै हँसत ग्वाल सब, सिखै देत बलबीर ॥`,
+`तू मोही कौं मारन सीखी, दाउहि कबहुँ न खीझै ।
+मोहन-मुख रिस की ये बातैं, जसुमति सुनि सुनि रीझै ॥`,
+`सुनहु कान्ह बलभद्र चबाई, जनमत ही कौ धूत ।
+सूर स्याम मोहि गोधन की सौं, हौं माता तू पूत ॥`
+]},
 { id:"madhurashtakam", cat:"bhajan",
   title:{hi:"मधुराष्टकम्", en:"Madhurashtakam"},
   sub:{hi:"श्री वल्लभाचार्य कृत — अधरं मधुरं", en:"By Shri Vallabhacharya — Adharam Madhuram"}, refrain:[0],
@@ -430,38 +479,13 @@ items: [
 `पितु मात स्वामी सखा हमारे ।
 हे नाथ नारायण वासुदेवा ॥`
 ]},
-{ id:"madan-mohan", cat:"aarti", listenOnly:true,
-  title:{hi:"श्री मदन मोहन जी की आरती", en:"Shri Madan Mohan Ji Ki Aarti"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"dwarkadhish", cat:"aarti", listenOnly:true,
-  title:{hi:"श्री द्वारकाधीश जी की आरती", en:"Shri Dwarkadhish Ji Ki Aarti"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"shyama-aan-baso", cat:"bhajan", listenOnly:true,
-  title:{hi:"श्यामा आन बसो", en:"Shyama Aan Baso"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"tu-jap-le-radha", cat:"bhajan", listenOnly:true,
-  title:{hi:"तू जप ले राधा राधा", en:"Tu Jap Le Radha Radha"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"radha-gori-gori", cat:"bhajan", listenOnly:true,
-  title:{hi:"राधा गोरी गोरी", en:"Radha Gori Gori"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"braj-ras", cat:"bhajan", listenOnly:true,
-  title:{hi:"ब्रज रस", en:"Braj Ras"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"pyaro-vrindavan", cat:"bhajan", listenOnly:true,
-  title:{hi:"प्यारो वृन्दावन", en:"Pyaro Vrindavan"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
-{ id:"yashomati-maiya", cat:"bhajan", listenOnly:true,
-  title:{hi:"यशोमति मैया से बोले नंदलाला", en:"Yashomati Maiya Se Bole Nandlala"},
-  sub:{hi:"YouTube पर सुनें", en:"Listen on YouTube"}, refrain:[],
-  verses:[]},
+{ id:"hare-krishna-kirtan", cat:"bhajan",
+  title:{hi:"हरे कृष्ण महामंत्र कीर्तन", en:"Hare Krishna Maha Mantra Kirtan"},
+  sub:{hi:"महामंत्र", en:"The Maha Mantra"}, refrain:[0],
+  verses:[
+`हरे कृष्ण हरे कृष्ण, कृष्ण कृष्ण हरे हरे ।
+हरे राम हरे राम, राम राम हरे हरे ॥`
+]},
 { id:"govind-bolo", cat:"bhajan",
   title:{hi:"गोविन्द बोलो हरि गोपाल बोलो", en:"Govind Bolo Hari Gopal Bolo"},
   sub:{hi:"पारंपरिक कीर्तन", en:"Traditional kirtan"}, refrain:[0],
@@ -489,6 +513,43 @@ items: [
 वन्यया मालया शोभितोरःस्थलं, लोहिताङ्घ्रिद्वयं वारिजाक्षं भजे ॥`,
 `कुञ्चितैः कुन्तलैर्भ्राजमानाननं, रत्नमौलिं लसत्कुण्डलं गण्डयोः ।
 हारकेयूरकं कङ्कणप्रोज्ज्वलं, किङ्किणीमञ्जुलं श्यामलं तं भजे ॥`
+]},
+{ id:"krishnashtakam", cat:"bhajan",
+  title:{hi:"श्री कृष्णाष्टकम् — भजे व्रजैकमण्डनम्", en:"Shri Krishnashtakam — Bhaje Vrajaikamandanam"},
+  sub:{hi:"श्री आदि शंकराचार्य कृत", en:"By Adi Shankaracharya"}, refrain:[0],
+  verses:[
+`भजे व्रजैकमण्डनं समस्तपापखण्डनं,
+स्वभक्तचित्तरञ्जनं सदैव नन्दनन्दनम् ।
+सुपिच्छगुच्छमस्तकं सुनादवेणुहस्तकं,
+अनङ्गरङ्गसागरं नमामि कृष्णनागरम् ॥`,
+`मनोजगर्वमोचनं विशाललोललोचनं,
+विधूतगोपशोचनं नमामि पद्मलोचनम् ।
+करारविन्दभूधरं स्मितावलोकसुन्दरं,
+महेन्द्रमानदारणं नमामि कृष्णवारणम् ॥`,
+`कदम्बसूनकुण्डलं सुचारुगण्डमण्डलं,
+व्रजाङ्गनैकवल्लभं नमामि कृष्णदुर्लभम् ।
+यशोदया समोदया सगोपया सनन्दया,
+युतं सुखैकदायकं नमामि गोपनायकम् ॥`,
+`सदैव पादपङ्कजं मदीयमानसे निजं,
+दधानमुक्तमालकं नमामि नन्दबालकम् ।
+समस्तदोषशोषणं समस्तलोकपोषणं,
+समस्तगोपमानसं नमामि नन्दलालसम् ॥`,
+`भुवो भरावतारकं भवाब्धिकर्णधारकं,
+यशोमतीकिशोरकं नमामि चित्तचोरकम् ।
+दृगन्तकान्तभङ्गिनं सदा सदालिसङ्गिनं,
+दिने दिने नवं नवं नमामि नन्दसम्भवम् ॥`,
+`गुणाकरं सुखाकरं कृपाकरं कृपापरं,
+सुरद्विषन्निकन्दनं नमामि गोपनन्दनम् ।
+नवीनगोपनागरं नवीनकेलिलम्पटं,
+नमामि मेघसुन्दरं तडित्प्रभालसत्पटम् ॥`,
+`समस्तगोपनन्दनं हृदम्बुजैकमोदनं,
+नमामि कुञ्जमध्यगं प्रसन्नभानुशोभनम् ।
+निकामकामदायकं दृगन्तचारुसायकं,
+रसालवेणुगायकं नमामि कुञ्जनायकम् ॥`,
+`विदग्धगोपिकामनोमनोज्ञतल्पशायिनं,
+नमामि कुञ्जकानने प्रवृद्धवह्निपायिनम् ।
+किशोरकान्तिरञ्जितं दृगञ्जनं सुशोभितं,
+गजेन्द्रमोक्षकारिणं नमामि श्रीविहारिणम् ॥`
 ]},
 { id:"vasudevasutam", cat:"mantra",
   title:{hi:"वसुदेवसुतं देवं", en:"Vasudevasutam Devam"},
@@ -608,6 +669,23 @@ items: [
 सोई सुकृती जो इनको ध्यावै,
 अब इनको अपना कर लीजै ॥
 आरती बाल कृष्ण की कीजै ॥`
+]},
+{ id:"bhog-aarti", cat:"aarti",
+  title:{hi:"आओ भोग लगाओ प्यारे मोहन", en:"Aao Bhog Lagao Pyare Mohan"},
+  sub:{hi:"श्री कृष्ण की भोग आरती", en:"Bhog aarti of Shri Krishna"}, refrain:[0],
+  verses:[
+`आओ भोग लगाओ प्यारे मोहन ॥`,
+`भिलनी के बेर सुदामा के तंदुल,
+रुचि रुचि भोग लगाओ प्यारे मोहन ॥`,
+`दुर्योधन को मेवा त्यागो,
+साग विदुर घर खायो प्यारे मोहन ॥`,
+`जो कोई तुम्हारा भोग लगावे,
+सुख सम्पत्ति घर आवे प्यारे मोहन ॥`,
+`ऐसा भोग लगाओ प्यारे मोहन,
+सब अमृत हो जाए प्यारे मोहन ॥`,
+`जो कोई ऐसा भोग को खावे,
+सो तेरा हो जाए प्यारे मोहन ॥
+आओ भोग लगाओ प्यारे मोहन ॥`
 ]},
 { id:"krishna-janm", cat:"katha", prose:true, refrain:[6],
   title:{hi:"श्री कृष्ण जन्म", en:"Birth of Shri Krishna"},
@@ -982,6 +1060,40 @@ var AARTIS = [
     ]
   },
   {
+    id: "radha-ji",
+    title: {hi:"आरती श्री वृषभानुसुता की", en:"Aarti Shri Vrishabhanusuta Ki"},
+    sub:   {hi:"श्री राधा रानी की आरती", en:"Aarti of Shri Radha Rani"},
+    refrain: [0],
+    verses: [
+`आरती श्री वृषभानुसुता की,
+मंजु मूर्ति मोहन ममता की ॥`,
+
+`त्रिविध तापयुत संसृति नाशिनि,
+विमल विवेक विराग विकासिनि ।
+पावन प्रभु पद प्रीति प्रकाशिनि,
+सुन्दरतम छवि सुन्दरता की ॥
+आरती श्री वृषभानुसुता की ॥`,
+
+`मुनि मन मोहन मोहन मोहनि,
+मधुर मनोहर मूरति सोहनि ।
+अविरल प्रेम अमिय रस दोहनि,
+प्रिय अति सदा सखी ललिता की ॥
+आरती श्री वृषभानुसुता की ॥`,
+
+`संतत सेव्य सत मुनि जन की,
+आकर अमित दिव्य गुन गन की ।
+आकर्षिणी कृष्ण तन मन की,
+अति अमूल्य सम्पति समता की ॥
+आरती श्री वृषभानुसुता की ॥`,
+
+`कृष्णात्मिका, कृष्ण सहचारिणि,
+चिन्मय वृन्दा विपिन विहारिणि ।
+जगज्जननि जग दुःख निवारिणि,
+आदि अनादि शक्ति विभुता की ॥
+आरती श्री वृषभानुसुता की ॥`
+    ]
+  },
+  {
     id: "govardhan",
     title: {hi:"श्री गोवर्धन महाराज की आरती", en:"Aarti Shri Govardhan Maharaj"},
     sub:   {hi:"गिरिराज जी की आरती", en:"Aarti of Shri Giriraj ji"},
@@ -1017,12 +1129,48 @@ var AARTIS = [
 तेरे माथे मुकुट विराज रह्यो ॥`
     ]
   },
+  {
+    id: "gita-ji",
+    title: {hi:"श्री भगवद्गीता जी की आरती", en:"Aarti Shri Bhagavad Gita Ji"},
+    sub:   {hi:"जय भगवद्गीते", en:"Jai Bhagavad Gite"},
+    refrain: [0],
+    verses: [
+`जय भगवद्गीते, जय भगवद्गीते ।
+हरि-हिय-कमल-विहारिणि सुन्दर सुपुनीते ॥ जय भगवद्गीते ॥`,
+
+`कर्म-सुमर्म-प्रकाशिनि कामासक्तिहरा ।
+तत्त्वज्ञान-विकासिनि विद्या ब्रह्म परा ॥
+जय भगवद्गीते ॥`,
+
+`निश्चल-भक्ति-विधायिनि निर्मल मलहारी ।
+शरण-रहस्य-प्रदायिनि सब विधि सुखकारी ॥
+जय भगवद्गीते ॥`,
+
+`राग-द्वेष-विदारिणि कारिणि मोद सदा ।
+भव-भय-हारिणि तारिणि परमानन्दप्रदा ॥
+जय भगवद्गीते ॥`,
+
+`आसुर-भाव-विनाशिनि नाशिनि तम रजनी ।
+दैवी सद्गुण-दायिनि हरि-रसिका सजनी ॥
+जय भगवद्गीते ॥`,
+
+`समता, त्याग सिखावनि, हरि-मुख की बानी ।
+सकल शास्त्र की स्वामिनि श्रुतियों की रानी ॥
+जय भगवद्गीते ॥`,
+
+`दया-सुधा बरसावनि, मातु ! कृपा कीजै ।
+हरि-पद-प्रेम दान कर अपनो कर लीजै ॥
+जय भगवद्गीते ॥`
+    ]
+  },
 ];
 
 var META = {
   "kunj-bihari":   {icon:"🦚", group:"krishna"},
   "yugal-kishor":  {icon:"💞", group:"krishna"},
+  "radha-ji":      {icon:"🌹", group:"krishna"},
   "govardhan":     {icon:"⛰️", group:"krishna"},
+  "gita-ji":       {icon:"📖", group:"krishna"},
 };
 var GROUPS = [
   {key:"krishna", title:{hi:"श्री कृष्ण एवं राधा जी", en:"Shri Krishna & Radha ji"}}
@@ -1043,9 +1191,9 @@ var CATS = [
 ];
 var UI = {
   hi:{title:"श्री कृष्ण भक्ति", sub:"आरती, भजन, मंत्र, कथाएँ और पर्व — खोलकर पूरा पढ़ें।", listen:"YouTube पर सुनें", tap:"जप के लिए छुएँ", mala:"माला", reset:"रीसेट", catWord:{aarti:"आरती",chalisa:"चालीसा",bhajan:"भजन",mantra:"मंत्र",katha:"कथा",parv:"पर्व"}, closing:"जय श्री कृष्ण 🙏",
-      prev:"पिछली आरती", next:"अगली आरती", share:"शेयर", copied:"कॉपी हो गया", shareTxt:"श्री कृष्ण वाणी ऐप से", all:"सभी आरतियाँ", listenOnly:"इसके बोल यहाँ उपलब्ध नहीं हैं। नीचे दिए बटन से YouTube पर सुनें।"},
+      prev:"पिछली आरती", next:"अगली आरती", share:"शेयर", copied:"कॉपी हो गया", shareTxt:"श्री कृष्ण वाणी ऐप से", all:"सभी आरतियाँ"},
   en:{title:"Shri Krishna Bhakti", sub:"Aarti, bhajan, mantra, stories and festivals — tap to read in full.", listen:"Listen on YouTube", tap:"tap to chant", mala:"Malas", reset:"Reset", catWord:{aarti:"aarti",chalisa:"chalisa",bhajan:"bhajan",mantra:"mantra",katha:"katha",parv:"festival"}, closing:"Jai Shri Krishna 🙏",
-      prev:"Previous", next:"Next", share:"Share", copied:"Copied", shareTxt:"via Shri Krishna Vani app", all:"All aartis", listenOnly:"The lyrics are not available here. Use the button below to listen on YouTube."}
+      prev:"Previous", next:"Next", share:"Share", copied:"Copied", shareTxt:"via Shri Krishna Vani app", all:"All aartis"}
 };
 
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
@@ -1074,10 +1222,10 @@ AARTIS.forEach(function(a){ if(ORDER.indexOf(a) < 0) ORDER.push(a); }); /* safet
 
 /* order inside each tab: items listed here come first, in this order */
 var PRIORITY = [
-  "kunj-bihari","om-jai-jagdish","krishna-govind-hare-aarti","banke-bihari","yugal-kishor",
-  "bal-krishna","madan-mohan","govardhan","dwarkadhish",
-  "shyama-aan-baso","tu-jap-le-radha","krishna-govind-hare","radha-gori-gori","braj-ras",
-  "pyaro-vrindavan","achyutashtakam","govind-bolo","yashomati-maiya","madhurashtakam"
+  "kunj-bihari","om-jai-jagdish","banke-bihari","yugal-kishor","bal-krishna",
+  "krishna-govind-hare-aarti","govardhan","radha-ji","bhog-aarti","gita-ji",
+  "krishna-govind-hare","achyutashtakam","hare-krishna-kirtan","govind-bolo","mere-to-girdhar",
+  "madhurashtakam","baso-more-nainan","maiya-makhan","maiya-mohi-dau","krishnashtakam"
 ];
 ORDER = ORDER.map(function(a,i){ var p = PRIORITY.indexOf(a.id); return {a:a, i:i, p:(p < 0 ? 1000 : p)}; })
   .sort(function(x,y){ return (x.p - y.p) || (x.i - y.i); })
@@ -1118,7 +1266,7 @@ function renderDetail(a){
   $("dTitle").textContent = a.title[lang];
   $("dSub").textContent = a.sub[lang];
   $("shareTxt").textContent = UI[lang].share;
-  $("dLyrics").innerHTML = a.listenOnly ? '<p class="verse">'+esc(UI[lang].listenOnly)+'</p>' : a.verses.map(function(v,i){
+  $("dLyrics").innerHTML = a.verses.map(function(v,i){
     var cls = (a.refrain && a.refrain.indexOf(i) > -1) ? "verse refrain" : "verse";
     if(a.prose && v.indexOf("# ") === 0) return '<h3 class="ph">'+esc(v.slice(2))+'</h3>';
     if(a.prose) cls += " prose";
