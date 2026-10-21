@@ -639,6 +639,16 @@ function startChatMode(){
   document.body.classList.add("chatting");
 }
 
+// The "Namaste" welcome bubble is only for an empty chat.
+// As soon as the person asks something (typed, spoken or via a topic card) it is removed.
+function removeGreeting(){
+  if(greetingBubble){
+    var row = greetingBubble.parentNode;
+    if(row && row.parentNode) row.parentNode.removeChild(row);
+    greetingBubble = null;
+  }
+}
+
 function goHome(){
   document.body.classList.remove("chatting");
   chat.innerHTML = "";
@@ -919,6 +929,7 @@ async function sendText(){
   var m=input.value.trim();
   if(!m)return;
   if(!canSendMessage())return;
+  removeGreeting();
   var ub=add(m,"user",true);
   saveHistory("user", m, ub);
   input.value="";
@@ -1212,6 +1223,7 @@ function encodePcm16Wav(samples,sampleRate,numChannels){
 
 async function sendVoice(blob,filename){
   lockProcessing();
+  removeGreeting();
   var userBubble=add(t("listening"),"user",true);
   bumpCount();
   var L=addTyping();
@@ -1296,7 +1308,10 @@ document.querySelectorAll(".lang-choice").forEach(function(elm){
     langModal.classList.remove("show");
     if(wasFirstLaunch){
       langModal.dataset.firstLaunch = "false";
-      greetingBubble = add(t("greeting"),"bot");
+      // only greet an empty chat; never add it after a question has already been asked
+      if(chat.children.length === 0){
+        greetingBubble = add(t("greeting"),"bot");
+      }
     }
   });
 });
