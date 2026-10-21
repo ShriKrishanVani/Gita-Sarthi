@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var LEADS_URL = window.GITA_LEADS_URL || "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+  var LEADS_URL = window.GITA_LEADS_URL || "https://script.google.com/macros/s/AKfycbxff-4kLTjIi_yEn9tfqOEtttB8boQEPl7YX2SXjCCbZBUvVnr_bBxBydPShnjivGHG/exec";
   if (!/^https?:\/\//.test(LEADS_URL)) return;           // not set up yet -> feature stays off
 
   var DONE_KEY = "krishna_lead_done";                     // person already signed up
