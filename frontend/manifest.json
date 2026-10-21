@@ -1,0 +1,18 @@
+{
+  "name": "श्री कृष्ण वाणी",
+  "short_name": "कृष्ण वाणी",
+  "description": "श्री कृष्ण से अपने मन की बात कहिए। आध्यात्मिक संवाद और जीवन मार्गदर्शन।",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef4f2",
+  "theme_color": "#B8923C",
+  "lang": "hi",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

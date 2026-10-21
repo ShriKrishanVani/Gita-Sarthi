@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: gita-sarthi
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false        # Render will ask you to paste your key
