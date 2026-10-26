@@ -10,8 +10,12 @@
  *
  * When you add or rename a file in PRECACHE below, change CACHE_VERSION (v2 -> v3)
  * so phones pick up the new list.
+ *
+ * Self-healing: if the first download of a page was interrupted (weak network, app
+ * closed too early), the worker quietly downloads the missing pages the next time
+ * the app is opened online, so Gita / Aarti / bhajan pages end up saved on the phone.
  */
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 const CACHE = "krishna-vani-" + CACHE_VERSION;
 
 const PRECACHE = [
@@ -34,15 +38,40 @@ const PRECACHE = [
 const NETWORK_TIMEOUT_MS = 4000;
 
 self.addEventListener("install", function (e) {
-  e.waitUntil(
-    caches.open(CACHE).then(function (cache) {
-      // add each file on its own, so one missing file never blocks the whole install
-      return Promise.all(PRECACHE.map(function (url) {
-        return cache.add(new Request(url, { cache: "reload" })).catch(function () {});
-      }));
-    }).then(function () { return self.skipWaiting(); })
-  );
+  e.waitUntil(healCache(true).then(function () { return self.skipWaiting(); }));
 });
+
+// Download one file and store a clean copy (works even if the server redirected it).
+function addClean(cache, url) {
+  return fetch(new Request(url, { cache: "reload" })).then(function (res) {
+    if (!res || !res.ok) throw new Error("bad response for " + url);
+    if (res.redirected) {
+      return res.blob().then(function (blob) {
+        return cache.put(url, new Response(blob, { status: 200, statusText: "OK", headers: res.headers }));
+      });
+    }
+    return cache.put(url, res);
+  });
+}
+
+// Save every file in PRECACHE. force = download all again; otherwise only the missing ones.
+var lastHeal = 0;
+function healCache(force) {
+  var now = Date.now();
+  if (!force && now - lastHeal < 5 * 60 * 1000) return Promise.resolve();
+  lastHeal = now;
+  var failed = 0;
+  return caches.open(CACHE).then(function (cache) {
+    return Promise.all(PRECACHE.map(function (url) {
+      var check = force ? Promise.resolve(null) : cache.match(url);
+      return check.then(function (hit) {
+        return hit ? null : addClean(cache, url).catch(function () { failed++; });   // one failure never blocks the rest
+      });
+    }));
+  }).then(function () {
+    if (failed) lastHeal = 0;      // something is still missing: try again the next time a page opens
+  });
+}
 
 self.addEventListener("activate", function (e) {
   e.waitUntil(
@@ -50,7 +79,8 @@ self.addEventListener("activate", function (e) {
       return Promise.all(keys.filter(function (k) {
         return k.indexOf("krishna-vani-") === 0 && k !== CACHE;
       }).map(function (k) { return caches.delete(k); }));
-    }).then(function () { return self.clients.claim(); })
+    }).then(function () { return healCache(false); })
+      .then(function () { return self.clients.claim(); })
   );
 });
 
@@ -62,6 +92,7 @@ self.addEventListener("fetch", function (e) {
 
   if (url.origin === self.location.origin) {
     if (url.pathname.indexOf("/api/") === 0 || url.pathname === "/health") return;
+    if (req.mode === "navigate") e.waitUntil(healCache(false));   // fill any page not saved yet
     if (/\.(png|jpe?g|webp|gif|svg|ico)$/i.test(url.pathname)) {
       e.respondWith(cacheFirst(req));
     } else {
