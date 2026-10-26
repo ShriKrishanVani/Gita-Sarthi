@@ -651,8 +651,6 @@ function removeGreeting(){
 
 function goHome(){
   document.body.classList.remove("chatting");
-  chat.innerHTML = "";
-  greetingBubble = null;
   input.value = "";
 }
 document.getElementById("backBtn").addEventListener("click", goHome);
@@ -1357,7 +1355,14 @@ if(!currentLang){
   }, LANG_POPUP_DELAY);
 } else {
   applyStaticText();
-  greetingBubble = add(t("greeting"),"bot");
+  if(loadHistory().length){
+    // earlier chat saved on this phone: show it again and open the chat view
+    restoreHistory();
+    startChatMode();
+    setTimeout(function(){ chat.scrollTop = chat.scrollHeight; }, 60);
+  } else {
+    greetingBubble = add(t("greeting"),"bot");
+  }
 }
 
 if(!isUnlocked() && msgCount >= FREE_LIMIT){
