@@ -134,6 +134,19 @@ body::after{
   background:rgba(184,146,60,0.12);border:1px solid rgba(184,146,60,0.4);
   color:var(--gold-deep);padding:6px 14px;border-radius:13px;font-size:12.5px;font-family:inherit;cursor:pointer;
 }
+.sharebtn{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;margin-right:8px;
+  background:linear-gradient(180deg,#D8B35F,#B8923C 70%,#8A6A26);border:none;
+  color:#3a2c0c;padding:7px 15px;border-radius:13px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;
+}
+.sharebtn:disabled{opacity:.65;cursor:default}
+.toast{
+  position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;
+  transform:translateX(-50%) translateY(10px);max-width:86vw;text-align:center;
+  background:rgba(34,45,51,.93);color:#fff;padding:10px 16px;border-radius:14px;font-size:13px;line-height:1.5;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #bar{
   position:relative;z-index:3;display:flex;gap:10px;flex-shrink:0;align-items:center;
   padding:13px 14px calc(13px + env(safe-area-inset-bottom));
@@ -516,6 +529,12 @@ var TXT = {
     error:"कुछ गड़बड़ हो गयी: ",
     micError:"माइक एक्सेस नहीं मिला: ",
     listenBtn:String.fromCodePoint(128266)+" सुनें",
+    shareBtn:String.fromCodePoint(128228)+" शेयर करें",
+    shareMaking:"कार्ड बन रहा है...",
+    shareSaved:"तस्वीर सेव हो गई। इसे WhatsApp या Instagram पर लगाएँ।",
+    shareFail:"तस्वीर नहीं बन सकी, फिर कोशिश करें।",
+    shareTagline:"अपना सवाल सीधे श्री कृष्ण से पूछिए",
+    shareCaption:"श्री कृष्ण वाणी — अपना सवाल सीधे श्री कृष्ण से पूछिए "+PRAY,
     paywallTitle:"निःशुल्क सीमा पूरी हुई",
     paywallText:"आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
     paywallBtn:"कृपया, सिर्फ ₹9 दक्षिणा दें।",
@@ -564,6 +583,12 @@ var TXT = {
     error:"Something went wrong: ",
     micError:"Mic access denied: ",
     listenBtn:String.fromCodePoint(128266)+" Listen",
+    shareBtn:String.fromCodePoint(128228)+" Share",
+    shareMaking:"Making your card...",
+    shareSaved:"Image saved. Add it to your WhatsApp or Instagram story.",
+    shareFail:"Could not make the image, please try again.",
+    shareTagline:"Ask your question to Shri Krishna",
+    shareCaption:"Shri Krishna Vani — ask your question to Shri Krishna "+PRAY,
     paywallTitle:"Free limit reached",
     paywallText:"You've asked 5 questions. Continue the conversation for 30 days for just ₹9.",
     paywallBtn:"Pay ₹9 to continue",
@@ -795,6 +820,207 @@ function addPlayLocal(bubble,blob){
   bubble.appendChild(pb);
 }
 
+
+/* ---------- Share an answer as a picture card (WhatsApp Status / Instagram) ---------- */
+// Optional: put your public app link here, e.g. "https://gita-sarthi.onrender.com".
+// If left empty, the link of the page the person is using is printed on the card.
+var SHARE_URL = "";
+var CARD_FONT_HI = '"Tiro Devanagari Hindi","Noto Sans Devanagari","Mangal",serif';
+var CARD_FONT_EN = '"Poppins","Helvetica Neue",Arial,sans-serif';
+
+function shareLink(){
+  if(SHARE_URL) return SHARE_URL;
+  try{ return location.origin + location.pathname.replace(/[^\/]*$/,""); }catch(e){ return ""; }
+}
+function shareLinkShort(){
+  return shareLink().replace(/^https?:\/\//,"").replace(/\/$/,"");
+}
+
+var toastEl=null, toastTimer=null;
+function showToast(msg){
+  if(!toastEl){ toastEl=document.createElement("div"); toastEl.className="toast"; document.body.appendChild(toastEl); }
+  toastEl.textContent=msg; toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ toastEl.classList.remove("show"); },3600);
+}
+
+function addShareBtn(bubble,text,verse){
+  if(!bubble||!text) return;
+  var sb=document.createElement("button");
+  sb.className="sharebtn";
+  sb.textContent=t("shareBtn");
+  sb.onclick=function(){ shareReply(sb,text,verse); };
+  bubble.appendChild(sb);
+}
+
+function loadCardImage(src){
+  return new Promise(function(resolve){
+    var im=new Image();
+    im.onload=function(){ resolve(im); };
+    im.onerror=function(){ resolve(null); };      // missing picture: the card still gets made
+    im.src=src;
+  });
+}
+function loadCardFonts(sample){
+  if(!document.fonts||!document.fonts.load) return Promise.resolve();
+  var jobs=Promise.all([
+    document.fonts.load('40px "Tiro Devanagari Hindi"',sample),
+    document.fonts.load('40px "Poppins"',sample)
+  ]).catch(function(){});
+  return Promise.race([jobs,new Promise(function(r){ setTimeout(r,1800); })]);
+}
+function cardWrap(ctx,text,maxW){
+  var out=[];
+  String(text||"").split(/\n+/).forEach(function(para){
+    var words=para.replace(/\s+/g," ").trim().split(" "), cur="";
+    words.forEach(function(w){
+      if(!w) return;
+      var test=cur ? cur+" "+w : w;
+      if(!cur || ctx.measureText(test).width<=maxW){ cur=test; } else { out.push(cur); cur=w; }
+    });
+    if(cur) out.push(cur);
+  });
+  return out;
+}
+function cardRoundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+// Finds the biggest text size at which the answer (and the verse, if it is short) fits the panel.
+function cardLayout(ctx,text,verse,fontMain,textW,maxH,withVerse){
+  var PAD=64;
+  for(var size=46; size>=30; size-=2){
+    ctx.font=size+"px "+fontMain;
+    var lines=cardWrap(ctx,text,textW), lh=Math.round(size*1.55);
+    var h=lines.length*lh, vl=[], vs=0, vlh=0, refH=0;
+    if(withVerse){
+      vs=Math.round(size*0.78); vlh=Math.round(vs*1.6);
+      ctx.font=vs+"px "+CARD_FONT_HI;
+      vl=cardWrap(ctx,verse.sa,textW);
+      if(vl.length>4) return null;
+      h+=44+vl.length*vlh;
+      if(verse.ref){ refH=Math.round(vs*1.5); h+=refH; }
+    }
+    if(h+2*PAD<=maxH) return {size:size,lh:lh,lines:lines,vs:vs,vlh:vlh,vl:vl,refH:refH,height:h+2*PAD,pad:PAD};
+  }
+  return null;
+}
+
+async function buildShareCard(text,verse){
+  var W=1080, H=1920, lang=(currentLang==="en")?"en":"hi";
+  var fontMain=(lang==="en")?CARD_FONT_EN:CARD_FONT_HI;
+  var hasVerse=!!(verse&&verse.sa);
+  await loadCardFonts(text+" "+(hasVerse?verse.sa:"")+" श्री कृष्ण वाणी");
+  var imgs=await Promise.all([loadCardImage("krishna-bg2.jpg"),loadCardImage("icon-192.png")]);
+  var bg=imgs[0], icon=imgs[1];
+
+  var cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  var ctx=cv.getContext("2d");
+
+  // background picture (or a soft gradient if it could not be loaded)
+  if(bg){ ctx.drawImage(bg,0,0,W,H); }
+  else{
+    var g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,"#dff1ee"); g.addColorStop(1,"#f6ecd2");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  // text panel
+  var footerTop=1730, panelBottom=1700, panelX=56, panelW=W-112, textW=panelW-120;
+  var maxH=720;
+  var lay = (hasVerse ? cardLayout(ctx,text,verse,fontMain,textW,maxH,true) : null) || cardLayout(ctx,text,verse,fontMain,textW,maxH,false);
+  if(!lay){                                     // very long answer: smallest size, cut the end
+    ctx.font="30px "+fontMain;
+    var all=cardWrap(ctx,text,textW), keep=Math.floor((maxH-128)/46);
+    if(all.length>keep){ all=all.slice(0,keep); all[keep-1]=all[keep-1].replace(/\s*\S*$/,"")+" ..."; }
+    lay={size:30,lh:46,lines:all,vs:0,vlh:0,vl:[],refH:0,height:all.length*46+128,pad:64};
+  }
+  var panelH=Math.max(lay.height,420), panelTop=panelBottom-panelH;
+  ctx.save();
+  ctx.shadowColor="rgba(40,50,55,0.25)"; ctx.shadowBlur=36; ctx.shadowOffsetY=10;
+  cardRoundRect(ctx,panelX,panelTop,panelW,panelH,44);
+  ctx.fillStyle="rgba(255,252,243,0.93)"; ctx.fill();
+  ctx.restore();
+  cardRoundRect(ctx,panelX,panelTop,panelW,panelH,44);
+  ctx.lineWidth=3; ctx.strokeStyle="rgba(184,146,60,0.75)"; ctx.stroke();
+
+  // answer text, centred inside the panel
+  var cx=W/2, y=panelTop+(panelH-(lay.height-2*lay.pad))/2;
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  ctx.font=lay.size+"px "+fontMain; ctx.fillStyle="#2f3a40";
+  lay.lines.forEach(function(ln,i){ ctx.fillText(ln,cx,y+i*lay.lh+lay.lh/2); });
+  y+=lay.lines.length*lay.lh;
+
+  if(lay.vl.length){
+    ctx.fillStyle="rgba(184,146,60,0.9)"; ctx.fillRect(cx-70,y+20,140,3);
+    y+=44;
+    ctx.font=lay.vs+"px "+CARD_FONT_HI; ctx.fillStyle="#8A6A26";
+    lay.vl.forEach(function(ln,i){ ctx.fillText(ln,cx,y+i*lay.vlh+lay.vlh/2); });
+    y+=lay.vl.length*lay.vlh;
+    if(verse.ref){
+      ctx.font=Math.round(lay.vs*0.85)+"px "+fontMain; ctx.fillStyle="#6d7b82";
+      ctx.fillText(verse.ref,cx,y+lay.refH/2);
+    }
+  }
+
+  // footer band: app icon, app name, tagline, link
+  var fg=ctx.createLinearGradient(0,footerTop,0,H); fg.addColorStop(0,"rgba(34,45,51,0.90)"); fg.addColorStop(1,"rgba(24,32,37,0.97)");
+  ctx.fillStyle=fg; ctx.fillRect(0,footerTop,W,H-footerTop);
+  ctx.fillStyle="rgba(216,179,95,0.9)"; ctx.fillRect(0,footerTop,W,4);
+  var ix=64, iy=footerTop+36, is=118;
+  if(icon){
+    ctx.save(); cardRoundRect(ctx,ix,iy,is,is,26); ctx.clip(); ctx.drawImage(icon,ix,iy,is,is); ctx.restore();
+  }
+  var tx=icon ? ix+is+34 : 64;
+  ctx.textAlign="left"; ctx.textBaseline="middle";
+  ctx.font="54px "+CARD_FONT_HI; ctx.fillStyle="#E8C873";
+  ctx.fillText("श्री कृष्ण वाणी",tx,footerTop+62);
+  ctx.font="29px "+fontMain; ctx.fillStyle="#ffffff";
+  ctx.fillText(t("shareTagline"),tx,footerTop+112);
+  ctx.font="27px "+CARD_FONT_EN; ctx.fillStyle="#D8B35F";
+  ctx.fillText(shareLinkShort(),tx,footerTop+152);
+
+  return new Promise(function(resolve,reject){
+    cv.toBlob(function(b){ b ? resolve(b) : reject(new Error("image failed")); },"image/jpeg",0.92);
+  });
+}
+
+function saveCardImage(blob){
+  var url=URL.createObjectURL(blob), a=document.createElement("a");
+  a.href=url; a.download="krishna-vani.jpg";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },1500);
+}
+
+var sharingNow=false;
+async function shareReply(btn,text,verse){
+  if(sharingNow) return;
+  sharingNow=true;
+  var label=btn.textContent;
+  btn.disabled=true; btn.textContent=t("shareMaking");
+  try{
+    var blob=await buildShareCard(text,verse);
+    var shared=false;
+    try{
+      var file=new File([blob],"krishna-vani.jpg",{type:"image/jpeg"});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        var caption=t("shareCaption")+"\n"+shareLink();
+        await navigator.share({files:[file],text:caption});
+        shared=true;
+      }
+    }catch(err){
+      if(err && err.name==="AbortError") return;      // the person closed the share sheet
+    }
+    if(!shared){ saveCardImage(blob); showToast(t("shareSaved")); }
+  }catch(e){
+    showToast(t("shareFail"));
+  }finally{
+    sharingNow=false; btn.disabled=false; btn.textContent=label;
+  }
+}
+
 var FREE_LIMIT = 1000000; // payment is switched off for now
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
 function saveCount(){ lsSet("krishna_msgcount", String(msgCount)); }
@@ -883,6 +1109,7 @@ function restoreHistory(){
       var b = add(item.t, item.w, true);
       if(item.id && b.parentNode) b.parentNode.dataset.mid = item.id;
       if(item.v) addVerse(b, item.v);
+      if(item.w === "bot" && item.t !== TXT.hi.noReply && item.t !== TXT.en.noReply) addShareBtn(b, item.t, item.v);
     }
   });
 }
@@ -941,6 +1168,7 @@ async function sendText(){
     var reply=data.reply||t("noReply");
     L.textContent=reply;
     var vv=normVerse(data);addVerse(L,vv);
+    if(data.reply) addShareBtn(L,reply,vv);
     saveHistory("bot", reply, L, vv);
   }catch(e){
     L.textContent=t("error")+e.message;
@@ -1267,6 +1495,7 @@ async function sendVoice(blob,filename){
     saveHistory("bot",reply,L,vv);
     if(data.reply){
       if(data.audioBase64) addPlay(L,data.audioBase64,reply,vv); else addSpeakBtn(L,reply,null,vv);
+      addShareBtn(L,reply,vv);
       speakReply(reply,data.audioBase64,vv);
     }
   }catch(e){
