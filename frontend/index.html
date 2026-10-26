@@ -455,6 +455,36 @@ body.chatting #hero .aarti-home-btn{display:none}
 .cal-aarti pre{margin:8px 0 0;white-space:pre-wrap;font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:15px;line-height:2;color:var(--gold-deep)}
 .cal-link{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gold-deep);text-decoration:none}
 .cal-note{font-size:11.5px;line-height:1.7;color:var(--ink-muted);text-align:center;margin:6px 6px 0}
+/* ---- Japa counter & mantra timer ---- */
+.japa-panel{position:fixed;inset:0;z-index:47;display:none;flex-direction:column;background:#eef4f2}
+.japa-panel.show{display:flex}
+.japa-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.japa-wrap{max-width:460px;margin:0 auto;text-align:center}
+.japa-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 12px}
+.japa-chip{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;touch-action:manipulation}
+.japa-chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.japa-mantra{font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:24px;line-height:1.6;color:var(--gold-deep);margin:4px 0 10px}
+.japa-ring{position:relative;width:min(72vw,300px);aspect-ratio:1;margin:6px auto 12px}
+.japa-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
+.japa-ring circle{fill:none;stroke-width:8}
+.japa-ring .bg{stroke:rgba(184,146,60,.22)}
+.japa-ring .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .15s}
+.japa-tap{position:absolute;inset:14px;border-radius:50%;border:0;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(circle at 35% 30%,#fff,rgba(250,244,228,.97));box-shadow:0 10px 26px rgba(74,90,99,.25),inset 0 0 0 1px rgba(184,146,60,.45);
+  color:var(--slate-deep);font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.japa-tap:active{transform:scale(.97)}
+.japa-tap b{font-size:58px;line-height:1;font-weight:600}
+.japa-tap small{font-size:12.5px;color:var(--ink-muted);margin-top:6px}
+.japa-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.japa-btn{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:12px;padding:9px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;touch-action:manipulation}
+.japa-btn.pri{background:var(--gold);color:#fff;border-color:var(--gold)}
+.japa-stats{display:flex;justify-content:center;gap:18px;font-size:13px;color:var(--ink-muted);margin:0 0 14px;flex-wrap:wrap}
+.japa-stats b{color:var(--slate-deep);font-size:15px}
+.japa-card{background:#fff;border:1px solid rgba(184,146,60,.45);border-radius:18px;padding:12px 12px 14px;box-shadow:0 6px 16px rgba(74,90,99,.12);margin:0 0 12px}
+.japa-card h5{margin:0 0 8px;font-size:13.5px;color:var(--slate-deep)}
+.japa-time{font-size:40px;font-weight:600;color:var(--slate-deep);letter-spacing:.02em;margin:2px 0 10px;font-variant-numeric:tabular-nums}
+.japa-done{display:none;margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(184,146,60,.15);color:var(--gold-deep);font-size:14px;font-weight:600;line-height:1.6}
+.japa-done.show{display:block}
 </style></head><body>
 
 <div id="dust"></div>
@@ -474,6 +504,7 @@ body.chatting #hero .aarti-home-btn{display:none}
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
       <button class="account-item" id="menuGitaBtn">📖 गीता / Gita</button>
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
+      <button class="account-item" id="menuJapaBtn">📿 जप काउंटर / Japa Counter</button>
       <button class="account-item" id="menuCalBtn">📅 पर्व-तिथि कैलेंडर / Festival Calendar</button>
       <button class="account-item" id="menuFavBtn">❤️ मेरे पसंदीदा / Favourites</button>
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
@@ -552,6 +583,14 @@ body.chatting #hero .aarti-home-btn{display:none}
     <div id="calTitle">पर्व और तिथि कैलेंडर</div>
   </div>
   <div class="cal-body"><div class="cal-wrap" id="calWrap"></div></div>
+</div>
+
+<div class="japa-panel" id="japaPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="japaClose" aria-label="Back">&larr;</button>
+    <div id="japaTitle">जप काउंटर</div>
+  </div>
+  <div class="japa-body"><div class="japa-wrap" id="japaWrap"></div></div>
 </div>
 
 <div class="modal-overlay" id="langModal">
@@ -756,6 +795,7 @@ function applyStaticText(){
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
   document.getElementById("menuAartiBtn").textContent = t("menuAarti");
   document.getElementById("menuFavBtn").textContent = t("menuFav");
+  if(typeof JAPA_UI!=="undefined"){ document.getElementById("menuJapaBtn").textContent = JAPA_UI[currentLang==="en"?"en":"hi"].menu; if(japaPanel.classList.contains("show")) japaPaint(); }
   if(typeof CAL_UI!=="undefined"){ document.getElementById("menuCalBtn").textContent = CAL_UI[currentLang==="en"?"en":"hi"].menu; if(calPanel.classList.contains("show")) calRender(); }
   document.getElementById("favTitle").textContent = t("favTitle");
   document.getElementById("aartiHomeText").textContent = t("aartiHome");
@@ -1491,6 +1531,173 @@ function closeCal(){
 window.addEventListener("popstate",function(){ calPanel.classList.remove("show"); });
 document.getElementById("calClose").addEventListener("click",closeCal);
 document.getElementById("menuCalBtn").addEventListener("click",openCal);
+
+/* ================= Japa counter & mantra timer =================
+ * Tap counter for two mantras with 11 / 21 / 108 targets, a timer (count-up or countdown),
+ * and daily totals kept on the phone (localStorage). Works offline.
+ */
+var JAPA_MANTRAS = {
+  hk:{text:"हरे कृष्ण हरे कृष्ण\nकृष्ण कृष्ण हरे हरे।\nहरे राम हरे राम\nराम राम हरे हरे॥", short:{hi:"हरे कृष्ण", en:"Hare Krishna"}},
+  nb:{text:"ॐ नमो भगवते वासुदेवाय", short:{hi:"ॐ नमो भगवते वासुदेवाय", en:"Om Namo Bhagavate Vasudevaya"}}
+};
+var JAPA_TARGETS=[11,21,108], JAPA_TIMES=[0,5,10,15,30];
+var JAPA_UI = {
+  hi:{title:"जप काउंटर और मंत्र टाइमर", tap:"गिनने के लिए दबाएँ", target:"संख्या", malas:"माला", today:"आज का जप", all:"कुल माला (आज)",
+      undo:"− एक घटाएँ", reset:"शून्य करें", timer:"मंत्र टाइमर", up:"घड़ी", min:"मि.", start:"शुरू करें", pause:"रोकें", cont:"जारी रखें", resetT:"फिर से",
+      doneJapa:function(n,m){return "🪔 "+n+" जप पूरे हुए। "+m+" की जय!";}, doneTimer:"🪔 समय पूरा हुआ। हरि ॐ तत्सत्।", menu:"📿 जप काउंटर / Japa Counter",
+      resetAsk:"गिनती शून्य करें?", count:"जप"},
+  en:{title:"Japa Counter & Mantra Timer", tap:"tap to count", target:"Target", malas:"Malas", today:"Japa today", all:"Malas today",
+      undo:"− Undo one", reset:"Reset", timer:"Mantra timer", up:"Stopwatch", min:"min", start:"Start", pause:"Pause", cont:"Resume", resetT:"Restart",
+      doneJapa:function(n,m){return "🪔 "+n+" japa complete. Glory to "+m+"!";}, doneTimer:"🪔 Time is up. Hari Om Tat Sat.", menu:"📿 Japa Counter / जप काउंटर",
+      resetAsk:"Reset the count?", count:"japa"}
+};
+var japaKey="krishna_japa";
+function japaToday(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function japaLoad(){
+  var s={}; try{ s=JSON.parse(lsGet(japaKey)||"{}")||{}; }catch(e){ s={}; }
+  if(!JAPA_MANTRAS[s.mantra]) s.mantra="hk";
+  if(JAPA_TARGETS.indexOf(s.target)<0) s.target=108;
+  s.count=Math.max(0,parseInt(s.count,10)||0);
+  if(s.day!==japaToday()){ s.day=japaToday(); s.dayJapa=0; s.dayMalas=0; }   // new day, fresh totals
+  s.dayJapa=s.dayJapa||0; s.dayMalas=s.dayMalas||0;
+  return s;
+}
+var japa=japaLoad();
+function japaSave(){ lsSet(japaKey,JSON.stringify(japa)); }
+function japaL(){ return currentLang==="en"?"en":"hi"; }
+
+/* timer: timestamps, so it stays right if the phone sleeps briefly */
+var jt={limit:0,running:false,acc:0,start:0,tick:null,finished:false}, japaWake=null, japaAudio=null;
+function jtElapsed(){ return jt.acc+(jt.running?Date.now()-jt.start:0); }
+function jtFmt(ms){ var s=Math.max(0,Math.floor(ms/1000)), m=Math.floor(s/60); s=s%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+function jtShown(){ return jt.limit? Math.max(0,jt.limit*60000-jtElapsed()) : jtElapsed(); }
+function japaBell(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    japaAudio=japaAudio||new AC(); if(japaAudio.state==="suspended") japaAudio.resume();
+    [528,792].forEach(function(f,i){
+      var o=japaAudio.createOscillator(), g=japaAudio.createGain(), t0=japaAudio.currentTime+i*0.02;
+      o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(i?0.12:0.3,t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+2.4); o.connect(g); g.connect(japaAudio.destination); o.start(t0); o.stop(t0+2.5);
+    });
+  }catch(e){}
+}
+function japaBuzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+function jtWake(on){
+  try{
+    if(on && navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(w){ japaWake=w; }).catch(function(){}); }
+    else if(!on && japaWake){ japaWake.release(); japaWake=null; }
+  }catch(e){}
+}
+function jtStart(){
+  if(jt.running) return; if(jt.finished){ jt.acc=0; jt.finished=false; }
+  jt.running=true; jt.start=Date.now(); jtWake(true);
+  jt.tick=setInterval(jtUpdate,250); japaPaint();
+}
+function jtPause(){
+  if(!jt.running) return;
+  jt.acc=jtElapsed(); jt.running=false; clearInterval(jt.tick); jtWake(false); japaPaint();
+}
+function jtReset(){ jt.running=false; clearInterval(jt.tick); jt.acc=0; jt.finished=false; jtWake(false); japaPaint(); }
+function jtUpdate(){
+  var el=document.getElementById("japaTime"); if(el) el.textContent=jtFmt(jtShown());
+  if(jt.limit && jtElapsed()>=jt.limit*60000 && !jt.finished){
+    jt.finished=true; jt.acc=jt.limit*60000; jt.running=false; clearInterval(jt.tick); jtWake(false);
+    japaBell(); japaBuzz([200,100,200,100,300]); japaBanner(japaUI().doneTimer); japaPaint();
+  }
+}
+function japaUI(){ return JAPA_UI[japaL()]; }
+var japaBannerTxt="";
+function japaBanner(txt){ japaBannerTxt=txt; var b=document.getElementById("japaDone"); if(b){ b.textContent=txt; b.classList.add("show"); } }
+
+function japaTap(){
+  if(!jt.running && !jt.finished) jtStart();                // first tap also starts the timer
+  japa.count++; japa.dayJapa++;
+  if(japa.count>=japa.target){
+    japa.count=0; japa.dayMalas++;
+    japaBell(); japaBuzz([60,40,60,40,120]);
+    japaBanner(japaUI().doneJapa(japa.target, JAPA_MANTRAS[japa.mantra].short[japaL()]));
+  } else { japaBuzz(10); }
+  japaSave(); japaPaintCount();
+}
+function japaPaintCount(){
+  var U=japaUI(), C=2*Math.PI*46;
+  var c=document.getElementById("japaCount"); if(!c) return;
+  c.textContent=japa.count;
+  document.getElementById("japaOf").textContent="/ "+japa.target;
+  var fg=document.getElementById("japaFg"); fg.style.strokeDasharray=C; fg.style.strokeDashoffset=C*(1-japa.count/japa.target);
+  document.getElementById("japaDayJapa").textContent=japa.dayJapa;
+  document.getElementById("japaDayMalas").textContent=japa.dayMalas;
+}
+function japaChip(parent,label,on,fn){ var b=document.createElement("button"); b.className="japa-chip"+(on?" on":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
+function japaBtn(parent,label,pri,fn){ var b=document.createElement("button"); b.className="japa-btn"+(pri?" pri":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
+function japaPaint(){
+  var L=japaL(), U=japaUI(), w=document.getElementById("japaWrap");
+  document.getElementById("japaTitle").textContent=U.title;
+  w.innerHTML="";
+  function el(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+
+  var mc=el("div","japa-chips");
+  Object.keys(JAPA_MANTRAS).forEach(function(k){
+    japaChip(mc,JAPA_MANTRAS[k].short[L],japa.mantra===k,function(){ japa.mantra=k; japa.count=0; japaSave(); japaPaint(); });
+  });
+  w.appendChild(mc);
+  var mt=el("div","japa-mantra",JAPA_MANTRAS[japa.mantra].text); mt.style.whiteSpace="pre-line"; w.appendChild(mt);
+
+  var tc=el("div","japa-chips");
+  JAPA_TARGETS.forEach(function(n){
+    japaChip(tc,String(n),japa.target===n,function(){ japa.target=n; japa.count=0; japaSave(); japaPaint(); });
+  });
+  w.appendChild(tc);
+
+  var ring=el("div","japa-ring");
+  ring.innerHTML='<svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="46"/><circle class="fg" id="japaFg" cx="50" cy="50" r="46"/></svg>';
+  var tap=el("button","japa-tap"); tap.id="japaTap"; tap.setAttribute("aria-label",U.tap);
+  tap.innerHTML='<b id="japaCount">0</b><span id="japaOf" style="font-size:14px;color:var(--ink-muted);margin-top:2px"></span><small>'+U.tap+'</small>';
+  tap.addEventListener("click",japaTap);
+  ring.appendChild(tap); w.appendChild(ring);
+
+  var bn=el("div","japa-done"+(japaBannerTxt?" show":""),japaBannerTxt); bn.id="japaDone"; w.appendChild(bn);
+
+  var st=el("div","japa-stats");
+  st.innerHTML='<span>'+U.today+': <b id="japaDayJapa">0</b></span><span>'+U.all+': <b id="japaDayMalas">0</b></span>';
+  w.appendChild(st);
+
+  var row=el("div","japa-row");
+  japaBtn(row,U.undo,false,function(){
+    if(japa.count>0){ japa.count--; japa.dayJapa=Math.max(0,japa.dayJapa-1); japaSave(); japaPaintCount(); }
+  });
+  japaBtn(row,U.reset,false,function(){ if(confirm(U.resetAsk)){ japa.count=0; japaBannerTxt=""; japaSave(); japaPaint(); } });
+  w.appendChild(row);
+
+  var card=el("div","japa-card"); card.appendChild(el("h5",null,"⏱ "+U.timer));
+  var lc=el("div","japa-chips");
+  JAPA_TIMES.forEach(function(n){
+    japaChip(lc,n?(n+" "+U.min):U.up,jt.limit===n,function(){ jtReset(); jt.limit=n; japaBannerTxt=""; japaPaint(); });
+  });
+  card.appendChild(lc);
+  var tm=el("div","japa-time",jtFmt(jtShown())); tm.id="japaTime"; card.appendChild(tm);
+  var tr=el("div","japa-row"); tr.style.marginBottom="0";
+  japaBtn(tr, jt.running?U.pause:(jtElapsed()>0&&!jt.finished?U.cont:U.start), true, function(){ if(jt.running) jtPause(); else jtStart(); });
+  japaBtn(tr,U.resetT,false,function(){ jtReset(); japaBannerTxt=""; japaPaint(); });
+  card.appendChild(tr); w.appendChild(card);
+  japaPaintCount();
+}
+var japaPanel=document.getElementById("japaPanel");
+function openJapa(){
+  japa=japaLoad(); japaBannerTxt=""; japaPaint(); japaPanel.classList.add("show");
+  menuDropdown.classList.remove("show");
+  try{ history.pushState({japa:1},""); }catch(e){}
+}
+function closeJapa(){
+  if(!japaPanel.classList.contains("show")) return;
+  japaPanel.classList.remove("show"); jtPause();
+  if(history.state && history.state.japa){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ if(japaPanel.classList.contains("show")){ japaPanel.classList.remove("show"); jtPause(); } });
+document.addEventListener("visibilitychange",function(){ if(!document.hidden && jt.running) jtWake(true); });
+document.getElementById("japaClose").addEventListener("click",closeJapa);
+document.getElementById("menuJapaBtn").addEventListener("click",openJapa);
 
 var FREE_LIMIT = 1000000; // payment is switched off for now
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
