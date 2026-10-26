@@ -252,6 +252,34 @@ details.summary .body{padding:0 16px 16px;font-size:14px;line-height:1.8;color:v
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.cover img{animation:none}.toast{transition:none}}
 @media (max-width:360px){.cover h1{font-size:33px}.chlist{gap:9px}.chtx .t{font-size:15.5px}}
+/* ---- Gita search (word or feeling) ---- */
+#gsearch{margin:18px 0 6px}
+.gs-box{position:relative}
+.gs-box input{width:100%;height:48px;padding:0 44px 0 16px;border-radius:24px;border:1px solid var(--line);background:var(--chip);color:var(--text);
+  font-family:inherit;font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
+.gs-box input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.gs-box input::placeholder{color:var(--muted)}
+.gs-box input::-webkit-search-cancel-button{display:none}
+#gsClear{position:absolute;right:6px;top:6px;width:36px;height:36px;border-radius:50%;border:0;background:transparent;color:var(--muted);font-size:18px;cursor:pointer;display:none}
+.gs-box.has #gsClear{display:block}
+.gs-lbl{margin:12px 2px 6px;font-size:12.5px;color:var(--muted)}
+.gs-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:0 -2px;scrollbar-width:none}
+.gs-chips::-webkit-scrollbar{display:none}
+.gs-chip{flex:0 0 auto;height:36px;padding:0 15px;border-radius:18px;border:1px solid var(--line);background:var(--chip);color:var(--text);
+  font-family:'Tiro Devanagari Hindi',serif;font-size:15.5px;cursor:pointer;white-space:nowrap}
+.gs-chip[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+#gsResults{margin:6px 0 0;scroll-margin-top:130px}
+.gs-h{margin:16px 2px 8px;font-size:13.5px;font-weight:600;color:var(--gold)}
+.gs-hit{display:block;width:100%;text-align:left;margin:0 0 10px;padding:14px 14px 12px;border-radius:16px;border:1px solid var(--line);
+  background:var(--panel-solid);color:var(--text);cursor:pointer;font-family:inherit;box-shadow:var(--shadow)}
+.gs-hit.top{border-color:var(--gold)}
+.gs-ref{font-size:12.5px;font-weight:600;color:var(--gold);margin-bottom:6px}
+.gs-sa{font-family:'Tiro Devanagari Hindi',serif;font-size:16.5px;line-height:1.8;color:var(--gold);white-space:pre-line}
+.gs-me{margin-top:6px;font-size:14px;line-height:1.7;color:var(--text)}
+.gs-hit mark{background:var(--gold-soft);color:inherit;border-radius:3px;padding:0 2px;box-shadow:inset 0 -2px 0 var(--gold)}
+.gs-empty,.gs-count{margin:14px 4px;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.gs-more{display:block;margin:6px auto 0;height:40px;padding:0 20px;border-radius:20px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:13.5px;cursor:pointer}
+body.gsing #resumeBox,body.gsing #votd,body.gsing #groups{display:none}
 </style></head><body class="onlist">
 
 <div id="prog"></div>
@@ -278,6 +306,15 @@ details.summary .body{padding:0 16px 16px;font-size:14px;line-height:1.8;color:v
         </div>
       </div>
       <div class="landing-body">
+        <div id="gsearch">
+          <div class="gs-box" id="gsBox">
+            <input id="gsInput" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <button id="gsClear" type="button" aria-label="Clear">✕</button>
+          </div>
+          <div class="gs-lbl" id="gsLbl"></div>
+          <div class="gs-chips" id="gsChips"></div>
+          <div id="gsResults" aria-live="polite"></div>
+        </div>
         <div id="resumeBox"></div>
         <div id="votd"></div>
         <div id="groups"></div>
@@ -528,6 +565,166 @@ function fromHash(){
   return n>=1 && n<=18 ? [n, m[2] ? parseInt(m[2],10) : 0] : [0,0];
 }
 window.addEventListener("popstate",function(){ var h = fromHash(); go(h[0], h[1], false); });
+
+/* ================= Gita search: by word or by feeling =================
+ * Type a word (Hindi / English / Sanskrit) or a feeling ("डर", "क्रोध", "gussa", "anxiety").
+ * Feelings show a hand-picked set of verses first, then every verse containing the word.
+ * Everything runs on the phone from gita-data.js. To add a feeling, add a block to FEELINGS:
+ * a:  words people may type (Hindi, English, Hinglish)   r: [chapter,verse] picks, best first
+ * k:  extra words searched inside the verses
+ */
+var FEELINGS = [
+ {id:"fear",   hi:"डर", en:"Fear", a:["डर","भय","खौफ","डरना","dar","darr","bhay","fear","afraid","scared","phobia"], k:["भय","डर","fear","afraid"], r:[[2,3],[4,10],[2,40],[18,66],[2,56],[12,15]]},
+ {id:"anger",  hi:"क्रोध", en:"Anger", a:["क्रोध","गुस्सा","ग़ुस्सा","चिढ़","krodh","gussa","gusa","anger","angry","rage","irritated"], k:["क्रोध","anger"], r:[[2,62],[3,37],[16,21],[2,56],[16,4],[12,15]]},
+ {id:"worry",  hi:"चिंता", en:"Worry", a:["चिंता","चिन्ता","तनाव","बेचैनी","घबराहट","chinta","tension","stress","anxiety","anxious","worry","overthinking","restless"], k:["चंचल","चञ्चल","restless","unsteady"], r:[[6,35],[6,26],[2,47],[2,66],[2,48],[6,17]]},
+ {id:"sorrow", hi:"दुख", en:"Sorrow", a:["दुख","दुःख","शोक","उदासी","उदास","रोना","dukh","dukhi","udasi","sad","sadness","grief","sorrow","depression","depressed"], k:["शोक","दुःख","grieve","sorrow"], r:[[2,11],[2,14],[2,13],[2,22],[2,27],[18,66],[2,38]]},
+ {id:"moh",    hi:"मोह", en:"Attachment", a:["मोह","आसक्ति","लगाव","मोहमाया","moh","attachment","attached"], k:["मोह","आसक्ति","attachment"], r:[[2,62],[5,10],[2,71],[12,13],[2,56]]},
+ {id:"lobh",   hi:"लोभ", en:"Greed & desire", a:["लोभ","लालच","इच्छा","इच्छाएँ","वासना","तृष्णा","lobh","lalach","greed","desire","lust","craving"], k:["लोभ","कामना","greed","desire"], r:[[3,37],[16,21],[2,70],[2,71],[14,17]]},
+ {id:"ego",    hi:"अहंकार", en:"Ego", a:["अहंकार","घमंड","अभिमान","ahankar","ghamand","abhiman","ego","pride","arrogance"], k:["अहंकार","अहङ्कार","egoism","arrogance"], r:[[3,27],[16,4],[18,58],[2,71],[12,13]]},
+ {id:"fail",   hi:"निराशा", en:"Failure", a:["निराशा","असफलता","असफल","हार","हताश","नाकामी","nirasha","asafalta","failure","fail","defeat","hopeless","disappointment","disappointed"], k:["सिद्धि","असिद्धि","failure","defeat"], r:[[2,47],[2,48],[2,38],[6,5],[2,3],[18,78]]},
+ {id:"alone",  hi:"अकेलापन", en:"Loneliness", a:["अकेला","अकेलापन","तन्हाई","akela","akelapan","lonely","loneliness","alone"], k:["शरण","refuge","friend"], r:[[9,22],[9,34],[18,66],[9,31],[5,29]]},
+ {id:"doubt",  hi:"उलझन", en:"Confusion", a:["उलझन","दुविधा","संशय","भ्रम","संदेह","uljhan","duvidha","confused","confusion","dilemma","doubt","decision"], k:["संशय","भ्रम","confused","doubt"], r:[[2,7],[18,63],[4,40],[3,35],[18,66]]},
+ {id:"peace",  hi:"शांति", en:"Peace", a:["शांति","शान्ति","सुकून","चैन","shanti","shaanti","peace","calm","calmness","tranquility"], k:["शान्ति","शांति","peace"], r:[[2,66],[2,70],[2,71],[5,29],[6,7],[12,12]]},
+ {id:"courage",hi:"हिम्मत", en:"Courage", a:["हिम्मत","हिम्मत","साहस","आत्मविश्वास","भरोसा","himmat","sahas","courage","confidence","strength","motivation"], k:["उद्धरेत्","courage","strength"], r:[[6,5],[6,6],[2,3],[18,58],[18,78]]},
+ {id:"hope",   hi:"आशा", en:"Hope & faith", a:["आशा","उम्मीद","श्रद्धा","भक्ति","asha","ummeed","hope","faith","bhakti","devotion","trust"], k:["भक्त","श्रद्धा","devotee","faith"], r:[[9,31],[9,26],[9,22],[18,78],[18,66]]},
+ {id:"death",  hi:"मृत्यु-भय", en:"Fear of death", a:["मृत्यु","मौत","मरना","mrityu","maut","death","dying","die"], k:["मृत्यु","मरण","death"], r:[[2,20],[2,22],[2,27],[2,13]]},
+ {id:"duty",   hi:"कर्तव्य", en:"Duty & work", a:["कर्तव्य","आलस्य","आलस","कर्म","मेहनत","kartavya","aalas","alas","duty","lazy","laziness","procrastination","work"], k:["कर्तव्य","कर्म","duty","action"], r:[[3,8],[2,47],[18,47],[3,35],[18,48]]}
+];
+var GS_UI = {
+  hi:{ph:"शब्द या भाव खोजें — जैसे डर, क्रोध, चिंता", lbl:"अपने मन का भाव चुनें", forYou:"आपके मन के लिए गीता", more:"इस शब्द वाले अन्य श्लोक", found:"{n} श्लोक मिले",
+      none:"कोई श्लोक नहीं मिला। दूसरा शब्द आज़माएँ, या ऊपर से कोई भाव चुनें।", showMore:"और दिखाएँ", ch:"अध्याय", v:"श्लोक"},
+  en:{ph:"Search a word or feeling, e.g. fear, anger, worry", lbl:"Pick how you feel", forYou:"The Gita for how you feel", more:"More verses with this word", found:"{n} verses found",
+      none:"No verse found. Try another word, or pick a feeling above.", showMore:"Show more", ch:"Chapter", v:"Verse"}
+};
+function gsNorm(s){ return String(s||"").normalize("NFC").replace(/[़‌‍]/g,"").toLowerCase(); }
+var GS_INDEX = null;
+function gsBuild(){
+  if(GS_INDEX) return GS_INDEX;
+  GS_INDEX = [];
+  GITA.forEach(function(ch){ ch.v.forEach(function(x){
+    GS_INDEX.push({c:ch.n, x:x, t:gsNorm(x.sa+" \n "+(x.hi||"")+" \n "+(x.en||""))});
+  }); });
+  return GS_INDEX;
+}
+var gsShown = 0, gsLast = null;
+var GS_STOP = {"the":1,"and":1,"for":1,"how":1,"to":1,"of":1,"in":1,"is":1,"i":1,"me":1,"my":1,"am":1,"feel":1,"feeling":1,"मुझे":1,"है":1,"हूँ":1,"हूं":1,"लगता":1,"लगती":1,"mujhe":1,"lagta":1,"lagti":1,"hai":1,"bahut":1,"बहुत":1,"से":1,"को":1,"का":1,"की":1,"के":1,"में":1};
+function gsTokens(q){ return gsNorm(q).split(/[\s,.;:!?"'()\-–—]+/).filter(function(w){ return w && !GS_STOP[w]; }); }
+function gsFeelings(tokens, whole){
+  var out=[];
+  FEELINGS.forEach(function(f){
+    var al=f.a.map(gsNorm), hit=false;
+    if(al.indexOf(whole)>-1) hit=true;
+    tokens.forEach(function(t){ if(hit) return;
+      if(al.indexOf(t)>-1) hit=true;
+      else if(t.length>=3) al.forEach(function(a){ if(a.length>=3 && (a.indexOf(t)===0 || t.indexOf(a)===0)) hit=true; });
+    });
+    if(hit) out.push(f);
+  });
+  return out;
+}
+function gsFind(tokens){          // every word must appear; if nothing, try shorter word stems, then any word
+  var idx=gsBuild();
+  function run(words, needAll){
+    var res=[];
+    idx.forEach(function(e){
+      var score=0, got=0;
+      words.forEach(function(w){ var p=e.t.indexOf(w), n=0; while(p>-1){ n++; p=e.t.indexOf(w,p+w.length); } if(n){ got++; score+=n; } });
+      if(needAll ? got===words.length : got>0) res.push({e:e,s:score*10+got});
+    });
+    return res;
+  }
+  var r=run(tokens,true);
+  if(!r.length){
+    var stems=tokens.map(function(w){ return w.length>4 ? w.slice(0,w.length-2) : (w.length>3 ? w.slice(0,w.length-1) : w); });
+    r=run(stems,true); tokens=stems;
+  }
+  if(!r.length && tokens.length>1) r=run(tokens,false);
+  r.sort(function(a,b){ return b.s-a.s || a.e.c-b.e.c || a.e.x.n-b.e.x.n; });
+  return {list:r.map(function(o){ return o.e; }), words:tokens};
+}
+function gsVerseOf(c,n){ var v=GITA[c-1].v.filter(function(y){ return y.n===n; })[0]; return v ? {c:c,x:v} : null; }
+function gsMark(text, words){            // escape, then wrap matches in <mark>
+  var src=String(text), norm=gsNorm(src);
+  if(norm.length!==src.length) return esc(src);        // spelling changed length: skip highlighting
+  var marks=[]; words.forEach(function(w){ if(!w) return; var p=norm.indexOf(w); while(p>-1){ marks.push([p,p+w.length]); p=norm.indexOf(w,p+w.length); } });
+  if(!marks.length) return esc(src);
+  marks.sort(function(a,b){ return a[0]-b[0]; });
+  var out="", pos=0;
+  marks.forEach(function(m){ if(m[0]<pos) { if(m[1]>pos){ out+="<mark>"+esc(src.slice(pos,m[1]))+"</mark>"; pos=m[1]; } return; }
+    out+=esc(src.slice(pos,m[0]))+"<mark>"+esc(src.slice(m[0],m[1]))+"</mark>"; pos=m[1]; });
+  return out+esc(src.slice(pos));
+}
+function gsSnippet(text, words){          // about 190 characters around the first match
+  var norm=gsNorm(text), at=-1;
+  if(norm.length===text.length) words.forEach(function(w){ var p=norm.indexOf(w); if(p>-1 && (at<0||p<at)) at=p; });
+  if(text.length<=200 || at<0) return text.length>200 ? text.slice(0,190).replace(/\s+\S*$/,"")+"…" : text;
+  var s=Math.max(0,at-70), e=Math.min(text.length,s+200);
+  var sn=text.slice(s,e); if(s>0) sn="…"+sn.replace(/^\S*\s/,""); if(e<text.length) sn=sn.replace(/\s+\S*$/,"")+"…";
+  return sn;
+}
+function gsCard(c,x,words,top){
+  var U=GS_UI[lang], meaning=(lang==="hi"?x.hi:x.en)||x.en||x.hi||"";
+  var sa=x.sa.split("\n").slice(0,2).join("\n");
+  var ref=U.ch+" "+dv(c)+" · "+U.v+" "+dv(x.n);
+  var snip=gsSnippet(meaning,words);
+  return '<button class="gs-hit'+(top?' top':'')+'" data-n="'+c+'" data-v="'+x.n+'"><div class="gs-ref">'+esc(ref)+'</div>'+
+    '<div class="gs-sa">'+gsMark(sa,words)+'</div><div class="gs-me">'+gsMark(snip,words)+'</div></button>';
+}
+function gsRender(q){
+  var U=GS_UI[lang], box=$("gsBox"), out=$("gsResults"), query=q.trim();
+  box.classList.toggle("has", !!q);
+  document.body.classList.toggle("gsing", !!query);
+  document.querySelectorAll(".gs-chip").forEach(function(b){ b.setAttribute("aria-pressed", gsNorm(b.getAttribute("data-q"))===gsNorm(query)); });
+  if(!query){ out.innerHTML=""; gsLast=null; return; }
+  var tokens=gsTokens(query); if(!tokens.length) tokens=[gsNorm(query)];
+  var feels=gsFeelings(tokens, gsNorm(query)), html="", seen={}, curated=0;
+  feels.forEach(function(f){
+    var cards="";
+    f.r.forEach(function(r){ var k=r[0]+"."+r[1]; if(seen[k]) return; var o=gsVerseOf(r[0],r[1]); if(!o) return; seen[k]=1; curated++;
+      cards+=gsCard(o.c,o.x,[],true); });
+    html+='<div class="gs-h">'+esc(U.forYou)+' — '+esc(lang==="hi"?f.hi:f.en)+'</div>'+cards;
+  });
+  var words=tokens, found=gsFind(tokens); words=found.words;
+  var list=found.list.filter(function(e){ return !seen[e.c+"."+e.x.n]; });
+  if(feels.length && list.length<8){            // feeling words (e.g. "भय") also pull in related verses
+    var kw=[]; feels.forEach(function(f){ f.k.forEach(function(w){ kw.push(gsNorm(w)); }); });
+    var extra=gsBuild().filter(function(e){ return !seen[e.c+"."+e.x.n] && kw.some(function(w){ return e.t.indexOf(w)>-1; }); });
+    extra.forEach(function(e){ if(list.indexOf(e)<0) list.push(e); });
+    words=words.concat(kw);
+  }
+  gsLast={list:list,words:words};
+  gsShown=0;
+  if(list.length){
+    html+='<div class="gs-h">'+esc(feels.length?U.more:fillS(U.found,{n:dv(list.length)}))+'</div><div id="gsList"></div><div id="gsMoreBox"></div>';
+  }
+  if(!curated && !list.length) html='<div class="gs-empty">'+esc(U.none)+'</div>';
+  out.innerHTML=html;
+  if(list.length) gsMore();
+}
+function fillS(s,o){ return s.replace(/\{(\w+)\}/g,function(_,k){ return o[k]; }); }
+function gsMore(){
+  if(!gsLast) return; var U=GS_UI[lang], list=gsLast.list, h="";
+  list.slice(gsShown,gsShown+20).forEach(function(e){ h+=gsCard(e.c,e.x,gsLast.words,false); });
+  gsShown=Math.min(list.length,gsShown+20);
+  var el=$("gsList"); if(el) el.insertAdjacentHTML("beforeend",h);
+  $("gsMoreBox").innerHTML = gsShown<list.length ? '<button class="gs-more" id="gsMoreBtn">'+esc(U.showMore)+' ('+dv(list.length-gsShown)+')</button>' : "";
+}
+function gsInit(){
+  var U=GS_UI[lang], inp=$("gsInput");
+  inp.placeholder=U.ph; $("gsLbl").textContent=U.lbl; $("gsClear").setAttribute("aria-label", lang==="hi"?"मिटाएँ":"Clear");
+  $("gsChips").innerHTML=FEELINGS.map(function(f){ var l=lang==="hi"?f.hi:f.en; return '<button class="gs-chip" type="button" data-q="'+esc(l)+'" aria-pressed="false">'+esc(l)+'</button>'; }).join("");
+  var t=null;
+  inp.addEventListener("input",function(){ clearTimeout(t); t=setTimeout(function(){ gsRender(inp.value); },160); $("gsBox").classList.toggle("has",!!inp.value); });
+  inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ inp.blur(); gsRender(inp.value); } });
+  $("gsClear").addEventListener("click",function(){ inp.value=""; gsRender(""); inp.focus(); });
+  $("gsChips").addEventListener("click",function(e){
+    var b=e.target.closest(".gs-chip"); if(!b) return;
+    var q=b.getAttribute("data-q"); inp.value = (b.getAttribute("aria-pressed")==="true") ? "" : q; gsRender(inp.value);
+    if(inp.value) $("gsResults").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  $("gsResults").addEventListener("click",function(e){ if(e.target.closest("#gsMoreBtn")) gsMore(); });
+}
+gsInit();
 
 document.documentElement.style.setProperty("--hero-img", 'url("' + $("heroImg").getAttribute("src") + '")');
 applyTheme(); applyFont();
