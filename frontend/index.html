@@ -407,6 +407,54 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
 }
 .aarti-home-btn:active{transform:scale(.98)}
 body.chatting #hero .aarti-home-btn{display:none}
+/* ---- Festival & tithi calendar ---- */
+.cal-panel{position:fixed;inset:0;z-index:46;display:none;flex-direction:column;background:#eef4f2}
+.cal-panel.show{display:flex}
+.cal-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.cal-wrap{max-width:560px;margin:0 auto}
+.cal-today{padding:14px 16px;border-radius:18px;color:#fff;margin-bottom:12px;
+  background:linear-gradient(135deg,var(--slate-deep),var(--slate));box-shadow:0 6px 16px rgba(74,90,99,.2)}
+.cal-today .k{font-size:12px;letter-spacing:.04em;opacity:.8}
+.cal-today .v{font-size:19px;font-weight:600;margin-top:3px;line-height:1.4}
+.cal-today .s{font-size:13px;margin-top:4px;opacity:.9;line-height:1.6}
+.cal-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.cal-chip{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:999px;
+  padding:6px 12px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer}
+.cal-chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.cal-month{background:#fff;border:1px solid rgba(184,146,60,.45);border-radius:18px;padding:10px 8px 8px;
+  box-shadow:0 6px 16px rgba(74,90,99,.12);margin-bottom:14px}
+.cal-mh{display:flex;align-items:center;justify-content:space-between;padding:2px 6px 8px}
+.cal-mh b{font-size:15px;color:var(--slate-deep)}
+.cal-nav{width:34px;height:34px;border-radius:50%;border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);font-size:16px;cursor:pointer;font-family:inherit}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.cal-dow{text-align:center;font-size:11px;color:var(--ink-muted);padding:2px 0 4px}
+.cal-d{min-width:0;padding-left:0;padding-right:0;position:relative;aspect-ratio:1/1.08;border:0;background:transparent;border-radius:10px;font-family:inherit;color:var(--ink);cursor:default;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:4px;font-size:13px}
+.cal-d small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:var(--ink-muted);margin-top:1px;line-height:1}
+.cal-d.has{cursor:pointer;background:rgba(184,146,60,.1)}
+.cal-d.today{outline:2px solid var(--gold)}
+.cal-d.sel{background:var(--gold);color:#fff}
+.cal-d.sel small{color:#fff}
+.cal-dots{display:flex;gap:2px;position:absolute;bottom:4px}
+.cal-dot{width:5px;height:5px;border-radius:50%}
+.t-janm{background:#2f6fb0}.t-ekad{background:#2e8b57}.t-gita{background:#c2410c}.t-purn{background:#b8923c}
+.cal-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-muted);padding:6px 6px 0}
+.cal-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.cal-h{font-size:14px;font-weight:600;color:var(--slate-deep);margin:4px 2px 8px}
+.cal-ev{background:#fff;color:var(--slate-deep);border:1px solid rgba(184,146,60,.45);border-radius:18px;
+  padding:14px 14px 12px;margin:0 0 12px;box-shadow:0 6px 16px rgba(74,90,99,.14)}
+.cal-ev.hl{box-shadow:0 0 0 2px var(--gold),0 6px 16px rgba(74,90,99,.14)}
+.cal-ev-top{display:flex;align-items:flex-start;gap:10px}
+.cal-ico{font-size:26px;line-height:1}
+.cal-ev h4{margin:0;font-size:16px;line-height:1.4}
+.cal-when{font-size:12.5px;color:var(--ink-muted);margin-top:2px;line-height:1.5}
+.cal-badge{margin-left:auto;flex-shrink:0;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(184,146,60,.15);color:var(--gold-deep);white-space:nowrap}
+.cal-msg{font-size:14.5px;line-height:1.8;margin:10px 0 4px;white-space:pre-line}
+.cal-aarti{margin-top:6px;border-top:1px dashed rgba(184,146,60,.5);padding-top:8px}
+.cal-aarti summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--gold-deep);padding:4px 0}
+.cal-aarti pre{margin:8px 0 0;white-space:pre-wrap;font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:15px;line-height:2;color:var(--gold-deep)}
+.cal-link{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gold-deep);text-decoration:none}
+.cal-note{font-size:11.5px;line-height:1.7;color:var(--ink-muted);text-align:center;margin:6px 6px 0}
 </style></head><body>
 
 <div id="dust"></div>
@@ -426,6 +474,7 @@ body.chatting #hero .aarti-home-btn{display:none}
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
       <button class="account-item" id="menuGitaBtn">📖 गीता / Gita</button>
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
+      <button class="account-item" id="menuCalBtn">📅 पर्व-तिथि कैलेंडर / Festival Calendar</button>
       <button class="account-item" id="menuFavBtn">❤️ मेरे पसंदीदा / Favourites</button>
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
       <button class="account-item" id="menuSupportBtn">सहायता / Support</button>
@@ -495,6 +544,14 @@ body.chatting #hero .aarti-home-btn{display:none}
     <div id="favTitle">मेरे पसंदीदा</div>
   </div>
   <div class="fav-list" id="favList"></div>
+</div>
+
+<div class="cal-panel" id="calPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="calClose" aria-label="Back">&larr;</button>
+    <div id="calTitle">पर्व और तिथि कैलेंडर</div>
+  </div>
+  <div class="cal-body"><div class="cal-wrap" id="calWrap"></div></div>
 </div>
 
 <div class="modal-overlay" id="langModal">
@@ -699,6 +756,7 @@ function applyStaticText(){
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
   document.getElementById("menuAartiBtn").textContent = t("menuAarti");
   document.getElementById("menuFavBtn").textContent = t("menuFav");
+  if(typeof CAL_UI!=="undefined"){ document.getElementById("menuCalBtn").textContent = CAL_UI[currentLang==="en"?"en":"hi"].menu; if(calPanel.classList.contains("show")) calRender(); }
   document.getElementById("favTitle").textContent = t("favTitle");
   document.getElementById("aartiHomeText").textContent = t("aartiHome");
   document.getElementById("menuGitaBtn").textContent = t("menuGita");
@@ -1160,6 +1218,279 @@ function closeFavs(){
 window.addEventListener("popstate",function(){ favPanel.classList.remove("show"); });
 document.getElementById("favClose").addEventListener("click",closeFavs);
 document.getElementById("menuFavBtn").addEventListener("click",openFavs);
+
+/* ================= Festival & tithi calendar =================
+ * Janmashtami, Ekadashi, Gita Jayanti, Purnima - each with a short message and aarti.
+ * Tithi is worked out on the phone from the Sun and Moon positions (no internet needed).
+ * Janmashtami and Gita Jayanti dates are fixed from a published panchang (Delhi).
+ * To add more years, add a line to FIXED_DATES below.
+ */
+var FIXED_DATES = {
+  janm: ["2026-09-04","2027-08-25","2028-08-13","2029-09-01","2030-08-21"],
+  gita: ["2026-12-20","2027-12-09","2028-11-27","2029-12-16"]
+};
+var CAL_TITHI = {
+  hi:["प्रतिपदा","द्वितीया","तृतीया","चतुर्थी","पंचमी","षष्ठी","सप्तमी","अष्टमी","नवमी","दशमी","एकादशी","द्वादशी","त्रयोदशी","चतुर्दशी","पूर्णिमा","अमावस्या"],
+  en:["Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami","Shashthi","Saptami","Ashtami","Navami","Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Purnima","Amavasya"]
+};
+var CAL_KINDS = {
+  janm:{cls:"t-janm", icon:"🦚", link:"aarti.html#janmashtami",
+    name:{hi:"श्री कृष्ण जन्माष्टमी", en:"Shri Krishna Janmashtami"},
+    chip:{hi:"जन्माष्टमी", en:"Janmashtami"},
+    sub:{hi:"भाद्रपद कृष्ण अष्टमी", en:"Krishna Ashtami of Bhadrapada"},
+    msg:{hi:"आज नंदलाल का जन्मोत्सव है। कारागार के अँधेरे में भी प्रभु प्रकट हुए। यही संदेश है कि कठिन से कठिन समय में भी आशा जन्म लेती है।\nआज एक संकल्प लें: किसी का मन नहीं दुखाऊँगा, और एक अच्छा काम कृष्ण को अर्पित करूँगा।\nनंद के आनंद भयो, जय कन्हैया लाल की!",
+         en:"Today we celebrate the birth of Nandlal. The Lord appeared even in the darkness of a prison, a reminder that hope is born in the hardest times.\nTake one resolve today: I will not hurt anyone, and I will offer one good deed to Krishna.\nJai Kanhaiya Lal ki!"},
+    aarti:{hi:"आरती उतारूँ नंदलाल की,\nयशोदा के प्यारे गोपाल की।\nमोर-मुकुट सिर, मुरली अधर पर,\nछवि अनुपम गिरिधर-गोपाल की।\nजय कन्हैया लाल की,\nजय जय नंदलाल की॥",
+           en:"I wave the lamp for Nandlal,\nfor Yashoda's beloved Gopal.\nPeacock crown, flute at His lips,\nincomparable is the beauty of Giridhar Gopal.\nVictory to Kanhaiya Lal,\nvictory to Nandlal!"}},
+  ekad:{cls:"t-ekad", icon:"🌿", link:"aarti.html#om-jai-jagdish",
+    name:{hi:"एकादशी", en:"Ekadashi"},
+    chip:{hi:"एकादशी", en:"Ekadashi"},
+    sub:{hi:"भगवान विष्णु का व्रत-दिवस", en:"Fasting day of Lord Vishnu"},
+    msg:{hi:"एकादशी मन और इंद्रियों को विश्राम देने का दिन है। अन्न या अनावश्यक भोग से दूरी रखें और नाम-जप व सत्संग में समय लगाएँ।\nअगर पूरा व्रत संभव न हो, तो आज एक बुरी आदत का उपवास रखें।\nव्रत का पारण द्वादशी को करें।",
+         en:"Ekadashi is a day to rest the mind and senses. Keep away from grain or needless indulgence and spend time in naam-jap and satsang.\nIf a full fast is not possible, fast from one bad habit today.\nBreak the fast (parana) on Dwadashi."},
+    aarti:{hi:"जय श्री हरि विष्णु, जय एकादशी व्रत की।\nशंख-चक्र-गदा-पद्मधारी, करुणा-सिंधु की।\nतुलसी-दल अर्पित है चरणों में, भाव भरे मन से।\nव्रत सफल हो, कृपा करें नारायण॥",
+           en:"Glory to Shri Hari Vishnu, glory to the Ekadashi vow.\nBearer of conch, discus, mace and lotus, ocean of compassion.\nA tulsi leaf at Your feet, offered with a full heart.\nMay the vow bear fruit, bless us, Narayan."}},
+  gita:{cls:"t-gita", icon:"📖", link:"aarti.html#gita-updesh",
+    name:{hi:"गीता जयंती", en:"Gita Jayanti"},
+    chip:{hi:"गीता जयंती", en:"Gita Jayanti"},
+    sub:{hi:"मार्गशीर्ष शुक्ल एकादशी (मोक्षदा एकादशी)", en:"Shukla Ekadashi of Margashirsha (Mokshada Ekadashi)"},
+    msg:{hi:"आज के दिन कुरुक्षेत्र में श्री कृष्ण ने अर्जुन को गीता का उपदेश दिया। आज गीता का एक अध्याय, या कम से कम एक श्लोक, अर्थ सहित पढ़ें।\n\"कर्मण्येवाधिकारस्ते मा फलेषु कदाचन\" (2.47): कर्म करना ही हमारा अधिकार है, फल की चिंता नहीं।",
+         en:"On this day at Kurukshetra, Shri Krishna gave the Gita to Arjuna. Read one chapter of the Gita today, or at least one shloka with its meaning.\n\"Karmanye vadhikaraste ma phaleshu kadachana\" (2.47): you have the right to your action, never to its fruits."},
+    aarti:{hi:"जय भगवद्गीते, माँ, जय भगवद्गीते।\nमोह-अंधकार मिटाने वाली, ज्ञान-दीप की ज्योते।\nकृष्ण-मुख से प्रकटी तू, अर्जुन को जो मिली।\nकर्म, भक्ति और ज्ञान की राह, जग को तूने दिखाई॥",
+           en:"Glory to the Bhagavad Gita, glory to the Gita.\nYou dispel the darkness of delusion, flame of the lamp of knowledge.\nBorn of Krishna's own lips, given to Arjuna.\nYou showed the world the paths of action, devotion and knowledge."}},
+  purn:{cls:"t-purn", icon:"🌕", link:"aarti.html#krishna-govind-hare-aarti",
+    name:{hi:"पूर्णिमा", en:"Purnima (Full Moon)"},
+    chip:{hi:"पूर्णिमा", en:"Purnima"},
+    sub:{hi:"शुक्ल पक्ष की पूर्णता", en:"The full moon of the bright fortnight"},
+    msg:{hi:"पूर्णिमा पूर्णता का प्रतीक है। आज चंद्र-दर्शन करें, कुछ दान दें और सत्यनारायण या श्री कृष्ण का स्मरण करें।\nआज किसी एक व्यक्ति को मन से क्षमा कर दें, मन भी चाँद की तरह हल्का और उजला हो जाएगा।",
+         en:"Purnima stands for wholeness. See the moon today, give something in charity and remember Satyanarayan or Shri Krishna.\nForgive one person from the heart today, and the mind becomes light and bright like the moon."},
+    aarti:{hi:"पूर्णिमा की रात उजियारी, चाँदनी बरसे प्यारी।\nकृष्ण-नाम की माला लेकर, बैठे भक्त दुआरी।\nजय गोविंद, जय गोपाल, जय हो कृपा तुम्हारी।\nशीतल मन में शांति भर दो, हे गिरिधर बनवारी॥",
+           en:"The Purnima night is radiant, moonlight showers down.\nDevotees sit at Your door with the rosary of Krishna's name.\nJai Govind, jai Gopal, glory to Your grace.\nFill the cooled mind with peace, O Giridhar Banwari."}}
+};
+var CAL_UI = {
+  hi:{title:"पर्व और तिथि कैलेंडर", today:"आज की तिथि", all:"सभी", upcoming:"आने वाले पर्व", noneMonth:"इस महीने में कोई चुना हुआ पर्व नहीं",
+      aarti:"🪔 छोटी आरती", full:"पूरी आरती / कथा पढ़ें →", todayB:"आज", tomorrow:"कल", inDays:function(n){return n+" दिन बाद";},
+      shukla:"शुक्ल पक्ष", krishna:"कृष्ण पक्ष",
+      note:"तिथि सूर्योदय के समय के आधार पर निकाली गई है। अलग-अलग शहरों और पंचांगों में एकादशी/पूर्णिमा एक दिन आगे-पीछे हो सकती है। व्रत से पहले अपने स्थानीय पंचांग से मिला लें।",
+      menu:"📅 पर्व-तिथि कैलेंडर", noFixed:"इस वर्ष की तारीख़ अभी जोड़ी नहीं गई है।"},
+  en:{title:"Festival & Tithi Calendar", today:"Today's tithi", all:"All", upcoming:"Upcoming festivals", noneMonth:"No selected festival this month",
+      aarti:"🪔 Short aarti", full:"Read the full aarti / story →", todayB:"Today", tomorrow:"Tomorrow", inDays:function(n){return "in "+n+" days";},
+      shukla:"Shukla Paksha", krishna:"Krishna Paksha",
+      note:"Tithi is taken at sunrise. Ekadashi and Purnima can differ by a day between cities and panchangs. Please check your local panchang before observing a fast.",
+      menu:"📅 Festival Calendar / पर्व-तिथि", noFixed:"Date for this year has not been added yet."}
+};
+var CAL_MONTHS = {
+  hi:["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"],
+  en:["January","February","March","April","May","June","July","August","September","October","November","December"]
+};
+var CAL_DOW = {hi:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"], en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]};
+
+/* ---- tithi maths (Sun and Moon longitudes, good to a fraction of an hour) ---- */
+var CAL_R = Math.PI/180;
+function calSunLon(T){
+  var L0=280.46646+36000.76983*T, M=(357.52911+35999.05029*T)*CAL_R;
+  return L0+(1.914602-0.004817*T)*Math.sin(M)+0.019993*Math.sin(2*M)+0.000289*Math.sin(3*M);
+}
+function calMoonLon(T){
+  var Lp=218.3164477+481267.88123421*T, D=(297.8501921+445267.1114034*T)*CAL_R,
+      M=(357.5291092+35999.0502909*T)*CAL_R, Mp=(134.9633964+477198.8675055*T)*CAL_R, F=(93.272095+483202.0175233*T)*CAL_R, S=Math.sin;
+  return Lp+6.288774*S(Mp)+1.274027*S(2*D-Mp)+0.658314*S(2*D)+0.213618*S(2*Mp)-0.185116*S(M)-0.114332*S(2*F)
+    +0.058793*S(2*D-2*Mp)+0.057066*S(2*D-M-Mp)+0.053322*S(2*D+Mp)+0.045758*S(2*D-M)-0.040923*S(M-Mp)-0.03472*S(D)
+    -0.030383*S(M+Mp)+0.015327*S(2*D-2*F)-0.012528*S(Mp+2*F)+0.01098*S(Mp-2*F)+0.010675*S(4*D-Mp)+0.010034*S(3*Mp)
+    +0.008548*S(4*D-2*Mp)-0.007888*S(2*D+M-Mp)-0.006766*S(2*D+M)-0.005163*S(D-Mp)+0.004987*S(D+M)+0.004036*S(2*D-M+Mp)
+    +0.003994*S(2*Mp+2*D)+0.003861*S(4*D)+0.003665*S(2*D-3*Mp);
+}
+function calTithiAt(ms){            // 1..30 (1-15 Shukla, 16-30 Krishna)
+  var T=(ms/86400000+2440587.5-2451545)/36525;
+  var d=(((calMoonLon(T)-calSunLon(T))%360)+360)%360;
+  return Math.floor(d/12)+1;
+}
+var calSunriseCache={};
+function calKey(y,m,d){ return y+"-"+(m<9?"0":"")+(m+1)+"-"+(d<10?"0":"")+d; }
+function calSunriseTithi(y,m,d){    // tithi at about 6:00 local time
+  var k=calKey(y,m,d);
+  if(calSunriseCache[k]==null) calSunriseCache[k]=calTithiAt(new Date(y,m,d,6,0,0).getTime());
+  return calSunriseCache[k];
+}
+function calDayTithi(y,m,d,h){ return calTithiAt(new Date(y,m,d,h,0,0).getTime()); }
+
+function calNearGita(y,m,day){      // is this day within 1 day of a Gita Jayanti date?
+  var t=new Date(y,m,day,12).getTime();
+  return FIXED_DATES.gita.some(function(s){
+    var p=s.split("-"); return Math.abs(new Date(+p[0],+p[1]-1,+p[2],12).getTime()-t)<=86400000*1.5;
+  });
+}
+/* tithi-based and fixed festival days in a month: returns {dayOfMonth: ["ekad","purn",...]} */
+var calMonthCache={};
+function calMonthEvents(y,m){
+  var ck=y+"-"+m; if(calMonthCache[ck]) return calMonthCache[ck];
+  var out={}, n=new Date(y,m+1,0).getDate();
+  function add(day,kind){ (out[day]=out[day]||[]).push(kind); }
+  // day 0 = last day of previous month, day n+1 = first of next, so a run is never split at a month edge
+  var days=[]; for(var i=0;i<=n+1;i++){ var dt=new Date(y,m,i,12); days.push({y:dt.getFullYear(),m:dt.getMonth(),d:dt.getDate(),day:i}); }
+  function pick(target,kind){
+    var hits=[];
+    for(var j=0;j<days.length;j++){
+      var t0=calSunriseTithi(days[j].y,days[j].m,days[j].d);
+      if(t0===target){ hits.push(j); continue; }
+      if(j+1<days.length && t0===target-1 &&
+         calSunriseTithi(days[j+1].y,days[j+1].m,days[j+1].d)===target+1) hits.push(j+1);   // tithi fell between two sunrises
+    }
+    for(var h=0;h<hits.length;h++){
+      if(h>0 && hits[h]===hits[h-1]+1) continue;     // 2-day run: keep the first day
+      var dd=days[hits[h]].day;
+      if(dd>=1 && dd<=n) add(dd,kind);
+    }
+  }
+  pick(11,"ekad"); pick(26,"ekad"); pick(15,"purn");
+  ["janm","gita"].forEach(function(kind){
+    FIXED_DATES[kind].forEach(function(s){
+      var p=s.split("-"); if(+p[0]===y && +p[1]-1===m) add(+p[2],kind);
+    });
+  });
+  // Gita Jayanti is the Mokshada Ekadashi: show it once, as Gita Jayanti
+  Object.keys(out).forEach(function(day){
+    out[day]=out[day].filter(function(x){ return x!=="ekad" || !calNearGita(y,m,+day); });
+    if(!out[day].length) delete out[day];
+  });
+  calMonthCache[ck]=out; return out;
+}
+
+/* ---- screen ---- */
+var calState={y:0,m:0,sel:null,filter:"all",open:false};
+function calL(){ return currentLang==="en" ? "en" : "hi"; }
+function calEl(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+function calTithiName(n){
+  var L=calL(), p=n>15?CAL_UI[L].krishna:CAL_UI[L].shukla, idx=((n-1)%15);
+  var nm=CAL_TITHI[L][(n===30)?15:idx];
+  return {name:nm, paksha:p};
+}
+function calDateLabel(y,m,d){
+  var L=calL(), dt=new Date(y,m,d,12);
+  return CAL_DOW[L][dt.getDay()]+", "+d+" "+CAL_MONTHS[L][m]+" "+y;
+}
+function calDaysFromToday(y,m,d){
+  var n=new Date(); var a=new Date(n.getFullYear(),n.getMonth(),n.getDate(),12).getTime();
+  return Math.round((new Date(y,m,d,12).getTime()-a)/86400000);
+}
+function calEventCard(kind,y,m,d,hl){
+  var L=calL(), K=CAL_KINDS[kind], U=CAL_UI[L];
+  var c=calEl("div","cal-ev"+(hl?" hl":""));
+  var top=calEl("div","cal-ev-top");
+  top.appendChild(calEl("div","cal-ico",K.icon));
+  var mid=calEl("div"); mid.appendChild(calEl("h4",null,K.name[L]));
+  var tt=calTithiName(calSunriseTithi(y,m,d));
+  mid.appendChild(calEl("div","cal-when",calDateLabel(y,m,d)+"  ·  "+K.sub[L]));
+  top.appendChild(mid);
+  var dd=calDaysFromToday(y,m,d);
+  var b=dd===0?U.todayB:dd===1?U.tomorrow:dd>1?U.inDays(dd):"";
+  if(b) top.appendChild(calEl("div","cal-badge",b));
+  c.appendChild(top);
+  c.appendChild(calEl("div","cal-msg",K.msg[L]));
+  var det=calEl("details","cal-aarti"); det.appendChild(calEl("summary",null,U.aarti));
+  det.appendChild(calEl("pre",null,K.aarti[L])); c.appendChild(det);
+  var a=calEl("a","cal-link",U.full); a.href=K.link; c.appendChild(a);
+  return c;
+}
+function calUpcoming(limit){
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), out=[];
+  for(var step=0; step<18 && out.length<limit; step++){
+    var ev=calMonthEvents(y,m);
+    Object.keys(ev).map(Number).sort(function(a,b){return a-b;}).forEach(function(d){
+      if(calDaysFromToday(y,m,d)<0) return;
+      ev[d].forEach(function(k){
+        if(calState.filter==="all"||calState.filter===k) out.push({k:k,y:y,m:m,d:d});
+      });
+    });
+    m++; if(m>11){m=0;y++;}
+  }
+  return out.slice(0,limit);
+}
+function calRender(){
+  var L=calL(), U=CAL_UI[L], wrap=document.getElementById("calWrap");
+  document.getElementById("calTitle").textContent=U.title;
+  wrap.innerHTML="";
+  var now=new Date(), ny=now.getFullYear(), nm=now.getMonth(), nd=now.getDate();
+
+  // today
+  var tn=calTithiName(calSunriseTithi(ny,nm,nd)), box=calEl("div","cal-today");
+  box.appendChild(calEl("div","k",U.today));
+  box.appendChild(calEl("div","v",tn.paksha+" · "+tn.name));
+  var todayKinds=calMonthEvents(ny,nm)[nd]||[];
+  if(todayKinds.length) box.appendChild(calEl("div","s",todayKinds.map(function(k){return CAL_KINDS[k].icon+" "+CAL_KINDS[k].name[L];}).join("  ·  ")));
+  else box.appendChild(calEl("div","s",calDateLabel(ny,nm,nd)));
+  wrap.appendChild(box);
+
+  // filter chips
+  var chips=calEl("div","cal-chips");
+  [["all",U.all]].concat(["janm","ekad","gita","purn"].map(function(k){return [k,CAL_KINDS[k].chip[L]];})).forEach(function(p){
+    var b=calEl("button","cal-chip"+(calState.filter===p[0]?" on":""),p[1]);
+    b.onclick=function(){ calState.filter=p[0]; calState.sel=null; calRender(); };
+    chips.appendChild(b);
+  });
+  wrap.appendChild(chips);
+
+  // month grid
+  var y=calState.y, m=calState.m, ev=calMonthEvents(y,m), first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+  var mon=calEl("div","cal-month"), mh=calEl("div","cal-mh");
+  var prev=calEl("button","cal-nav","‹"), next=calEl("button","cal-nav","›");
+  prev.setAttribute("aria-label","Previous month"); next.setAttribute("aria-label","Next month");
+  prev.onclick=function(){ calState.m--; if(calState.m<0){calState.m=11;calState.y--;} calState.sel=null; calRender(); };
+  next.onclick=function(){ calState.m++; if(calState.m>11){calState.m=0;calState.y++;} calState.sel=null; calRender(); };
+  mh.appendChild(prev); mh.appendChild(calEl("b",null,CAL_MONTHS[L][m]+" "+y)); mh.appendChild(next); mon.appendChild(mh);
+  var g=calEl("div","cal-grid");
+  CAL_DOW[L].forEach(function(s){ g.appendChild(calEl("div","cal-dow",s)); });
+  for(var i=0;i<first;i++) g.appendChild(calEl("div"));
+  for(var d=1; d<=days; d++){
+    var kinds=(ev[d]||[]).filter(function(k){ return calState.filter==="all"||calState.filter===k; });
+    var isToday=(y===ny&&m===nm&&d===nd);
+    var cell=calEl("button","cal-d"+(kinds.length?" has":"")+(isToday?" today":"")+(calState.sel===d?" sel":""));
+    cell.appendChild(document.createTextNode(String(d)));
+    var tt=calTithiName(calSunriseTithi(y,m,d));
+    cell.appendChild(calEl("small",null,tt.name));
+    if(kinds.length){
+      var dots=calEl("span","cal-dots");
+      kinds.forEach(function(k){ dots.appendChild(calEl("i","cal-dot "+CAL_KINDS[k].cls)); });
+      cell.appendChild(dots);
+      (function(dd){ cell.onclick=function(){ calState.sel=(calState.sel===dd?null:dd); calRender(); }; })(d);
+    }
+    g.appendChild(cell);
+  }
+  mon.appendChild(g);
+  var lg=calEl("div","cal-legend");
+  ["janm","ekad","gita","purn"].forEach(function(k){
+    var s=calEl("span"); var i=calEl("i",CAL_KINDS[k].cls); s.appendChild(i); s.appendChild(document.createTextNode(CAL_KINDS[k].chip[L])); lg.appendChild(s);
+  });
+  mon.appendChild(lg); wrap.appendChild(mon);
+
+  // selected day, or upcoming list
+  if(calState.sel){
+    (ev[calState.sel]||[]).forEach(function(k){
+      if(calState.filter==="all"||calState.filter===k) wrap.appendChild(calEventCard(k,y,m,calState.sel,true));
+    });
+  } else {
+    wrap.appendChild(calEl("div","cal-h",U.upcoming));
+    var list=calUpcoming(8);
+    list.forEach(function(e,i){ wrap.appendChild(calEventCard(e.k,e.y,e.m,e.d,i===0)); });
+    if(!list.length) wrap.appendChild(calEl("div","cal-note",U.noFixed));
+  }
+  wrap.appendChild(calEl("div","cal-note",U.note));
+}
+var calPanel=document.getElementById("calPanel");
+function openCal(){
+  var n=new Date(); calState.y=n.getFullYear(); calState.m=n.getMonth(); calState.sel=null; calState.filter="all";
+  calRender(); calPanel.classList.add("show"); calPanel.querySelector(".cal-body").scrollTop=0;
+  menuDropdown.classList.remove("show");
+  try{ history.pushState({cal:1},""); }catch(e){}
+}
+function closeCal(){
+  if(!calPanel.classList.contains("show")) return;
+  calPanel.classList.remove("show");
+  if(history.state && history.state.cal){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ calPanel.classList.remove("show"); });
+document.getElementById("calClose").addEventListener("click",closeCal);
+document.getElementById("menuCalBtn").addEventListener("click",openCal);
 
 var FREE_LIMIT = 1000000; // payment is switched off for now
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
