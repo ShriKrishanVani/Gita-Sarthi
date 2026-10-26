@@ -485,7 +485,94 @@ body.chatting #hero .aarti-home-btn{display:none}
 .japa-time{font-size:40px;font-weight:600;color:var(--slate-deep);letter-spacing:.02em;margin:2px 0 10px;font-variant-numeric:tabular-nums}
 .japa-done{display:none;margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(184,146,60,.15);color:var(--gold-deep);font-size:14px;font-weight:600;line-height:1.6}
 .japa-done.show{display:block}
+
+/* ---- Text size (--ts) ---- */
+body.ts1{--ts:1.2}
+body.ts2{--ts:1.4}
+.bubble{font-size:calc(15px*var(--ts,1))}
+#msg{font-size:calc(16px*var(--ts,1))}
+.wait-text{font-size:calc(13px*var(--ts,1))}
+.playbtn,.sharebtn{font-size:calc(12.5px*var(--ts,1))}
+.account-item{font-size:calc(13.5px*var(--ts,1))}
+.topics-label{font-size:calc(13.5px*var(--ts,1))}
+.topic-card span:last-child{font-size:calc(12.5px*var(--ts,1))}
+.hero-sub2{font-size:calc(16.5px*var(--ts,1))}
+.hero-quote{font-size:calc(16px*var(--ts,1))}
+.aarti-home-btn{font-size:calc(14px*var(--ts,1))}
+.modal-card p{font-size:calc(13.5px*var(--ts,1))}
+.lang-choice,.modal-btn{font-size:calc(15px*var(--ts,1))}
+#favTitle,#calTitle,#japaTitle{font-size:calc(18px*var(--ts,1))}
+.fav-text,.fav-empty{font-size:calc(15px*var(--ts,1))}
+.cal-msg{font-size:calc(14.5px*var(--ts,1))}
+.cal-when,.cal-chip{font-size:calc(12.5px*var(--ts,1))}
+.cal-ev h4{font-size:calc(16px*var(--ts,1))}
+.cal-aarti summary,.cal-link{font-size:calc(13.5px*var(--ts,1))}
+.cal-aarti pre{font-size:calc(15px*var(--ts,1))}
+.cal-note,.cal-badge{font-size:calc(11.5px*var(--ts,1))}
+.cal-today .v{font-size:calc(19px*var(--ts,1))}
+.cal-today .s{font-size:calc(13px*var(--ts,1))}
+.cal-legend{font-size:calc(11px*var(--ts,1))}
+.cal-d{font-size:calc(13px*var(--ts,1))}
+.japa-mantra{font-size:calc(24px*var(--ts,1))}
+.japa-chip,.japa-btn,.japa-card h5{font-size:calc(13.5px*var(--ts,1))}
+.japa-stats{font-size:calc(13px*var(--ts,1))}
+.japa-done{font-size:calc(14px*var(--ts,1))}
+
+/* ---- Comfort sheet (text size + night mode) ---- */
+.top-right{display:flex;align-items:center;gap:8px}
+.cmf-btn{font-family:'Tiro Devanagari Hindi',serif;font-size:15px;font-weight:600;line-height:1}
+.cmf-ov{position:fixed;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center;background:rgba(20,26,30,.5)}
+.cmf-ov.show{display:flex}
+.cmf-sheet{width:100%;max-width:460px;background:var(--panel-deep,#fdfaf2);color:var(--ink);border-radius:22px 22px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));
+  box-shadow:0 -14px 40px rgba(20,26,30,.3);border:1px solid rgba(184,146,60,.45);border-bottom:0}
+.cmf-sheet h3{margin:0 0 14px;font-size:18px;font-weight:600;color:var(--slate-deep);text-align:center}
+.cmf-lbl{font-size:13px;color:var(--ink-muted);margin:14px 2px 8px}
+.cmf-row{display:flex;gap:10px}
+.cmf-opt{flex:1;border:1.5px solid rgba(184,146,60,.5);background:rgba(184,146,60,.08);color:var(--slate-deep);border-radius:14px;padding:10px 4px;
+  font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;touch-action:manipulation;min-height:64px;justify-content:center}
+.cmf-opt b{font-family:'Tiro Devanagari Hindi',serif;font-weight:400;line-height:1}
+.cmf-opt small{font-size:12px;color:var(--ink-muted)}
+.cmf-opt[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#3a2c0c}
+.cmf-opt[aria-pressed="true"] small{color:#3a2c0c}
+.cmf-prev{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(184,146,60,.1);border:1px dashed rgba(184,146,60,.5);color:var(--slate-deep);line-height:1.7;text-align:center}
+.cmf-done{display:block;width:100%;margin-top:16px;height:46px;border-radius:14px;border:0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
+  background:linear-gradient(180deg,var(--gold-light),var(--gold) 60%,var(--gold-deep));color:#3a2c0c}
+
+/* ---- Night mode ---- */
+body.night{
+  color-scheme:dark;
+  --panel:rgba(23,31,82,.78);--panel-deep:#171F52;--bot-glass:rgba(23,31,82,.95);--user-glass:rgba(230,190,99,.18);
+  --ink:#F1E9D2;--ink-muted:#B4BDDA;--slate-deep:#F5EBD3;--slate:#C9D2E8;--gold-deep:#E6BE63;
+  background-color:#0b1030;
+  background-image:linear-gradient(180deg,rgba(8,12,38,.78),rgba(8,12,38,.9)),url("krishna-bg2.jpg");
+}
+body.night::after{background:none}
+body.night .bubble{box-shadow:0 8px 20px rgba(0,0,0,.35)}
+body.night .user .bubble{border-color:rgba(230,190,99,.35)}
+body.night #bar{background:rgba(12,18,52,.9);border-top-color:rgba(230,190,99,.3)}
+body.night #msg{background:rgba(255,255,255,.1);color:var(--ink);border-color:rgba(230,190,99,.4)}
+body.night #mic{background:radial-gradient(circle at 35% 30%,#2a3470,#171F52);color:var(--slate-deep);border-color:var(--slate)}
+body.night #hero h1{text-shadow:0 2px 14px rgba(0,0,0,.5)}
+body.night .del-btn,body.night .back-btn,body.night .account-btn,body.night .topic-card,
+body.night .fav-close,body.night .cal-chip,body.night .cal-nav,body.night .japa-chip,body.night .japa-btn{background:rgba(255,255,255,.1);color:var(--gold-deep)}
+body.night .topic-card{color:var(--slate-deep)}
+body.night .topic-card:active{background:rgba(255,255,255,.2)}
+body.night .cal-chip.on,body.night .japa-chip.on,body.night .japa-btn.pri{background:var(--gold);color:#3a2c0c}
+body.night .aarti-home-btn{background:rgba(23,31,82,.92);color:var(--gold-deep)}
+body.night .fav-panel,body.night .cal-panel,body.night .japa-panel{background:#0f1640}
+body.night .fav-head{background:rgba(23,31,82,.96)}
+body.night .fav-card,body.night .cal-ev,body.night .cal-month,body.night .japa-card{background:#171F52}
+body.night .cal-d.has{background:rgba(230,190,99,.16)}
+body.night .cal-today{background:linear-gradient(135deg,#2a3470,#1c2560)}
+body.night .japa-tap{background:radial-gradient(circle at 35% 30%,#2a3470,#171F52);color:var(--slate-deep)}
+body.night .modal-card,body.night .crest .ring{background-color:#171F52}
+body.night .lang-choice{background:rgba(255,255,255,.08);border-color:rgba(230,190,99,.4)}
+body.night #installBanner{background:#171F52}
+body.night #installBanner .ib-title{color:#F5EBD3}
+body.night #installBanner .ib-sub{color:#B4BDDA}
+body.night .cmf-sheet{background:#171F52}
 </style></head><body>
+<script>(function(){try{var b=document.body,L=localStorage;if(L.getItem("aarti_theme")==="dark")b.classList.add("night");var s=parseInt(L.getItem("krishna_textsize"),10)||0;if(s>0&&s<3)b.classList.add("ts"+s);}catch(e){}})();</script>
 
 <div id="dust"></div>
 
@@ -496,6 +583,8 @@ body.chatting #hero .aarti-home-btn{display:none}
     </button>
     <div class="brand-icon"><img src="data:image/jpeg;base64,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" alt="Krishna"></div>
   </div>
+  <div class="top-right">
+  <button class="account-btn cmf-btn" id="cmfBtn" type="button" title="अक्षर और रात्रि मोड" aria-label="Text size and night mode">अ</button>
   <div class="account-wrap">
     <button class="account-btn" id="menuBtn" title="प्रोफ़ाइल और भाषा">
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.8-3.6-5-8-5z"/></svg>
@@ -504,6 +593,7 @@ body.chatting #hero .aarti-home-btn{display:none}
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
       <button class="account-item" id="menuGitaBtn">📖 गीता / Gita</button>
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
+      <button class="account-item" id="menuCmfBtn">🔆 अक्षर और रात्रि मोड / Text & Night</button>
       <button class="account-item" id="menuJapaBtn">📿 जप काउंटर / Japa Counter</button>
       <button class="account-item" id="menuCalBtn">📅 पर्व-तिथि कैलेंडर / Festival Calendar</button>
       <button class="account-item" id="menuFavBtn">❤️ मेरे पसंदीदा / Favourites</button>
@@ -512,6 +602,7 @@ body.chatting #hero .aarti-home-btn{display:none}
       <button class="account-item" id="menuInstallBtn">ऐप इंस्टॉल करें</button>
       <button class="account-item" id="menuClearBtn">चैट साफ़ करें / Clear chat</button>
     </div>
+  </div>
   </div>
 </div>
 
@@ -591,6 +682,18 @@ body.chatting #hero .aarti-home-btn{display:none}
     <div id="japaTitle">जप काउंटर</div>
   </div>
   <div class="japa-body"><div class="japa-wrap" id="japaWrap"></div></div>
+</div>
+
+<div class="cmf-ov" id="cmfOv">
+  <div class="cmf-sheet" role="dialog" aria-modal="true" aria-labelledby="cmfTitle">
+    <h3 id="cmfTitle">आराम से पढ़ें</h3>
+    <div class="cmf-lbl" id="cmfSizeLbl">अक्षर का आकार</div>
+    <div class="cmf-row" id="cmfSizes"></div>
+    <div class="cmf-lbl" id="cmfModeLbl">रोशनी</div>
+    <div class="cmf-row" id="cmfModes"></div>
+    <div class="cmf-prev" id="cmfPrev"></div>
+    <button class="cmf-done" id="cmfDone" type="button">ठीक है</button>
+  </div>
 </div>
 
 <div class="modal-overlay" id="langModal">
@@ -795,6 +898,7 @@ function applyStaticText(){
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
   document.getElementById("menuAartiBtn").textContent = t("menuAarti");
   document.getElementById("menuFavBtn").textContent = t("menuFav");
+  if(typeof CMF_TXT!=="undefined"){ cmfPaint(); }
   if(typeof JAPA_UI!=="undefined"){ document.getElementById("menuJapaBtn").textContent = JAPA_UI[currentLang==="en"?"en":"hi"].menu; if(japaPanel.classList.contains("show")) japaPaint(); }
   if(typeof CAL_UI!=="undefined"){ document.getElementById("menuCalBtn").textContent = CAL_UI[currentLang==="en"?"en":"hi"].menu; if(calPanel.classList.contains("show")) calRender(); }
   document.getElementById("favTitle").textContent = t("favTitle");
@@ -1698,6 +1802,49 @@ window.addEventListener("popstate",function(){ if(japaPanel.classList.contains("
 document.addEventListener("visibilitychange",function(){ if(!document.hidden && jt.running) jtWake(true); });
 document.getElementById("japaClose").addEventListener("click",closeJapa);
 document.getElementById("menuJapaBtn").addEventListener("click",openJapa);
+
+/* ================= Text size and night mode =================
+ * Three text sizes and a day / night switch, saved on the phone.
+ * The choice is also written for the Gita and Aarti pages, so the whole app follows it.
+ */
+var CMF_TXT = {
+  hi:{title:"आराम से पढ़ें", size:"अक्षर का आकार", mode:"रोशनी", sizes:["सामान्य","बड़ा","बहुत बड़ा"], day:"दिन", night:"रात",
+      prev:"जय श्री कृष्ण 🙏\nआपके प्रश्न, श्री कृष्ण के उत्तर", done:"ठीक है", menu:"🔆 अक्षर और रात्रि मोड / Text & Night", btn:"अक्षर और रात्रि मोड"},
+  en:{title:"Easy reading", size:"Text size", mode:"Light", sizes:["Normal","Large","Extra large"], day:"Day", night:"Night",
+      prev:"Jai Shri Krishna 🙏\nYour questions, Shri Krishna's answers", done:"Done", menu:"🔆 Text size & Night mode / अक्षर", btn:"Text size and night mode"}
+};
+var CMF_GITA=[19,23,27], CMF_AARTI=[20,24,28];     // matching sizes on the Gita and Aarti pages
+function cmfLevel(){ var s=parseInt(lsGet("krishna_textsize"),10); return (s>=0&&s<=2)?s:0; }
+function cmfIsNight(){ return lsGet("aarti_theme")==="dark"; }
+function cmfApply(){
+  var b=document.body, s=cmfLevel(), n=cmfIsNight();
+  b.classList.remove("ts1","ts2"); if(s) b.classList.add("ts"+s);
+  b.classList.toggle("night",n);
+  var m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", n?"#0b1030":"#B8923C");
+}
+function cmfSetSize(s){ lsSet("krishna_textsize",String(s)); lsSet("gita_font",String(CMF_GITA[s])); lsSet("aarti_font",String(CMF_AARTI[s])); cmfApply(); cmfPaint(); }
+function cmfSetNight(n){ lsSet("aarti_theme", n?"dark":"light"); cmfApply(); cmfPaint(); }
+function cmfPaint(){
+  var T=CMF_TXT[currentLang==="en"?"en":"hi"], s=cmfLevel(), n=cmfIsNight();
+  $c("cmfTitle").textContent=T.title; $c("cmfSizeLbl").textContent=T.size; $c("cmfModeLbl").textContent=T.mode; $c("cmfDone").textContent=T.done;
+  var px=[20,25,30];
+  $c("cmfSizes").innerHTML=T.sizes.map(function(l,i){ return '<button class="cmf-opt" type="button" data-s="'+i+'" aria-pressed="'+(s===i)+'"><b style="font-size:'+px[i]+'px">अ</b><small>'+l+'</small></button>'; }).join("");
+  $c("cmfModes").innerHTML=[[0,"☀️",T.day],[1,"🌙",T.night]].map(function(o){ return '<button class="cmf-opt" type="button" data-m="'+o[0]+'" aria-pressed="'+((o[0]===1)===n)+'"><b style="font-size:24px">'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join("");
+  var pv=$c("cmfPrev"); pv.textContent=T.prev; pv.style.whiteSpace="pre-line"; pv.style.fontSize=(15*[1,1.2,1.4][s])+"px";
+  var mb=document.getElementById("menuCmfBtn"); if(mb) mb.textContent=T.menu;
+  var tb=document.getElementById("cmfBtn"); if(tb) tb.title=T.btn;
+}
+function $c(id){ return document.getElementById(id); }
+function openCmf(){ cmfPaint(); $c("cmfOv").classList.add("show"); menuDropdown.classList.remove("show"); }
+function closeCmf(){ $c("cmfOv").classList.remove("show"); }
+$c("cmfBtn").addEventListener("click",openCmf);
+$c("menuCmfBtn").addEventListener("click",openCmf);
+$c("cmfDone").addEventListener("click",closeCmf);
+$c("cmfOv").addEventListener("click",function(e){ if(e.target===this) closeCmf(); });
+$c("cmfSizes").addEventListener("click",function(e){ var b=e.target.closest("[data-s]"); if(b) cmfSetSize(parseInt(b.getAttribute("data-s"),10)); });
+$c("cmfModes").addEventListener("click",function(e){ var b=e.target.closest("[data-m]"); if(b) cmfSetNight(b.getAttribute("data-m")==="1"); });
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeCmf(); });
+cmfApply(); cmfPaint();
 
 var FREE_LIMIT = 1000000; // payment is switched off for now
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
