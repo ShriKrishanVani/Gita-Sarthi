@@ -541,10 +541,10 @@ body.ts2{--ts:1.4}
 /* ---- Night mode ---- */
 body.night{
   color-scheme:dark;
-  --panel:rgba(23,31,82,.78);--panel-deep:#171F52;--bot-glass:rgba(23,31,82,.95);--user-glass:rgba(230,190,99,.18);
-  --ink:#F1E9D2;--ink-muted:#B4BDDA;--slate-deep:#F5EBD3;--slate:#C9D2E8;--gold-deep:#E6BE63;
+  --panel:rgba(23,31,82,.86);--panel-deep:#1B2560;--bot-glass:rgba(27,37,96,.97);--user-glass:rgba(240,210,138,.22);
+  --ink:#FFF6DF;--ink-muted:#D2D9F0;--slate-deep:#FFF6DF;--slate:#DCE2F4;--gold:#EBC56B;--gold-light:#F6DC94;--gold-deep:#F0CC72;
   background-color:#0b1030;
-  background-image:linear-gradient(180deg,rgba(8,12,38,.78),rgba(8,12,38,.9)),url("krishna-bg2.jpg");
+  background-image:linear-gradient(180deg,rgba(8,12,38,.9),rgba(8,12,38,.95)),url("krishna-bg2.jpg");
 }
 body.night::after{background:none}
 body.night .bubble{box-shadow:0 8px 20px rgba(0,0,0,.35)}
@@ -571,6 +571,49 @@ body.night #installBanner{background:#171F52}
 body.night #installBanner .ib-title{color:#F5EBD3}
 body.night #installBanner .ib-sub{color:#B4BDDA}
 body.night .cmf-sheet{background:#171F52}
+/* ---- Night mode: contrast fixes ---- */
+body.night #hero h1{color:#FFF6DF;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+body.night .hero-tagline{color:#F6DC94;text-shadow:0 1px 10px rgba(0,0,0,.7)}
+body.night .topics-label{color:#FFF6DF;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+body.night .topic-card,body.night .del-btn,body.night .back-btn,body.night .account-btn,
+body.night .fav-close,body.night .cal-chip,body.night .cal-nav,body.night .japa-chip,body.night .japa-btn{background:rgba(35,46,112,.92);border-color:rgba(240,204,114,.55)}
+body.night .topic-card span:last-child{color:#FFF6DF}
+body.night .aarti-home-btn{background:#1B2560;border-color:rgba(240,204,114,.6);color:#F6DC94}
+body.night .bot .bubble{border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .user .bubble{background:rgba(70,84,170,.55);border-color:rgba(200,210,245,.45);color:#FFFFFF}
+body.night .av.user{background:linear-gradient(135deg,#3a4690,#2a3470);color:#FFF6DF}
+body.night #msg{background:rgba(255,255,255,.14);border-color:rgba(240,204,114,.6)}
+body.night #msg::placeholder{color:#C3CBE6}
+body.night #msg:focus{border-color:#F0CC72;box-shadow:0 0 0 3px rgba(240,204,114,.22)}
+body.night #bar{background:rgba(12,18,52,.96)}
+body.night #mic{background:radial-gradient(circle at 35% 30%,#3a4690,#1B2560);color:#FFF6DF;border-color:#DCE2F4}
+body.night .playbtn,body.night .favbtn{background:rgba(240,204,114,.16);border-color:rgba(240,204,114,.55);color:#F6DC94}
+body.night .favbtn.on{background:rgba(255,120,140,.2);border-color:rgba(255,140,160,.7)}
+body.night .account-dropdown{background:#1B2560;border-color:rgba(240,204,114,.5)}
+body.night .account-item{color:#FFF6DF}
+body.night .account-item:active{background:rgba(240,204,114,.18)}
+body.night .modal-card h3{color:#F6DC94}
+body.night .modal-card p{color:#D2D9F0}
+body.night .modal-close{color:#C3CBE6}
+body.night .lang-choice{background:rgba(255,255,255,.12);border-color:rgba(240,204,114,.6);color:#FFF6DF}
+body.night .lang-choice:active{background:rgba(255,255,255,.22)}
+body.night .modal-btn,body.night .cmf-done,body.night .sharebtn{background:linear-gradient(180deg,#F6DC94,#EBC56B 60%,#D6A944);color:#2a1f05}
+body.night .cmf-opt{background:rgba(255,255,255,.08);border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .cmf-opt small,body.night .cmf-lbl{color:#D2D9F0}
+body.night .cmf-opt[aria-pressed="true"]{background:#EBC56B;border-color:#EBC56B;color:#2a1f05}
+body.night .cmf-opt[aria-pressed="true"] small{color:#2a1f05}
+body.night .cmf-prev{background:rgba(240,204,114,.1);border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .cal-d.sel{background:#EBC56B;color:#2a1f05}
+body.night .cal-d.sel small{color:#2a1f05}
+body.night .cal-d.has{background:rgba(240,204,114,.2)}
+body.night .cal-d small,body.night .cal-dow,body.night .cal-legend,body.night .cal-when,body.night .cal-note,body.night .japa-stats,body.night .japa-tap small{color:#D2D9F0}
+body.night .cal-badge,body.night .japa-done{background:rgba(240,204,114,.2);color:#F6DC94}
+body.night .cal-chip.on,body.night .japa-chip.on,body.night .japa-btn.pri{background:#EBC56B;color:#2a1f05;border-color:#EBC56B}
+body.night .japa-ring .bg{stroke:rgba(255,255,255,.18)}
+body.night .japa-card,body.night .fav-card,body.night .cal-ev,body.night .cal-month{border-color:rgba(240,204,114,.5)}
+body.night .fav-empty{color:#D2D9F0}
+body.night .t-janm{background:#6FB0F0}body.night .t-ekad{background:#5CC98A}body.night .t-gita{background:#FF8A4C}
+body.night #installBanner .ib-sub{color:#D2D9F0}
 </style></head><body>
 <script>(function(){try{var b=document.body,L=localStorage;if(L.getItem("aarti_theme")==="dark")b.classList.add("night");var s=parseInt(L.getItem("krishna_textsize"),10)||0;if(s>0&&s<3)b.classList.add("ts"+s);}catch(e){}})();</script>
 
