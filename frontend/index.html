@@ -140,6 +140,36 @@ body::after{
   color:#3a2c0c;padding:7px 15px;border-radius:13px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;
 }
 .sharebtn:disabled{opacity:.65;cursor:default}
+.favbtn{
+  display:inline-flex;align-items:center;justify-content:center;margin-top:8px;margin-right:8px;
+  width:40px;height:32px;padding:0;font-family:inherit;font-size:16px;line-height:1;cursor:pointer;
+  background:rgba(184,146,60,0.12);border:1px solid rgba(184,146,60,0.4);border-radius:13px;
+}
+.favbtn.on{background:rgba(214,70,90,0.12);border-color:rgba(214,70,90,0.5)}
+.favbtn:active{transform:scale(.92)}
+.fav-panel{position:fixed;inset:0;z-index:45;display:none;flex-direction:column;background:#eef4f2}
+.fav-panel.show{display:flex}
+.fav-head{
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  padding:calc(12px + env(safe-area-inset-top)) 14px 12px;
+  background:rgba(255,255,255,0.88);border-bottom:1px solid rgba(184,146,60,0.35);
+}
+.fav-close{
+  width:38px;height:38px;border-radius:50%;border:1px solid rgba(184,146,60,0.5);background:#fff;
+  color:var(--gold-deep);font-size:20px;line-height:1;cursor:pointer;font-family:inherit;
+}
+#favTitle{font-size:18px;font-weight:600;color:var(--slate-deep)}
+.fav-list{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.fav-card{
+  max-width:560px;margin:0 auto 12px;padding:14px 14px 8px;background:#fff;color:var(--slate-deep);
+  border:1px solid rgba(184,146,60,0.45);border-radius:18px;box-shadow:0 6px 16px rgba(74,90,99,.14);
+}
+.fav-text{font-size:15px;line-height:1.75;font-weight:500;white-space:pre-line}
+.fav-card .verse-card{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(184,146,60,0.5)}
+.fav-card .verse-card .v-sa{color:var(--gold-deep);font-size:14.5px;line-height:1.8}
+.fav-card .verse-card .v-mean{font-size:13.5px;color:var(--ink-muted)}
+.fav-actions{display:flex;flex-wrap:wrap;align-items:center;margin-top:2px}
+.fav-empty{max-width:420px;margin:70px auto 0;text-align:center;font-size:15px;line-height:1.9;color:var(--ink-muted)}
 .toast{
   position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;
   transform:translateX(-50%) translateY(10px);max-width:86vw;text-align:center;
@@ -396,6 +426,7 @@ body.chatting #hero .aarti-home-btn{display:none}
       <button class="account-item" id="menuProfileBtn">प्रोफ़ाइल</button>
       <button class="account-item" id="menuGitaBtn">📖 गीता / Gita</button>
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
+      <button class="account-item" id="menuFavBtn">❤️ मेरे पसंदीदा / Favourites</button>
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
       <button class="account-item" id="menuSupportBtn">सहायता / Support</button>
       <button class="account-item" id="menuInstallBtn">ऐप इंस्टॉल करें</button>
@@ -456,6 +487,14 @@ body.chatting #hero .aarti-home-btn{display:none}
     <p id="paywallText">आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।</p>
     <a class="modal-btn" href="subscribe.html" target="_blank" rel="noopener" id="paywallBtn">कृपया, सिर्फ ₹9 दक्षिणा दें।</a>
   </div>
+</div>
+
+<div class="fav-panel" id="favPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="favClose" aria-label="Back">&larr;</button>
+    <div id="favTitle">मेरे पसंदीदा</div>
+  </div>
+  <div class="fav-list" id="favList"></div>
 </div>
 
 <div class="modal-overlay" id="langModal">
@@ -535,6 +574,14 @@ var TXT = {
     shareFail:"तस्वीर नहीं बन सकी, फिर कोशिश करें।",
     shareTagline:"अपना सवाल सीधे श्री कृष्ण से पूछिए",
     shareCaption:"श्री कृष्ण वाणी — अपना सवाल सीधे श्री कृष्ण से पूछिए "+PRAY,
+    menuFav:String.fromCodePoint(10084,65039)+" मेरे पसंदीदा",
+    favTitle:"मेरे पसंदीदा",
+    favEmpty:"अभी कुछ सहेजा नहीं है।\nकिसी भी उत्तर के नीचे "+String.fromCodePoint(129293)+" दबाइए, वह यहाँ जुड़ जाएगा।",
+    favAdded:"पसंदीदा में जोड़ा गया",
+    favRemoved:"पसंदीदा से हटाया गया",
+    favRemove:String.fromCodePoint(128148)+" हटाएँ",
+    favOn:"पसंदीदा से हटाएँ",
+    favOff:"पसंदीदा में जोड़ें",
     paywallTitle:"निःशुल्क सीमा पूरी हुई",
     paywallText:"आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
     paywallBtn:"कृपया, सिर्फ ₹9 दक्षिणा दें।",
@@ -589,6 +636,14 @@ var TXT = {
     shareFail:"Could not make the image, please try again.",
     shareTagline:"Ask your question to Shri Krishna",
     shareCaption:"Shri Krishna Vani — ask your question to Shri Krishna "+PRAY,
+    menuFav:String.fromCodePoint(10084,65039)+" My Favourites",
+    favTitle:"My Favourites",
+    favEmpty:"Nothing saved yet.\nTap "+String.fromCodePoint(129293)+" under any answer and it will appear here.",
+    favAdded:"Added to favourites",
+    favRemoved:"Removed from favourites",
+    favRemove:String.fromCodePoint(128148)+" Remove",
+    favOn:"Remove from favourites",
+    favOff:"Add to favourites",
     paywallTitle:"Free limit reached",
     paywallText:"You've asked 5 questions. Continue the conversation for 30 days for just ₹9.",
     paywallBtn:"Pay ₹9 to continue",
@@ -643,6 +698,8 @@ function applyStaticText(){
   document.getElementById("paywallBtn").textContent = t("paywallBtn");
   document.getElementById("menuProfileBtn").textContent = t("menuProfile");
   document.getElementById("menuAartiBtn").textContent = t("menuAarti");
+  document.getElementById("menuFavBtn").textContent = t("menuFav");
+  document.getElementById("favTitle").textContent = t("favTitle");
   document.getElementById("aartiHomeText").textContent = t("aartiHome");
   document.getElementById("menuGitaBtn").textContent = t("menuGita");
   document.getElementById("menuLangBtn").textContent = t("menuLang");
@@ -1021,6 +1078,89 @@ async function shareReply(btn,text,verse){
   }
 }
 
+
+/* ---------- Favourites: a heart on every answer + "मेरे पसंदीदा" list ---------- */
+var FAV_KEY="krishna_favs", MAX_FAVS=100;
+function favLoad(){
+  try{ var a=JSON.parse(lsGet(FAV_KEY)||"[]"); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+}
+function favSave(a){ lsSet(FAV_KEY,JSON.stringify(a)); }
+function favKey(text){                        // short fingerprint of the answer text
+  var s=String(text), h=5381;
+  for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; }
+  return "f"+(h>>>0).toString(36)+"-"+s.length;
+}
+function favIndex(a,k){ for(var i=0;i<a.length;i++){ if(a[i].k===k) return i; } return -1; }
+function favToggle(text,verse){                // returns true when the answer is now a favourite
+  var a=favLoad(), k=favKey(text), i=favIndex(a,k);
+  if(i>-1){ a.splice(i,1); favSave(a); showToast(t("favRemoved")); return false; }
+  a.unshift({k:k,t:text,v:(verse&&verse.sa)?verse:undefined,ts:Date.now()});
+  if(a.length>MAX_FAVS) a=a.slice(0,MAX_FAVS);
+  favSave(a); showToast(t("favAdded")); return true;
+}
+function setHeart(hb,on){
+  hb.textContent=on ? String.fromCodePoint(10084,65039) : String.fromCodePoint(129293);
+  hb.classList.toggle("on",on);
+  hb.title=t(on?"favOn":"favOff");
+  hb.setAttribute("aria-pressed",on?"true":"false");
+}
+function refreshHearts(){
+  var a=favLoad();
+  document.querySelectorAll(".favbtn").forEach(function(hb){ setHeart(hb,favIndex(a,hb.dataset.fk)>-1); });
+}
+function addHeartBtn(bubble,text,verse){
+  if(!bubble||!text) return;
+  var hb=document.createElement("button");
+  hb.className="favbtn";
+  hb.dataset.fk=favKey(text);
+  setHeart(hb,favIndex(favLoad(),hb.dataset.fk)>-1);
+  hb.onclick=function(){ favToggle(text,verse); refreshHearts(); };
+  bubble.appendChild(hb);
+}
+function addActionBtns(bubble,text,verse){     // heart + share under an answer
+  addHeartBtn(bubble,text,verse);
+  addShareBtn(bubble,text,verse);
+}
+
+var favPanel=document.getElementById("favPanel");
+function renderFavs(){
+  var list=document.getElementById("favList"), a=favLoad();
+  document.getElementById("favTitle").textContent=t("favTitle");
+  list.innerHTML="";
+  if(!a.length){
+    var e=document.createElement("div"); e.className="fav-empty"; e.style.whiteSpace="pre-line";
+    e.textContent=t("favEmpty"); list.appendChild(e); return;
+  }
+  a.forEach(function(it){
+    var c=document.createElement("div"); c.className="fav-card";
+    var p=document.createElement("div"); p.className="fav-text"; p.textContent=it.t; c.appendChild(p);
+    if(it.v && it.v.sa) addVerse(c,it.v);
+    var row=document.createElement("div"); row.className="fav-actions";
+    var sb=document.createElement("button"); sb.className="sharebtn"; sb.textContent=t("shareBtn");
+    sb.onclick=function(){ shareReply(sb,it.t,it.v); };
+    var rb=document.createElement("button"); rb.className="playbtn"; rb.style.marginTop="8px"; rb.textContent=t("favRemove");
+    rb.onclick=function(){
+      favSave(favLoad().filter(function(x){ return x.k!==it.k; }));
+      showToast(t("favRemoved")); renderFavs(); refreshHearts();
+    };
+    row.appendChild(sb); row.appendChild(rb); c.appendChild(row);
+    list.appendChild(c);
+  });
+}
+function openFavs(){
+  renderFavs();
+  favPanel.classList.add("show");
+  try{ history.pushState({fav:1},""); }catch(e){}   // so the phone's Back button closes the list
+}
+function closeFavs(){
+  if(!favPanel.classList.contains("show")) return;
+  favPanel.classList.remove("show");
+  if(history.state && history.state.fav){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ favPanel.classList.remove("show"); });
+document.getElementById("favClose").addEventListener("click",closeFavs);
+document.getElementById("menuFavBtn").addEventListener("click",openFavs);
+
 var FREE_LIMIT = 1000000; // payment is switched off for now
 var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
 function saveCount(){ lsSet("krishna_msgcount", String(msgCount)); }
@@ -1109,7 +1249,7 @@ function restoreHistory(){
       var b = add(item.t, item.w, true);
       if(item.id && b.parentNode) b.parentNode.dataset.mid = item.id;
       if(item.v) addVerse(b, item.v);
-      if(item.w === "bot" && item.t !== TXT.hi.noReply && item.t !== TXT.en.noReply) addShareBtn(b, item.t, item.v);
+      if(item.w === "bot" && item.t !== TXT.hi.noReply && item.t !== TXT.en.noReply) addActionBtns(b, item.t, item.v);
     }
   });
 }
@@ -1168,7 +1308,7 @@ async function sendText(){
     var reply=data.reply||t("noReply");
     L.textContent=reply;
     var vv=normVerse(data);addVerse(L,vv);
-    if(data.reply) addShareBtn(L,reply,vv);
+    if(data.reply) addActionBtns(L,reply,vv);
     saveHistory("bot", reply, L, vv);
   }catch(e){
     L.textContent=t("error")+e.message;
@@ -1495,7 +1635,7 @@ async function sendVoice(blob,filename){
     saveHistory("bot",reply,L,vv);
     if(data.reply){
       if(data.audioBase64) addPlay(L,data.audioBase64,reply,vv); else addSpeakBtn(L,reply,null,vv);
-      addShareBtn(L,reply,vv);
+      addActionBtns(L,reply,vv);
       speakReply(reply,data.audioBase64,vv);
     }
   }catch(e){
