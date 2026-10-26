@@ -2686,5 +2686,18 @@ if(!isUnlocked() && msgCount >= FREE_LIMIT){
 })();
 </script>
 
+<script>
+/* open a panel directly from the shared menu on other pages (index.html#japa / #cal / #fav / #lang) */
+(function(){
+  var h=(location.hash||"").slice(1); if(!h) return;
+  setTimeout(function(){
+    try{
+      if(h==="japa") openJapa(); else if(h==="cal") openCal(); else if(h==="fav") openFavs();
+      else if(h==="lang") document.getElementById("menuLangBtn").click();
+    }catch(e){}
+    try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  },400);
+})();
+</script>
 <script src="connect.js"></script>
 </body></html>
