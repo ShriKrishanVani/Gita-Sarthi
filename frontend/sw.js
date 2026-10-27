@@ -1,5 +1,5 @@
 /* श्री कृष्ण वाणी - service worker
- * Lets the app pages (home, Gita, Aarti, profile, support) open without internet.
+ * Lets the chat page open without internet.
  *
  * - On first visit it saves the main pages and images on the phone.
  * - Pages and scripts: tries the internet first (so updates arrive), and falls back
@@ -13,28 +13,20 @@
  *
  * Self-healing: if the first download of a page was interrupted (weak network, app
  * closed too early), the worker quietly downloads the missing pages the next time
- * the app is opened online, so Gita / Aarti / bhajan pages end up saved on the phone.
+ * the app is opened online, so the chat page and its images end up saved on the phone.
  */
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 const CACHE = "krishna-vani-" + CACHE_VERSION;
 
 const PRECACHE = [
   "./",
   "./index.html",
-  "./gita.html",
-  "./gita-data.js",
-  "./aarti.html",
-  "./profile.html",
-  "./support.html",
   "./connect.js",
-  "./menu.js",
-  "./panchang.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
   "./krishna-hero.jpg",
-  "./krishna-bg2.jpg",
-  "./profile-photo.jpg"
+  "./krishna-bg2.jpg"
 ];
 
 const NETWORK_TIMEOUT_MS = 4000;
@@ -94,7 +86,7 @@ self.addEventListener("fetch", function (e) {
 
   if (url.origin === self.location.origin) {
     if (url.pathname.indexOf("/api/") === 0 || url.pathname === "/health") return;
-    if (req.mode === "navigate") e.waitUntil(healCache(false));   // fill any page not saved yet
+    if (req.mode === "navigate") e.waitUntil(healCache(false));   // fill any file not saved yet
     if (/\.(png|jpe?g|webp|gif|svg|ico)$/i.test(url.pathname)) {
       e.respondWith(cacheFirst(req));
     } else {
