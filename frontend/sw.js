@@ -15,7 +15,7 @@
  * closed too early), the worker quietly downloads the missing pages the next time
  * the app is opened online, so Gita / Aarti / bhajan pages end up saved on the phone.
  */
-const CACHE_VERSION = "v4";
+const CACHE_VERSION = "v5";
 const CACHE = "krishna-vani-" + CACHE_VERSION;
 
 const PRECACHE = [
@@ -28,6 +28,7 @@ const PRECACHE = [
   "./support.html",
   "./connect.js",
   "./menu.js",
+  "./panchang.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
