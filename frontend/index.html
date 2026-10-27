@@ -659,6 +659,7 @@ body.night #installBanner .ib-sub{color:#D2D9F0}
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
       <button class="account-item" id="menuCmfBtn">🔆 अक्षर और रात्रि मोड / Text & Night</button>
       <button class="account-item" id="menuJapaBtn">📿 जप काउंटर / Japa Counter</button>
+      <button class="account-item" id="menuPathBtn">🛤 गीता पाठ पथ / Gita Reading Path</button>
       <button class="account-item" id="menuNotesBtn">🔖 बुकमार्क और नोट्स / Bookmarks &amp; Notes</button>
       <button class="account-item" id="menuPanchangBtn">🗓 पंचांग / Panchang</button>
       <button class="account-item" id="menuCalBtn">📅 पर्व-तिथि कैलेंडर / Festival Calendar</button>
@@ -2523,6 +2524,10 @@ document.getElementById("menuGitaBtn").addEventListener("click",function(){
 
 document.getElementById("menuAartiBtn").addEventListener("click",function(){
   window.location.href = "aarti.html";
+});
+
+document.getElementById("menuPathBtn").addEventListener("click",function(){
+  window.location.href = "gita.html#path";
 });
 
 document.getElementById("menuNotesBtn").addEventListener("click",function(){
