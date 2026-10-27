@@ -15,13 +15,14 @@
     {id:"gita",  href:"gita.html",          label:T("📖 गीता","📖 Gita")},
     {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
     {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")},
+    {id:"panchang",href:"panchang.html",     label:T("🗓 पंचांग","🗓 Panchang")},
     {id:"cal",   href:"index.html#cal",     label:T("📅 पर्व-तिथि कैलेंडर","📅 Festival Calendar")},
     {id:"fav",   href:"index.html#fav",     label:T("❤️ मेरे पसंदीदा","❤️ Favourites")},
     {id:"profile",href:"profile.html",      label:T("👤 प्रोफ़ाइल","👤 Profile")},
     {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
     {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}
   ];
-  var here = {"index.html":"home","gita.html":"gita","aarti.html":"aarti","profile.html":"profile","support.html":"support"}[page];
+  var here = {"index.html":"home","gita.html":"gita","aarti.html":"aarti","profile.html":"profile","support.html":"support","panchang.html":"panchang"}[page];
   var hasTheme = document.documentElement.hasAttribute("data-theme");
 
   var css = document.createElement("style");
