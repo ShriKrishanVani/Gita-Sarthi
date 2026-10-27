@@ -482,6 +482,21 @@ body.chatting #hero .aarti-home-btn{display:none}
 .japa-stats b{color:var(--slate-deep);font-size:15px}
 .japa-card{background:#fff;border:1px solid rgba(184,146,60,.45);border-radius:18px;padding:12px 12px 14px;box-shadow:0 6px 16px rgba(74,90,99,.12);margin:0 0 12px}
 .japa-card h5{margin:0 0 8px;font-size:13.5px;color:var(--slate-deep)}
+.jst-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.jst-box{border:1px solid rgba(184,146,60,.45);background:rgba(184,146,60,.1);border-radius:14px;padding:9px 4px 8px}
+.jst-box b{display:block;font-size:calc(22px*var(--ts,1));line-height:1.15;color:var(--slate-deep);font-weight:600}
+.jst-box small{display:block;font-size:calc(11.5px*var(--ts,1));color:var(--ink-muted);margin-top:3px;line-height:1.3}
+.jst-streak{font-size:calc(14px*var(--ts,1));font-weight:600;color:var(--gold-deep);margin:0 0 10px;line-height:1.5}
+.jst-week{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;height:96px;margin:6px 2px 0}
+.jst-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.jst-bar{width:70%;max-width:26px;min-height:3px;border-radius:6px 6px 3px 3px;background:rgba(184,146,60,.3)}
+.jst-col.has .jst-bar{background:var(--gold)}
+.jst-col.today .jst-bar{box-shadow:0 0 0 2px rgba(184,146,60,.45)}
+.jst-n{font-size:10.5px;color:var(--ink-muted);margin-bottom:3px;height:13px;line-height:13px;font-variant-numeric:tabular-nums}
+.jst-d{font-size:calc(11px*var(--ts,1));color:var(--ink-muted);margin-top:5px}
+.jst-col.today .jst-d{color:var(--slate-deep);font-weight:700}
+.jst-sum{font-size:calc(12.5px*var(--ts,1));color:var(--ink-muted);margin-top:10px;line-height:1.6}
+.jst-sum b{color:var(--slate-deep)}
 .japa-time{font-size:40px;font-weight:600;color:var(--slate-deep);letter-spacing:.02em;margin:2px 0 10px;font-variant-numeric:tabular-nums}
 .japa-done{display:none;margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(184,146,60,.15);color:var(--gold-deep);font-size:14px;font-weight:600;line-height:1.6}
 .japa-done.show{display:block}
@@ -610,6 +625,11 @@ body.night .cal-d small,body.night .cal-dow,body.night .cal-legend,body.night .c
 body.night .cal-badge,body.night .japa-done{background:rgba(240,204,114,.2);color:#F6DC94}
 body.night .cal-chip.on,body.night .japa-chip.on,body.night .japa-btn.pri{background:#EBC56B;color:#2a1f05;border-color:#EBC56B}
 body.night .japa-ring .bg{stroke:rgba(255,255,255,.18)}
+body.night .jst-box{background:rgba(240,204,114,.12);border-color:rgba(240,204,114,.5)}
+body.night .jst-box small,body.night .jst-n,body.night .jst-d,body.night .jst-sum{color:#D2D9F0}
+body.night .jst-bar{background:rgba(255,255,255,.2)}
+body.night .jst-col.has .jst-bar{background:#EBC56B}
+body.night .jst-col.today .jst-bar{box-shadow:0 0 0 2px rgba(240,204,114,.6)}
 body.night .japa-card,body.night .fav-card,body.night .cal-ev,body.night .cal-month{border-color:rgba(240,204,114,.5)}
 body.night .fav-empty{color:#D2D9F0}
 body.night .t-janm{background:#6FB0F0}body.night .t-ekad{background:#5CC98A}body.night .t-gita{background:#FF8A4C}
@@ -1692,11 +1712,19 @@ var JAPA_UI = {
   hi:{title:"जप काउंटर और मंत्र टाइमर", tap:"गिनने के लिए दबाएँ", target:"संख्या", malas:"माला", today:"आज का जप", all:"कुल माला (आज)",
       undo:"− एक घटाएँ", reset:"शून्य करें", timer:"मंत्र टाइमर", up:"घड़ी", min:"मि.", start:"शुरू करें", pause:"रोकें", cont:"जारी रखें", resetT:"फिर से",
       doneJapa:function(n,m){return "🪔 "+n+" जप पूरे हुए। "+m+" की जय!";}, doneTimer:"🪔 समय पूरा हुआ। हरि ॐ तत्सत्।", menu:"📿 जप काउंटर / Japa Counter",
-      resetAsk:"गिनती शून्य करें?", count:"जप"},
+      resetAsk:"गिनती शून्य करें?", count:"जप",
+      stTitle:"📊 मेरी साधना", stStreak:"दिन की लगातार साधना", stBest:"सर्वश्रेष्ठ", stTotMalas:"कुल माला", stTotJapa:"कुल जप",
+      stWeek:"इस सप्ताह", stWeekJapa:"जप", stWeekMalas:"माला", stDays:"सक्रिय दिन",
+      stNone:"आज एक माला से अपनी साधना शुरू करें 🙏", stKeep:"आज जप करें और अपनी लगातार साधना बनाए रखें 🔥", stOk:"आज की साधना पूरी हुई 🔥",
+      dows:["र","सो","मं","बु","गु","शु","श"]},
   en:{title:"Japa Counter & Mantra Timer", tap:"tap to count", target:"Target", malas:"Malas", today:"Japa today", all:"Malas today",
       undo:"− Undo one", reset:"Reset", timer:"Mantra timer", up:"Stopwatch", min:"min", start:"Start", pause:"Pause", cont:"Resume", resetT:"Restart",
       doneJapa:function(n,m){return "🪔 "+n+" japa complete. Glory to "+m+"!";}, doneTimer:"🪔 Time is up. Hari Om Tat Sat.", menu:"📿 Japa Counter / जप काउंटर",
-      resetAsk:"Reset the count?", count:"japa"}
+      resetAsk:"Reset the count?", count:"japa",
+      stTitle:"📊 My Sadhana", stStreak:"day streak", stBest:"Best streak", stTotMalas:"Total malas", stTotJapa:"Total japa",
+      stWeek:"This week", stWeekJapa:"japa", stWeekMalas:"malas", stDays:"active days",
+      stNone:"Start your sadhana today with one mala 🙏", stKeep:"Chant today to keep your streak alive 🔥", stOk:"Today's sadhana done 🔥",
+      dows:["S","M","T","W","T","F","S"]}
 };
 var japaKey="krishna_japa";
 function japaToday(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
@@ -1711,6 +1739,66 @@ function japaLoad(){
 }
 var japa=japaLoad();
 function japaSave(){ lsSet(japaKey,JSON.stringify(japa)); }
+/* ---- history: one entry per day  { "2026-10-27":[japaCount, malas] }  -> streaks, totals, weekly chart ---- */
+var japaHistKey="krishna_japa_hist";
+function japaDK(d){ function p(n){return n<10?"0"+n:""+n;} return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
+function japaHistLoad(){
+  var h={}; try{ h=JSON.parse(lsGet(japaHistKey)||"{}")||{}; }catch(e){ h={}; }
+  if(typeof h!=="object"||Array.isArray(h)) h={};
+  var k=japaDK(new Date());
+  if(!h[k] && (japa.dayJapa>0||japa.dayMalas>0)) h[k]=[japa.dayJapa,japa.dayMalas];   // carry over today's existing count
+  return h;
+}
+function japaHistAdd(dj,dm){
+  var h={}; try{ h=JSON.parse(lsGet(japaHistKey)||"{}")||{}; }catch(e){ h={}; }
+  if(typeof h!=="object"||Array.isArray(h)) h={};
+  var k=japaDK(new Date()), e=h[k]||[Math.max(0,japa.dayJapa-dj),Math.max(0,japa.dayMalas-dm)];   // japa.day* already updated by the caller
+  e[0]=Math.max(0,(e[0]||0)+dj); e[1]=Math.max(0,(e[1]||0)+dm); h[k]=e;
+  lsSet(japaHistKey,JSON.stringify(h));
+}
+function japaStats(){
+  var h=japaHistLoad(), now=new Date(), tj=0, tm=0, ad=0, day;
+  Object.keys(h).forEach(function(k){ var e=h[k]||[0,0]; tj+=e[0]||0; tm+=e[1]||0; if((e[0]||0)>0) ad++; });
+  function has(d){ var e=h[japaDK(d)]; return !!(e && e[0]>0); }
+  // current streak: counts back from today; if today is still empty, yesterday keeps it alive
+  var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()), todayDone=has(d), streak=0;
+  if(!todayDone) d.setDate(d.getDate()-1);
+  while(has(d)){ streak++; d.setDate(d.getDate()-1); }
+  // best streak
+  var keys=Object.keys(h).filter(function(k){return (h[k][0]||0)>0;}).sort(), best=0, run=0, prev=null;
+  keys.forEach(function(k){
+    var p=k.split("-"), cur=new Date(+p[0],+p[1]-1,+p[2]);
+    if(prev && Math.round((cur-prev)/86400000)===1) run++; else run=1;
+    if(run>best) best=run; prev=cur;
+  });
+  // last 7 days (oldest -> today)
+  var week=[], wj=0, wm=0, i;
+  for(i=6;i>=0;i--){
+    day=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    var e=h[japaDK(day)]||[0,0]; week.push({dow:day.getDay(),j:e[0]||0,m:e[1]||0,today:i===0}); wj+=e[0]||0; wm+=e[1]||0;
+  }
+  return {tj:tj,tm:tm,ad:ad,streak:streak,best:Math.max(best,streak),todayDone:todayDone,week:week,wj:wj,wm:wm};
+}
+function japaPaintStats(){
+  var box=document.getElementById("japaStatsCard"); if(!box) return;
+  var U=japaUI(), S=japaStats(), max=1;
+  S.week.forEach(function(w){ if(w.j>max) max=w.j; });
+  var msg=S.todayDone?U.stOk:(S.streak>0?U.stKeep:U.stNone);
+  var bars=S.week.map(function(w){
+    var hgt=w.j>0?Math.max(6,Math.round(w.j/max*62)):3;
+    return '<div class="jst-col'+(w.j>0?' has':'')+(w.today?' today':'')+'"><div class="jst-n">'+(w.j>0?w.j:'')+'</div><div class="jst-bar" style="height:'+hgt+'px"></div><div class="jst-d">'+U.dows[w.dow]+'</div></div>';
+  }).join("");
+  box.innerHTML='<h5>'+U.stTitle+'</h5>'+
+    '<div class="jst-streak">'+msg+'</div>'+
+    '<div class="jst-top">'+
+      '<div class="jst-box"><b>🔥 '+S.streak+'</b><small>'+U.stStreak+'</small></div>'+
+      '<div class="jst-box"><b>'+S.tm+'</b><small>'+U.stTotMalas+'</small></div>'+
+      '<div class="jst-box"><b>'+S.tj+'</b><small>'+U.stTotJapa+'</small></div>'+
+    '</div>'+
+    '<div class="cal-h" style="margin:0 2px 2px;text-align:left">'+U.stWeek+'</div>'+
+    '<div class="jst-week" role="img" aria-label="'+U.stWeek+'">'+bars+'</div>'+
+    '<div class="jst-sum"><b>'+S.wj+'</b> '+U.stWeekJapa+' · <b>'+S.wm+'</b> '+U.stWeekMalas+' · <b>'+S.ad+'</b> '+U.stDays+' · '+U.stBest+': <b>'+S.best+'</b></div>';
+}
 function japaL(){ return currentLang==="en"?"en":"hi"; }
 
 /* timer: timestamps, so it stays right if the phone sleeps briefly */
@@ -1759,12 +1847,13 @@ function japaBanner(txt){ japaBannerTxt=txt; var b=document.getElementById("japa
 
 function japaTap(){
   if(!jt.running && !jt.finished) jtStart();                // first tap also starts the timer
-  japa.count++; japa.dayJapa++;
+  japa.count++; japa.dayJapa++; var _mala=0;
   if(japa.count>=japa.target){
-    japa.count=0; japa.dayMalas++;
+    japa.count=0; japa.dayMalas++; _mala=1;
     japaBell(); japaBuzz([60,40,60,40,120]);
     japaBanner(japaUI().doneJapa(japa.target, JAPA_MANTRAS[japa.mantra].short[japaL()]));
   } else { japaBuzz(10); }
+  japaHistAdd(1,_mala);
   japaSave(); japaPaintCount();
 }
 function japaPaintCount(){
@@ -1775,6 +1864,7 @@ function japaPaintCount(){
   var fg=document.getElementById("japaFg"); fg.style.strokeDasharray=C; fg.style.strokeDashoffset=C*(1-japa.count/japa.target);
   document.getElementById("japaDayJapa").textContent=japa.dayJapa;
   document.getElementById("japaDayMalas").textContent=japa.dayMalas;
+  japaPaintStats();
 }
 function japaChip(parent,label,on,fn){ var b=document.createElement("button"); b.className="japa-chip"+(on?" on":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
 function japaBtn(parent,label,pri,fn){ var b=document.createElement("button"); b.className="japa-btn"+(pri?" pri":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
@@ -1812,11 +1902,12 @@ function japaPaint(){
 
   var row=el("div","japa-row");
   japaBtn(row,U.undo,false,function(){
-    if(japa.count>0){ japa.count--; japa.dayJapa=Math.max(0,japa.dayJapa-1); japaSave(); japaPaintCount(); }
+    if(japa.count>0){ japa.count--; japa.dayJapa=Math.max(0,japa.dayJapa-1); japaHistAdd(-1,0); japaSave(); japaPaintCount(); }
   });
   japaBtn(row,U.reset,false,function(){ if(confirm(U.resetAsk)){ japa.count=0; japaBannerTxt=""; japaSave(); japaPaint(); } });
   w.appendChild(row);
 
+  var sc=el("div","japa-card"); sc.id="japaStatsCard"; w.appendChild(sc);
   var card=el("div","japa-card"); card.appendChild(el("h5",null,"⏱ "+U.timer));
   var lc=el("div","japa-chips");
   JAPA_TIMES.forEach(function(n){
