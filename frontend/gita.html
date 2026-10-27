@@ -282,6 +282,51 @@ details.summary .body{padding:0 16px 16px;font-size:14px;line-height:1.8;color:v
 .gs-empty,.gs-count{margin:14px 4px;font-size:13.5px;line-height:1.7;color:var(--muted)}
 .gs-more{display:block;margin:6px auto 0;height:40px;padding:0 20px;border-radius:20px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:13.5px;cursor:pointer}
 body.gsing #resumeBox,body.gsing #votd,body.gsing #groups{display:none}
+
+/* ---- Bookmarks, highlights and notes ---- */
+.vfoot{flex-wrap:wrap}
+.vfoot button.on{background:var(--gold);color:var(--on-gold);border-color:var(--gold);font-weight:600}
+.vfoot .hd{display:inline-block;width:11px;height:11px;border-radius:50%;border:1px solid var(--gold);background:transparent}
+.vfoot .hd.c1{background:#F2C230;border-color:#F2C230}.vfoot .hd.c2{background:#35C47C;border-color:#35C47C}.vfoot .hd.c3{background:#F27AA0;border-color:#F27AA0}
+.verse .bmflag{position:absolute;right:16px;top:0;z-index:2;width:26px;height:34px;color:var(--gold);filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+.verse.hl1 .sloka{background:rgba(242,194,48,.20);border-radius:16px;box-shadow:inset 3px 0 0 #F2C230}
+.verse.hl2 .sloka{background:rgba(53,196,124,.18);border-radius:16px;box-shadow:inset 3px 0 0 #35C47C}
+.verse.hl3 .sloka{background:rgba(242,122,160,.20);border-radius:16px;box-shadow:inset 3px 0 0 #F27AA0}
+.mynote{display:block;width:calc(100% - 40px);margin:14px 20px 0;padding:11px 14px 12px;border-radius:16px;text-align:left;cursor:pointer;
+  background:var(--gold-soft);border:1px dashed var(--gold);color:var(--text);font-family:inherit}
+.mynote .lbl{display:block;font-size:12px;font-weight:600;color:var(--gold);margin-bottom:4px}
+.mynote .tx{display:block;font-size:var(--fs);line-height:1.7;white-space:pre-wrap;word-wrap:break-word}
+.noted{margin:14px 20px 0;padding:12px;border-radius:16px;border:1px solid var(--gold);background:var(--panel)}
+.noted textarea{width:100%;min-height:96px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip);color:var(--text);
+  font-family:inherit;font-size:16px;line-height:1.6;outline:none}
+.noted textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.noted .nrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.noted .nrow button{flex:1;min-width:84px;height:40px;border-radius:20px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-size:13.5px;cursor:pointer}
+.noted .nrow button.pri{background:var(--gold);color:var(--on-gold);border-color:var(--gold);font-weight:600}
+.noted .nrow button.del{color:var(--rose)}
+.notes-entry{display:flex;align-items:center;gap:12px;width:100%;margin:16px 0 0;padding:13px 16px;border-radius:20px;cursor:pointer;text-align:left;
+  background:var(--panel);border:1px solid var(--line)}
+.notes-entry .rl{flex:1;min-width:0;display:flex;flex-direction:column}
+.notes-entry strong{font-family:'Tiro Devanagari Hindi',serif;font-weight:400;font-size:17px;color:var(--text)}
+.notes-entry small{font-size:12px;color:var(--muted)}
+.notes-entry:active{background:var(--gold-soft)}
+#notesPanel{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;flex-direction:column}
+#notesPanel.show{display:flex}
+.np-head{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;border-bottom:1px solid var(--line)}
+.np-head h2{flex:1;margin:0;font-family:'Tiro Devanagari Hindi',serif;font-weight:400;font-size:19px;color:var(--gold)}
+.np-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px calc(40px + env(safe-area-inset-bottom,0px));max-width:620px;width:100%;margin:0 auto}
+.np-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.np-chip{height:36px;padding:0 15px;border-radius:18px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:13.5px;cursor:pointer}
+.np-chip[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold);font-weight:600}
+.np-item{margin:0 0 12px;padding:14px;border-radius:18px;border:1px solid var(--line);background:var(--panel-solid);box-shadow:var(--shadow)}
+.np-item.hl1{box-shadow:inset 4px 0 0 #F2C230}.np-item.hl2{box-shadow:inset 4px 0 0 #35C47C}.np-item.hl3{box-shadow:inset 4px 0 0 #F27AA0}
+.np-ref{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:6px}
+.np-sa{font-family:'Tiro Devanagari Hindi',serif;font-size:16.5px;line-height:1.8;color:var(--gold);white-space:pre-line}
+.np-note{margin-top:8px;padding:9px 12px;border-radius:12px;background:var(--gold-soft);border:1px dashed var(--gold);font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-wrap:break-word}
+.np-open{margin-top:10px;height:38px;padding:0 18px;border-radius:19px;border:1px solid var(--line);background:var(--chip);color:var(--gold);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.np-empty{margin:40px 10px;text-align:center;font-size:14.5px;line-height:1.9;color:var(--muted)}
+.np-share{display:block;width:100%;margin:6px 0 0;height:44px;border-radius:22px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:14px;cursor:pointer}
+body.gsing #notesBox{display:none}
 </style></head><body class="onlist">
 
 <div id="prog"></div>
@@ -317,6 +362,7 @@ body.gsing #resumeBox,body.gsing #votd,body.gsing #groups{display:none}
           <div class="gs-chips" id="gsChips"></div>
           <div id="gsResults" aria-live="polite"></div>
         </div>
+        <div id="notesBox"></div>
         <div id="resumeBox"></div>
         <div id="votd"></div>
         <div id="groups"></div>
@@ -353,6 +399,13 @@ body.gsing #resumeBox,body.gsing #votd,body.gsing #groups{display:none}
     <p class="credit" id="credit2"></p>
   </section>
 </main>
+<div id="notesPanel" role="dialog" aria-modal="true" aria-labelledby="npTitle">
+  <div class="np-head">
+    <button class="icon-btn" id="npBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <h2 id="npTitle"></h2>
+  </div>
+  <div class="np-body" id="npBody"></div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script src="gita-data.js"></script>
@@ -378,6 +431,11 @@ var UI = {
        chapter:"अध्याय", verses:"श्लोक", hiBtn:"हिंदी", enBtn:"English", prev:"पिछला अध्याय", next:"अगला अध्याय",
        sumLbl:"इस अध्याय का सार", hiLbl:"हिंदी अर्थ", enLbl:"English meaning", copy:"कॉपी", share:"शेयर",
        copied:"कॉपी हो गया", jump:"श्लोक पर जाएँ",
+       nBm:"बुकमार्क", nBmOn:"बुकमार्क किया", nHl:"रंग", nNote:"नोट", nMy:"✏️ मेरा नोट", nPh:"इस श्लोक पर अपना विचार लिखें…", nSave:"सहेजें", nCancel:"रद्द करें", nDel:"हटाएँ",
+       nSaved:"नोट सहेज लिया", nDeleted:"नोट हटाया", nBmAdded:"बुकमार्क जुड़ गया", nBmGone:"बुकमार्क हटाया",
+       nTitle:"मेरे बुकमार्क और नोट्स", nEntry:"🔖 मेरे बुकमार्क और नोट्स", nEntrySub:"{n} श्लोक सहेजे गए", nEntryNone:"श्लोक पर 🔖, रंग या नोट जोड़ें",
+       nAll:"सभी", nFBm:"🔖 बुकमार्क", nFNote:"✏️ नोट वाले", nFHl:"🖍 रंगीन", nOpen:"श्लोक पढ़ें →", nShareAll:"सभी नोट्स साझा / कॉपी करें",
+       nEmpty:"यहाँ कुछ नहीं है।\nकिसी श्लोक के नीचे 🔖 बुकमार्क, रंग या ✏️ नोट दबाएँ, वह यहाँ जुड़ जाएगा।",
        seeAbove:"इस श्लोक का अर्थ श्लोक {a} से {b} तक के साथ, श्लोक {a} में दिया गया है।",
        together:"श्लोक {a} से {b} का संयुक्त अर्थ",
        votd:"आज का श्लोक", read:"अध्याय में पढ़ें", cont:"जहाँ छोड़ा था वहीं से पढ़ें",
@@ -389,6 +447,11 @@ var UI = {
        chapter:"Chapter", verses:"verses", hiBtn:"Hindi", enBtn:"English", prev:"Previous chapter", next:"Next chapter",
        sumLbl:"Summary of this chapter", hiLbl:"हिंदी अर्थ", enLbl:"English meaning", copy:"Copy", share:"Share",
        copied:"Copied", jump:"Jump to verse",
+       nBm:"Bookmark", nBmOn:"Bookmarked", nHl:"Colour", nNote:"Note", nMy:"✏️ My note", nPh:"Write your thoughts on this verse…", nSave:"Save", nCancel:"Cancel", nDel:"Delete",
+       nSaved:"Note saved", nDeleted:"Note deleted", nBmAdded:"Bookmarked", nBmGone:"Bookmark removed",
+       nTitle:"My bookmarks & notes", nEntry:"🔖 My bookmarks & notes", nEntrySub:"{n} verses saved", nEntryNone:"Add a 🔖, colour or note on any verse",
+       nAll:"All", nFBm:"🔖 Bookmarks", nFNote:"✏️ With notes", nFHl:"🖍 Highlighted", nOpen:"Read verse →", nShareAll:"Share / copy all notes",
+       nEmpty:"Nothing here yet.\nTap 🔖 Bookmark, a colour or ✏️ Note under any verse and it will appear here.",
        seeAbove:"The meaning of this shloka is given together with verses {a} to {b}, under verse {a}.",
        together:"Combined meaning of verses {a} to {b}",
        votd:"Verse of the day", read:"Read in chapter", cont:"Continue where you left off",
@@ -437,6 +500,9 @@ function renderList(){
   $("credit1").textContent = T("credit");
   $("facts").innerHTML = '<span><b>'+dv(18)+'</b>'+esc(T("fCh"))+'</span><span><b>'+dv(700)+'</b>'+esc(T("fVs"))+'</span><span><b>'+dv(3)+'</b>'+esc(T("fLang"))+'</span>';
 
+  var nn = nCount();
+  $("notesBox").innerHTML = '<button class="notes-entry" id="notesEntry"><span class="rl"><strong>'+esc(T("nEntry"))+'</strong><small>'+esc(nn ? fill(T("nEntrySub"),{n:dv(nn)}) : T("nEntryNone"))+'</small></span>'+CHEV+'</button>';
+  $("notesEntry").onclick = openNotes;
   var last = parseInt(lsGet("gita_last"),10);
   $("resumeBox").innerHTML = (last>=1 && last<=18)
     ? '<button class="resume" data-n="'+last+'"><span class="rl"><small>'+esc(T("cont"))+'</small><strong>'+esc(T("chapter"))+' '+dv(last)+' · '+esc(GITA[last-1].sa)+'</strong></span>'+CHEV+'</button>' : '';
@@ -465,8 +531,27 @@ function renderList(){
   $("groups").innerHTML = html;
 }
 
+/* ---- my bookmarks, highlights and notes (saved on the phone) ----
+ * gita_notes = { "2.47": {b:1, h:0-3, n:"my note", t:time} }   b = bookmark, h = highlight colour, n = note */
+var NOTES = (function(){ try{ var o=JSON.parse(lsGet("gita_notes")||"{}"); return (o && typeof o==="object" && !Array.isArray(o)) ? o : {}; }catch(e){ return {}; } })();
+function nKey(c,v){ return c+"."+v; }
+function nGet(c,v){ return NOTES[nKey(c,v)] || null; }
+function nSet(c,v,patch){
+  var k=nKey(c,v), e=NOTES[k]||{b:0,h:0,n:"",t:0};
+  Object.keys(patch).forEach(function(p){ e[p]=patch[p]; });
+  e.t=Date.now();
+  if(!e.b && !e.h && !(e.n||"").trim()) delete NOTES[k]; else NOTES[k]=e;
+  lsSet("gita_notes",JSON.stringify(NOTES));
+}
+function nCount(){ return Object.keys(NOTES).length; }
+var BM_SVG='<svg class="bmflag" viewBox="0 0 24 34" fill="currentColor" aria-hidden="true"><path d="M2 0h20v34l-10-8-10 8z"/></svg>';
+function noteBlock(c,x){
+  var e=nGet(c,x.n);
+  return (e && (e.n||"").trim()) ? '<button type="button" class="mynote" data-nact="edit" data-c="'+c+'" data-v="'+x.n+'"><span class="lbl">'+esc(T("nMy"))+'</span><span class="tx">'+esc(e.n)+'</span></button>' : '';
+}
 function verseCard(ch,x){
-  var h = '<article class="verse" id="v'+x.n+'"><div class="vtop"><span class="vref">'+LOTUS+'॥ '+dv(ch.n)+'.'+dv(x.n)+' ॥'+LOTUS+'</span></div>';
+  var nt = nGet(ch.n,x.n) || {b:0,h:0,n:""};
+  var h = '<article class="verse'+(nt.h?' hl'+nt.h:'')+'" id="v'+x.n+'">'+(nt.b?BM_SVG:'')+'<div class="vtop"><span class="vref">'+LOTUS+'॥ '+dv(ch.n)+'.'+dv(x.n)+' ॥'+LOTUS+'</span></div>';
   if(x.sp) h += '<div class="speaker">'+esc(x.sp)+'</div>';
   h += '<div class="sloka">'+esc(x.sa)+'</div>';
   if(showHi){
@@ -480,7 +565,12 @@ function verseCard(ch,x){
     h += '</div>';
   }
   if(showEn) h += '<div class="mean en"><span class="lbl">'+esc(T("enLbl"))+'</span><div class="tx">'+esc(x.en)+'</div></div>';
-  h += '<div class="vfoot"><button data-act="copy" data-v="'+x.n+'">'+COPY+esc(T("copy"))+'</button>'+
+  h += '<div class="nslot" id="ns'+x.n+'">'+noteBlock(ch.n,x)+'</div>';
+  h += '<div class="vfoot">'+
+       '<button class="'+(nt.b?'on':'')+'" data-nact="bm" data-c="'+ch.n+'" data-v="'+x.n+'" aria-pressed="'+(nt.b?'true':'false')+'">🔖 '+esc(nt.b?T("nBmOn"):T("nBm"))+'</button>'+
+       '<button data-nact="hl" data-c="'+ch.n+'" data-v="'+x.n+'"><i class="hd'+(nt.h?' c'+nt.h:'')+'"></i>'+esc(T("nHl"))+'</button>'+
+       '<button data-nact="edit" data-c="'+ch.n+'" data-v="'+x.n+'">✏️ '+esc(T("nNote"))+'</button>'+
+       '<button data-act="copy" data-v="'+x.n+'">'+COPY+esc(T("copy"))+'</button>'+
        '<button data-act="share" data-v="'+x.n+'">'+SHARE+esc(T("share"))+'</button></div>';
   return h + '</article>';
 }
@@ -509,6 +599,7 @@ function renderChapter(n){
 
 function setHash(n,v){ return n ? "#c=" + n + (v ? "&v=" + v : "") : ""; }
 function go(n, v, push){
+  if(typeof notesHide === "function") notesHide();
   cur = n;
   if(n){
     document.body.classList.remove("onlist");
@@ -542,7 +633,83 @@ function updateProg(){
 }
 window.addEventListener("scroll", updateProg, {passive:true});
 
+/* ---- note actions ---- */
+function refreshVerse(c,n){
+  var el = $("v"+n), ch = GITA[c-1], x = getV(c,n); if(!el || !x) return;
+  var tmp = document.createElement("div"); tmp.innerHTML = verseCard(ch,x);
+  el.parentNode.replaceChild(tmp.firstChild, el);
+}
+function openEditor(c,n){
+  var slot = $("ns"+n); if(!slot) return;
+  var e = nGet(c,n) || {n:""};
+  slot.innerHTML = '<div class="noted"><textarea id="nta'+n+'" maxlength="2000" placeholder="'+esc(T("nPh"))+'">'+esc(e.n||"")+'</textarea>'+
+    '<div class="nrow"><button class="pri" data-nact="save" data-c="'+c+'" data-v="'+n+'">'+esc(T("nSave"))+'</button>'+
+    '<button data-nact="cancel" data-c="'+c+'" data-v="'+n+'">'+esc(T("nCancel"))+'</button>'+
+    ((e.n||"").trim() ? '<button class="del" data-nact="del" data-c="'+c+'" data-v="'+n+'">'+esc(T("nDel"))+'</button>' : '')+'</div></div>';
+  var ta = $("nta"+n); ta.focus(); try{ ta.setSelectionRange(ta.value.length, ta.value.length); }catch(_){}
+}
+function notesAct(btn){
+  var act = btn.getAttribute("data-nact"), c = parseInt(btn.getAttribute("data-c"),10), n = parseInt(btn.getAttribute("data-v"),10), e = nGet(c,n) || {b:0,h:0,n:""};
+  if(act === "bm"){ nSet(c,n,{b:e.b?0:1}); refreshVerse(c,n); toast(T(e.b ? "nBmGone" : "nBmAdded")); }
+  else if(act === "hl"){ nSet(c,n,{h:((e.h||0)+1)%4}); refreshVerse(c,n); }
+  else if(act === "edit"){ openEditor(c,n); }
+  else if(act === "cancel"){ var s=$("ns"+n); if(s) s.innerHTML = noteBlock(c,getV(c,n)); }
+  else if(act === "save"){ var ta=$("nta"+n); nSet(c,n,{n:ta ? ta.value.trim() : ""}); refreshVerse(c,n); toast(T("nSaved")); }
+  else if(act === "del"){ nSet(c,n,{n:""}); refreshVerse(c,n); toast(T("nDeleted")); }
+}
+
+/* ---- "My bookmarks & notes" screen ---- */
+var notesFilter = "all", notesOpen = false;
+function notesList(){
+  var out = [];
+  Object.keys(NOTES).forEach(function(k){
+    var p = k.split("."), c = +p[0], n = +p[1], x = (c>=1 && c<=18) ? getV(c,n) : null; if(!x) return;
+    out.push({c:c, n:n, x:x, e:NOTES[k]});
+  });
+  out.sort(function(a,b){ return a.c-b.c || a.n-b.n; });
+  return out;
+}
+function notesRender(){
+  $("npTitle").textContent = T("nTitle");
+  var all = notesList(), f = notesFilter;
+  var list = all.filter(function(o){ return f==="bm" ? o.e.b : f==="note" ? (o.e.n||"").trim() : f==="hl" ? o.e.h : true; });
+  var h = '<div class="np-chips">' + [["all",T("nAll")],["bm",T("nFBm")],["note",T("nFNote")],["hl",T("nFHl")]].map(function(p){
+    return '<button class="np-chip" data-nf="'+p[0]+'" aria-pressed="'+(f===p[0])+'">'+esc(p[1])+'</button>'; }).join("") + '</div>';
+  if(!list.length) h += '<div class="np-empty" style="white-space:pre-line">'+esc(T("nEmpty"))+'</div>';
+  list.forEach(function(o){
+    var first = o.x.sa.split("\n").slice(0,2).join("\n");
+    h += '<div class="np-item'+(o.e.h?' hl'+o.e.h:'')+'"><div class="np-ref"><span>'+esc(T("chapter"))+' '+dv(o.c)+' · '+esc(T("verses"))+' '+dv(o.n)+'</span><span>'+(o.e.b?'🔖':'')+'</span></div>'+
+      '<div class="np-sa">'+esc(first)+'</div>'+
+      ((o.e.n||"").trim() ? '<div class="np-note">✏️ '+esc(o.e.n)+'</div>' : '')+
+      '<button class="np-open" data-n="'+o.c+'" data-v="'+o.n+'">'+esc(T("nOpen"))+'</button></div>';
+  });
+  if(all.length) h += '<button class="np-share" id="npShare">'+esc(T("nShareAll"))+'</button>';
+  $("npBody").innerHTML = h;
+  var sh = $("npShare"); if(sh) sh.onclick = function(){
+    var t = all.map(function(o){ return fill(T("foot"),{c:o.c,v:o.n}).replace(/^— /,"") + "\n" + o.x.sa + ((o.e.n||"").trim() ? "\n✏️ " + o.e.n : ""); }).join("\n\n");
+    if(navigator.share){ navigator.share({title:T("nTitle"), text:t}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ toast(T("copied")); }); }
+  };
+}
+function openNotes(){
+  notesFilter = "all"; notesRender(); $("notesPanel").classList.add("show"); notesOpen = true;
+  $("npBody").scrollTop = 0;
+  try{ history.pushState({notes:1}, ""); }catch(e){}
+}
+function notesHide(){ if(!notesOpen) return; notesOpen = false; $("notesPanel").classList.remove("show"); }
+function closeNotes(){
+  if(!notesOpen) return;
+  notesHide();
+  if(history.state && history.state.notes){ try{ history.back(); }catch(e){} }
+  if(!cur) renderList();            // refresh the count on the list
+}
+$("npBack").addEventListener("click", closeNotes);
+$("npBody").addEventListener("click", function(e){
+  var f = e.target.closest("[data-nf]"); if(f){ notesFilter = f.getAttribute("data-nf"); notesRender(); }
+});
+
 document.addEventListener("click",function(e){
+  var nb = e.target.closest("[data-nact]"); if(nb){ notesAct(nb); return; }
   var b = e.target.closest("[data-n]");
   if(b){ var v = b.getAttribute("data-v"); go(parseInt(b.getAttribute("data-n"),10), v ? parseInt(v,10) : 0, true); return; }
   var a = e.target.closest("[data-act]");
@@ -566,7 +733,11 @@ function fromHash(){
   var m = /#c=(\d+)(?:&v=(\d+))?/.exec(location.hash), n = m ? parseInt(m[1],10) : 0;
   return n>=1 && n<=18 ? [n, m[2] ? parseInt(m[2],10) : 0] : [0,0];
 }
-window.addEventListener("popstate",function(){ var h = fromHash(); go(h[0], h[1], false); });
+window.addEventListener("popstate",function(){
+  if(notesOpen){ notesHide(); if(!cur) renderList(); return; }
+  var h = fromHash(); go(h[0], h[1], false);
+});
+window.addEventListener("hashchange",function(){ if(location.hash === "#notes"){ if(!notesOpen) openNotes(); } });
 
 /* ================= Gita search: by word or by feeling =================
  * Type a word (Hindi / English / Sanskrit) or a feeling ("डर", "क्रोध", "gussa", "anxiety").
@@ -735,6 +906,7 @@ gsInit();
 document.documentElement.style.setProperty("--hero-img", 'url("' + $("heroImg").getAttribute("src") + '")');
 applyTheme(); applyFont();
 var h0 = fromHash(); go(h0[0], h0[1], false);
+if(location.hash === "#notes") openNotes();
 })();
 </script>
 <script src="menu.js" defer></script>
