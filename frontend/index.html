@@ -134,7 +134,49 @@ body::after{
   background:rgba(184,146,60,0.12);border:1px solid rgba(184,146,60,0.4);
   color:var(--gold-deep);padding:6px 14px;border-radius:13px;font-size:12.5px;font-family:inherit;cursor:pointer;
 }
+.sharebtn{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;margin-right:8px;
+  background:linear-gradient(180deg,#D8B35F,#B8923C 70%,#8A6A26);border:none;
+  color:#3a2c0c;padding:7px 15px;border-radius:13px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;
+}
+.sharebtn:disabled{opacity:.65;cursor:default}
+.favbtn{
+  display:inline-flex;align-items:center;justify-content:center;margin-top:8px;margin-right:8px;
+  width:40px;height:32px;padding:0;font-family:inherit;font-size:16px;line-height:1;cursor:pointer;
+  background:rgba(184,146,60,0.12);border:1px solid rgba(184,146,60,0.4);border-radius:13px;
+}
+.favbtn.on{background:rgba(214,70,90,0.12);border-color:rgba(214,70,90,0.5)}
+.favbtn:active{transform:scale(.92)}
+.fav-panel{position:fixed;inset:0;z-index:45;display:none;flex-direction:column;background:#eef4f2}
+.fav-panel.show{display:flex}
+.fav-head{
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  padding:calc(12px + env(safe-area-inset-top)) 14px 12px;
+  background:rgba(255,255,255,0.88);border-bottom:1px solid rgba(184,146,60,0.35);
+}
+.fav-close{
+  width:38px;height:38px;border-radius:50%;border:1px solid rgba(184,146,60,0.5);background:#fff;
+  color:var(--gold-deep);font-size:20px;line-height:1;cursor:pointer;font-family:inherit;
+}
 #favTitle{font-size:18px;font-weight:600;color:var(--slate-deep)}
+.fav-list{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.fav-card{
+  max-width:560px;margin:0 auto 12px;padding:14px 14px 8px;background:#fff;color:var(--slate-deep);
+  border:1px solid rgba(184,146,60,0.45);border-radius:18px;box-shadow:0 6px 16px rgba(74,90,99,.14);
+}
+.fav-text{font-size:15px;line-height:1.75;font-weight:500;white-space:pre-line}
+.fav-card .verse-card{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(184,146,60,0.5)}
+.fav-card .verse-card .v-sa{color:var(--gold-deep);font-size:14.5px;line-height:1.8}
+.fav-card .verse-card .v-mean{font-size:13.5px;color:var(--ink-muted)}
+.fav-actions{display:flex;flex-wrap:wrap;align-items:center;margin-top:2px}
+.fav-empty{max-width:420px;margin:70px auto 0;text-align:center;font-size:15px;line-height:1.9;color:var(--ink-muted)}
+.toast{
+  position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;
+  transform:translateX(-50%) translateY(10px);max-width:86vw;text-align:center;
+  background:rgba(34,45,51,.93);color:#fff;padding:10px 16px;border-radius:14px;font-size:13px;line-height:1.5;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #bar{
   position:relative;z-index:3;display:flex;gap:10px;flex-shrink:0;align-items:center;
   padding:13px 14px calc(13px + env(safe-area-inset-bottom));
@@ -313,6 +355,16 @@ body.chatting .back-btn{display:flex}
 .account-item:not(:last-child){border-bottom:1px solid rgba(184,146,60,0.15)}
 .account-item:active{background:rgba(184,146,60,0.1)}
 .account-dropdown{max-height:calc(100dvh - 70px);overflow-y:auto;-webkit-overflow-scrolling:touch;min-width:240px}
+.mg-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:12px 16px;border:0;border-bottom:1px solid rgba(184,146,60,0.15);
+  background:none;color:var(--ink);font-weight:600;font-size:13.5px;line-height:1.3;font-family:inherit;cursor:pointer;text-align:left}
+.mg-head::after{content:"";width:7px;height:7px;border-right:2px solid var(--gold-deep);border-bottom:2px solid var(--gold-deep);transform:rotate(45deg);margin-top:-3px;transition:transform .15s;flex-shrink:0}
+.mg-head[aria-expanded="true"]{background:rgba(184,146,60,0.1)}
+.mg-head[aria-expanded="true"]::after{transform:rotate(-135deg);margin-top:4px}
+.mg-head:active{background:rgba(184,146,60,0.1)}
+.mg-body{display:none;background:rgba(184,146,60,0.05)}
+.mg-body.open{display:block}
+.mg-body .account-item{padding-left:30px;font-size:13px}
+.mg-head:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 
 /* ---------- hero (landing view, shown until first message) ---------- */
 #hero{position:relative;z-index:2;flex:1;min-height:0;overflow:hidden;padding:8px 18px 24px;text-align:center}
@@ -358,7 +410,89 @@ body.chatting #hero .topics-label,
 body.chatting #hero .topics-grid,
 body.chatting #hero .hero-quote{display:none}
 body.chatting #chat{display:flex;flex:1;min-height:0}
+.aarti-home-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;max-width:420px;margin:12px auto 0;
+  padding:13px 16px;border-radius:14px;text-decoration:none;font-size:14px;font-weight:600;
+  color:var(--gold-deep);background:rgba(250,244,228,0.95);border:1px solid rgba(184,146,60,0.5);
+  box-shadow:0 6px 14px rgba(74,90,99,.12);
+}
+.aarti-home-btn:active{transform:scale(.98)}
+body.chatting #hero .aarti-home-btn{display:none}
+/* ---- Festival & tithi calendar ---- */
+.cal-panel{position:fixed;inset:0;z-index:46;display:none;flex-direction:column;background:#eef4f2}
+.cal-panel.show{display:flex}
+.cal-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.cal-wrap{max-width:560px;margin:0 auto}
+.cal-today{padding:14px 16px;border-radius:18px;color:#fff;margin-bottom:12px;
+  background:linear-gradient(135deg,var(--slate-deep),var(--slate));box-shadow:0 6px 16px rgba(74,90,99,.2)}
+.cal-today .k{font-size:12px;letter-spacing:.04em;opacity:.8}
+.cal-today .v{font-size:19px;font-weight:600;margin-top:3px;line-height:1.4}
+.cal-today .s{font-size:13px;margin-top:4px;opacity:.9;line-height:1.6}
+.cal-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.cal-chip{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:999px;
+  padding:6px 12px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer}
+.cal-chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.cal-month{background:#fff;border:1px solid rgba(184,146,60,.45);border-radius:18px;padding:10px 8px 8px;
+  box-shadow:0 6px 16px rgba(74,90,99,.12);margin-bottom:14px}
+.cal-mh{display:flex;align-items:center;justify-content:space-between;padding:2px 6px 8px}
+.cal-mh b{font-size:15px;color:var(--slate-deep)}
+.cal-nav{width:34px;height:34px;border-radius:50%;border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);font-size:16px;cursor:pointer;font-family:inherit}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.cal-dow{text-align:center;font-size:11px;color:var(--ink-muted);padding:2px 0 4px}
+.cal-d{min-width:0;padding-left:0;padding-right:0;position:relative;aspect-ratio:1/1.08;border:0;background:transparent;border-radius:10px;font-family:inherit;color:var(--ink);cursor:default;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:4px;font-size:13px}
+.cal-d small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:var(--ink-muted);margin-top:1px;line-height:1}
+.cal-d.has{cursor:pointer;background:rgba(184,146,60,.1)}
+.cal-d.today{outline:2px solid var(--gold)}
+.cal-d.sel{background:var(--gold);color:#fff}
+.cal-d.sel small{color:#fff}
+.cal-dots{display:flex;gap:2px;position:absolute;bottom:4px}
+.cal-dot{width:5px;height:5px;border-radius:50%}
 .t-janm{background:#2f6fb0}.t-ekad{background:#2e8b57}.t-gita{background:#c2410c}.t-purn{background:#b8923c}
+.cal-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-muted);padding:6px 6px 0}
+.cal-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.cal-h{font-size:14px;font-weight:600;color:var(--slate-deep);margin:4px 2px 8px}
+.cal-ev{background:#fff;color:var(--slate-deep);border:1px solid rgba(184,146,60,.45);border-radius:18px;
+  padding:14px 14px 12px;margin:0 0 12px;box-shadow:0 6px 16px rgba(74,90,99,.14)}
+.cal-ev.hl{box-shadow:0 0 0 2px var(--gold),0 6px 16px rgba(74,90,99,.14)}
+.cal-ev-top{display:flex;align-items:flex-start;gap:10px}
+.cal-ico{font-size:26px;line-height:1}
+.cal-ev h4{margin:0;font-size:16px;line-height:1.4}
+.cal-when{font-size:12.5px;color:var(--ink-muted);margin-top:2px;line-height:1.5}
+.cal-badge{margin-left:auto;flex-shrink:0;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(184,146,60,.15);color:var(--gold-deep);white-space:nowrap}
+.cal-msg{font-size:14.5px;line-height:1.8;margin:10px 0 4px;white-space:pre-line}
+.cal-aarti{margin-top:6px;border-top:1px dashed rgba(184,146,60,.5);padding-top:8px}
+.cal-aarti summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--gold-deep);padding:4px 0}
+.cal-aarti pre{margin:8px 0 0;white-space:pre-wrap;font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:15px;line-height:2;color:var(--gold-deep)}
+.cal-link{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gold-deep);text-decoration:none}
+.cal-note{font-size:11.5px;line-height:1.7;color:var(--ink-muted);text-align:center;margin:6px 6px 0}
+/* ---- Japa counter & mantra timer ---- */
+.japa-panel{position:fixed;inset:0;z-index:47;display:none;flex-direction:column;background:#eef4f2}
+.japa-panel.show{display:flex}
+.japa-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))}
+.japa-wrap{max-width:460px;margin:0 auto;text-align:center}
+.japa-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 12px}
+.japa-chip{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;touch-action:manipulation}
+.japa-chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.japa-mantra{font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:24px;line-height:1.6;color:var(--gold-deep);margin:4px 0 10px}
+.japa-ring{position:relative;width:min(72vw,300px);aspect-ratio:1;margin:6px auto 12px}
+.japa-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
+.japa-ring circle{fill:none;stroke-width:8}
+.japa-ring .bg{stroke:rgba(184,146,60,.22)}
+.japa-ring .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .15s}
+.japa-tap{position:absolute;inset:14px;border-radius:50%;border:0;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(circle at 35% 30%,#fff,rgba(250,244,228,.97));box-shadow:0 10px 26px rgba(74,90,99,.25),inset 0 0 0 1px rgba(184,146,60,.45);
+  color:var(--slate-deep);font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.japa-tap:active{transform:scale(.97)}
+.japa-tap b{font-size:58px;line-height:1;font-weight:600}
+.japa-tap small{font-size:12.5px;color:var(--ink-muted);margin-top:6px}
+.japa-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.japa-btn{border:1px solid rgba(184,146,60,.5);background:#fff;color:var(--gold-deep);border-radius:12px;padding:9px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;touch-action:manipulation}
+.japa-btn.pri{background:var(--gold);color:#fff;border-color:var(--gold)}
+.japa-stats{display:flex;justify-content:center;gap:18px;font-size:13px;color:var(--ink-muted);margin:0 0 14px;flex-wrap:wrap}
+.japa-stats b{color:var(--slate-deep);font-size:15px}
+.japa-card{background:#fff;border:1px solid rgba(184,146,60,.45);border-radius:18px;padding:12px 12px 14px;box-shadow:0 6px 16px rgba(74,90,99,.12);margin:0 0 12px}
+.japa-card h5{margin:0 0 8px;font-size:13.5px;color:var(--slate-deep)}
 .jst-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
 .jst-box{border:1px solid rgba(184,146,60,.45);background:rgba(184,146,60,.1);border-radius:14px;padding:9px 4px 8px}
 .jst-box b{display:block;font-size:calc(22px*var(--ts,1));line-height:1.15;color:var(--slate-deep);font-weight:600}
@@ -374,22 +508,149 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
 .jst-col.today .jst-d{color:var(--slate-deep);font-weight:700}
 .jst-sum{font-size:calc(12.5px*var(--ts,1));color:var(--ink-muted);margin-top:10px;line-height:1.6}
 .jst-sum b{color:var(--slate-deep)}
+.japa-time{font-size:40px;font-weight:600;color:var(--slate-deep);letter-spacing:.02em;margin:2px 0 10px;font-variant-numeric:tabular-nums}
+.japa-done{display:none;margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(184,146,60,.15);color:var(--gold-deep);font-size:14px;font-weight:600;line-height:1.6}
+.japa-done.show{display:block}
+
+/* ---- Text size (--ts) ---- */
+body.ts1{--ts:1.2}
+body.ts2{--ts:1.4}
 .bubble{font-size:calc(15px*var(--ts,1))}
 #msg{font-size:calc(16px*var(--ts,1))}
 .wait-text{font-size:calc(13px*var(--ts,1))}
-.playbtn{font-size:calc(12.5px*var(--ts,1))}
-.account-item{font-size:calc(13.5px*var(--ts,1))}
+.playbtn,.sharebtn{font-size:calc(12.5px*var(--ts,1))}
+.account-item,.mg-head{font-size:calc(13.5px*var(--ts,1))}
 .topics-label{font-size:calc(13.5px*var(--ts,1))}
 .topic-card span:last-child{font-size:calc(12.5px*var(--ts,1))}
 .hero-sub2{font-size:calc(16.5px*var(--ts,1))}
 .hero-quote{font-size:calc(16px*var(--ts,1))}
+.aarti-home-btn{font-size:calc(14px*var(--ts,1))}
 .modal-card p{font-size:calc(13.5px*var(--ts,1))}
 .lang-choice,.modal-btn{font-size:calc(15px*var(--ts,1))}
-#favTitle,#calTitle{font-size:calc(18px*var(--ts,1))}
+#favTitle,#calTitle,#japaTitle{font-size:calc(18px*var(--ts,1))}
+.fav-text,.fav-empty{font-size:calc(15px*var(--ts,1))}
+.cal-msg{font-size:calc(14.5px*var(--ts,1))}
+.cal-when,.cal-chip{font-size:calc(12.5px*var(--ts,1))}
+.cal-ev h4{font-size:calc(16px*var(--ts,1))}
+.cal-aarti summary,.cal-link{font-size:calc(13.5px*var(--ts,1))}
+.cal-aarti pre{font-size:calc(15px*var(--ts,1))}
+.cal-note,.cal-badge{font-size:calc(11.5px*var(--ts,1))}
+.cal-today .v{font-size:calc(19px*var(--ts,1))}
+.cal-today .s{font-size:calc(13px*var(--ts,1))}
+.cal-legend{font-size:calc(11px*var(--ts,1))}
+.cal-d{font-size:calc(13px*var(--ts,1))}
+.japa-mantra{font-size:calc(24px*var(--ts,1))}
+.japa-chip,.japa-btn,.japa-card h5{font-size:calc(13.5px*var(--ts,1))}
+.japa-stats{font-size:calc(13px*var(--ts,1))}
+.japa-done{font-size:calc(14px*var(--ts,1))}
 
 /* ---- Comfort sheet (text size + night mode) ---- */
 .top-right{display:flex;align-items:center;gap:8px}
+.cmf-btn{font-family:'Tiro Devanagari Hindi',serif;font-size:15px;font-weight:600;line-height:1}
+.cmf-ov{position:fixed;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center;background:rgba(20,26,30,.5)}
+.cmf-ov.show{display:flex}
+.cmf-sheet{width:100%;max-width:460px;background:var(--panel-deep,#fdfaf2);color:var(--ink);border-radius:22px 22px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));
+  box-shadow:0 -14px 40px rgba(20,26,30,.3);border:1px solid rgba(184,146,60,.45);border-bottom:0}
+.cmf-sheet h3{margin:0 0 14px;font-size:18px;font-weight:600;color:var(--slate-deep);text-align:center}
+.cmf-lbl{font-size:13px;color:var(--ink-muted);margin:14px 2px 8px}
+.cmf-row{display:flex;gap:10px}
+.cmf-opt{flex:1;border:1.5px solid rgba(184,146,60,.5);background:rgba(184,146,60,.08);color:var(--slate-deep);border-radius:14px;padding:10px 4px;
+  font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;touch-action:manipulation;min-height:64px;justify-content:center}
+.cmf-opt b{font-family:'Tiro Devanagari Hindi',serif;font-weight:400;line-height:1}
+.cmf-opt small{font-size:12px;color:var(--ink-muted)}
+.cmf-opt[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#3a2c0c}
+.cmf-opt[aria-pressed="true"] small{color:#3a2c0c}
+.cmf-prev{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(184,146,60,.1);border:1px dashed rgba(184,146,60,.5);color:var(--slate-deep);line-height:1.7;text-align:center}
+.cmf-done{display:block;width:100%;margin-top:16px;height:46px;border-radius:14px;border:0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
+  background:linear-gradient(180deg,var(--gold-light),var(--gold) 60%,var(--gold-deep));color:#3a2c0c}
+
+
+/* ---- Night mode ---- */
+body.night{
+  color-scheme:dark;
+  --panel:rgba(23,31,82,.86);--panel-deep:#1B2560;--bot-glass:rgba(27,37,96,.97);--user-glass:rgba(240,210,138,.22);
+  --ink:#FFF6DF;--ink-muted:#D2D9F0;--slate-deep:#FFF6DF;--slate:#DCE2F4;--gold:#EBC56B;--gold-light:#F6DC94;--gold-deep:#F0CC72;
+  background-color:#0b1030;
+  background-image:linear-gradient(180deg,rgba(8,12,38,.9),rgba(8,12,38,.95)),url("krishna-bg2.jpg");
+}
+body.night::after{background:none}
+body.night .bubble{box-shadow:0 8px 20px rgba(0,0,0,.35)}
+body.night .user .bubble{border-color:rgba(230,190,99,.35)}
+body.night #bar{background:rgba(12,18,52,.9);border-top-color:rgba(230,190,99,.3)}
+body.night #msg{background:rgba(255,255,255,.1);color:var(--ink);border-color:rgba(230,190,99,.4)}
+body.night #mic{background:radial-gradient(circle at 35% 30%,#2a3470,#171F52);color:var(--slate-deep);border-color:var(--slate)}
+body.night #hero h1{text-shadow:0 2px 14px rgba(0,0,0,.5)}
+body.night .del-btn,body.night .back-btn,body.night .account-btn,body.night .topic-card,
+body.night .fav-close,body.night .cal-chip,body.night .cal-nav,body.night .japa-chip,body.night .japa-btn{background:rgba(255,255,255,.1);color:var(--gold-deep)}
+body.night .topic-card{color:var(--slate-deep)}
+body.night .topic-card:active{background:rgba(255,255,255,.2)}
+body.night .cal-chip.on,body.night .japa-chip.on,body.night .japa-btn.pri{background:var(--gold);color:#3a2c0c}
+body.night .aarti-home-btn{background:rgba(23,31,82,.92);color:var(--gold-deep)}
+body.night .fav-panel,body.night .cal-panel,body.night .japa-panel{background:#0f1640}
+body.night .fav-head{background:rgba(23,31,82,.96)}
+body.night .fav-card,body.night .cal-ev,body.night .cal-month,body.night .japa-card{background:#171F52}
+body.night .cal-d.has{background:rgba(230,190,99,.16)}
+body.night .cal-today{background:linear-gradient(135deg,#2a3470,#1c2560)}
+body.night .japa-tap{background:radial-gradient(circle at 35% 30%,#2a3470,#171F52);color:var(--slate-deep)}
+body.night .modal-card,body.night .crest .ring{background-color:#171F52}
+body.night .lang-choice{background:rgba(255,255,255,.08);border-color:rgba(230,190,99,.4)}
+body.night #installBanner{background:#171F52}
+body.night #installBanner .ib-title{color:#F5EBD3}
+body.night #installBanner .ib-sub{color:#B4BDDA}
+body.night .cmf-sheet{background:#171F52}
+/* ---- Night mode: contrast fixes ---- */
+body.night #hero h1{color:#FFF6DF;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+body.night .hero-tagline{color:#F6DC94;text-shadow:0 1px 10px rgba(0,0,0,.7)}
+body.night .topics-label{color:#FFF6DF;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+body.night .topic-card,body.night .del-btn,body.night .back-btn,body.night .account-btn,
+body.night .fav-close,body.night .cal-chip,body.night .cal-nav,body.night .japa-chip,body.night .japa-btn{background:rgba(35,46,112,.92);border-color:rgba(240,204,114,.55)}
+body.night .topic-card span:last-child{color:#FFF6DF}
+body.night .aarti-home-btn{background:#1B2560;border-color:rgba(240,204,114,.6);color:#F6DC94}
+body.night .bot .bubble{border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .user .bubble{background:rgba(70,84,170,.55);border-color:rgba(200,210,245,.45);color:#FFFFFF}
+body.night .av.user{background:linear-gradient(135deg,#3a4690,#2a3470);color:#FFF6DF}
+body.night #msg{background:rgba(255,255,255,.14);border-color:rgba(240,204,114,.6)}
+body.night #msg::placeholder{color:#C3CBE6}
+body.night #msg:focus{border-color:#F0CC72;box-shadow:0 0 0 3px rgba(240,204,114,.22)}
+body.night #bar{background:rgba(12,18,52,.96)}
+body.night #mic{background:radial-gradient(circle at 35% 30%,#3a4690,#1B2560);color:#FFF6DF;border-color:#DCE2F4}
+body.night .playbtn,body.night .favbtn{background:rgba(240,204,114,.16);border-color:rgba(240,204,114,.55);color:#F6DC94}
+body.night .favbtn.on{background:rgba(255,120,140,.2);border-color:rgba(255,140,160,.7)}
+body.night .account-dropdown{background:#1B2560;border-color:rgba(240,204,114,.5)}
+body.night .account-item,body.night .mg-head{color:#FFF6DF}
+body.night .mg-head::after{border-color:#F0CC72}
+body.night .mg-head[aria-expanded="true"],body.night .mg-body{background:rgba(240,204,114,.08)}
+body.night .account-item:active{background:rgba(240,204,114,.18)}
+body.night .modal-card h3{color:#F6DC94}
+body.night .modal-card p{color:#D2D9F0}
+body.night .modal-close{color:#C3CBE6}
+body.night .lang-choice{background:rgba(255,255,255,.12);border-color:rgba(240,204,114,.6);color:#FFF6DF}
+body.night .lang-choice:active{background:rgba(255,255,255,.22)}
+body.night .modal-btn,body.night .cmf-done,body.night .sharebtn{background:linear-gradient(180deg,#F6DC94,#EBC56B 60%,#D6A944);color:#2a1f05}
+body.night .cmf-opt{background:rgba(255,255,255,.08);border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .cmf-opt small,body.night .cmf-lbl{color:#D2D9F0}
+body.night .cmf-opt[aria-pressed="true"]{background:#EBC56B;border-color:#EBC56B;color:#2a1f05}
+body.night .cmf-opt[aria-pressed="true"] small{color:#2a1f05}
+body.night .cmf-prev{background:rgba(240,204,114,.1);border-color:rgba(240,204,114,.55);color:#FFF6DF}
+body.night .cal-d.sel{background:#EBC56B;color:#2a1f05}
+body.night .cal-d.sel small{color:#2a1f05}
+body.night .cal-d.has{background:rgba(240,204,114,.2)}
+body.night .cal-d small,body.night .cal-dow,body.night .cal-legend,body.night .cal-when,body.night .cal-note,body.night .japa-stats,body.night .japa-tap small{color:#D2D9F0}
+body.night .cal-badge,body.night .japa-done{background:rgba(240,204,114,.2);color:#F6DC94}
+body.night .cal-chip.on,body.night .japa-chip.on,body.night .japa-btn.pri{background:#EBC56B;color:#2a1f05;border-color:#EBC56B}
+body.night .japa-ring .bg{stroke:rgba(255,255,255,.18)}
+body.night .jst-box{background:rgba(240,204,114,.12);border-color:rgba(240,204,114,.5)}
+body.night .jst-box small,body.night .jst-n,body.night .jst-d,body.night .jst-sum{color:#D2D9F0}
+body.night .jst-bar{background:rgba(255,255,255,.2)}
+body.night .jst-col.has .jst-bar{background:#EBC56B}
+body.night .jst-col.today .jst-bar{box-shadow:0 0 0 2px rgba(240,204,114,.6)}
+body.night .japa-card,body.night .fav-card,body.night .cal-ev,body.night .cal-month{border-color:rgba(240,204,114,.5)}
+body.night .fav-empty{color:#D2D9F0}
+body.night .t-janm{background:#6FB0F0}body.night .t-ekad{background:#5CC98A}body.night .t-gita{background:#FF8A4C}
+body.night #installBanner .ib-sub{color:#D2D9F0}
 </style></head><body>
+<script>(function(){try{var b=document.body,L=localStorage;if(L.getItem("aarti_theme")==="dark")b.classList.add("night");var s=parseInt(L.getItem("krishna_textsize"),10)||0;if(s>0&&s<3)b.classList.add("ts"+s);}catch(e){}})();</script>
+
 <div id="dust"></div>
 
 <div class="topbar">
@@ -400,12 +661,15 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
     <div class="brand-icon"><img src="data:image/jpeg;base64,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" alt="Krishna"></div>
   </div>
   <div class="top-right">
+  <button class="account-btn cmf-btn" id="cmfBtn" type="button" title="अक्षर और रात्रि मोड" aria-label="Text size and night mode">अ</button>
   <div class="account-wrap">
-    <button class="account-btn" id="menuBtn" title="भाषा / Language">
+    <button class="account-btn" id="menuBtn" title="प्रोफ़ाइल और भाषा">
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.8-3.6-5-8-5z"/></svg>
     </button>
     <div class="account-dropdown" id="menuDropdown">
       <button class="account-item" id="menuLangBtn">भाषा / Language</button>
+      <button class="account-item" id="menuSupportBtn">सहायता / Support</button>
+      <button class="account-item" id="menuInstallBtn">ऐप इंस्टॉल करें</button>
       <button class="account-item" id="menuClearBtn">चैट साफ़ करें / Clear chat</button>
     </div>
   </div>
@@ -438,6 +702,68 @@ body.chatting #chat{display:flex;flex:1;min-height:0}
 <button id="send" title="भेजें"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.45-7.48a1 1 0 0 0 0-1.84L3.4 3.6a1 1 0 0 0-1.4.92V9.6a1 1 0 0 0 .78.98L14 12 2.78 13.42a1 1 0 0 0-.78.98v5.08a1 1 0 0 0 1.4.92z"/></svg></button>
 </div>
 <div id="micHint"></div>
+
+<div class="modal-overlay" id="subModal">
+  <div class="modal-card">
+    <div class="corner tl"><svg viewBox="0 0 16 16"><path d="M1 15 V4 Q1 1 4 1 H15" fill="none" stroke="var(--gold)" stroke-width="1.1"/></svg></div>
+    <div class="corner tr"><svg viewBox="0 0 16 16"><path d="M1 15 V4 Q1 1 4 1 H15" fill="none" stroke="var(--gold)" stroke-width="1.1"/></svg></div>
+    <div class="corner bl"><svg viewBox="0 0 16 16"><path d="M1 15 V4 Q1 1 4 1 H15" fill="none" stroke="var(--gold)" stroke-width="1.1"/></svg></div>
+    <div class="corner br"><svg viewBox="0 0 16 16"><path d="M1 15 V4 Q1 1 4 1 H15" fill="none" stroke="var(--gold)" stroke-width="1.1"/></svg></div>
+    <div class="crest">
+      <div class="ring">
+        <svg viewBox="0 0 28 28" aria-hidden="true">
+          <g fill="var(--gold-deep)">
+            <ellipse cx="14" cy="10" rx="3.2" ry="7.2"/>
+            <ellipse cx="14" cy="10" rx="3.2" ry="7.2" transform="rotate(35 14 14)"/>
+            <ellipse cx="14" cy="10" rx="3.2" ry="7.2" transform="rotate(-35 14 14)"/>
+            <ellipse cx="14" cy="10" rx="3.2" ry="7.2" transform="rotate(70 14 14)"/>
+            <ellipse cx="14" cy="10" rx="3.2" ry="7.2" transform="rotate(-70 14 14)"/>
+          </g>
+          <circle cx="14" cy="14" r="3.4" fill="var(--gold-light)"/>
+        </svg>
+      </div>
+    </div>
+    <h3 id="paywallTitle">निःशुल्क सीमा पूरी हुई</h3>
+    <p id="paywallText">आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।</p>
+    <a class="modal-btn" href="subscribe.html" target="_blank" rel="noopener" id="paywallBtn">कृपया, सिर्फ ₹9 दक्षिणा दें।</a>
+  </div>
+</div>
+
+<div class="fav-panel" id="favPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="favClose" aria-label="Back">&larr;</button>
+    <div id="favTitle">मेरे पसंदीदा</div>
+  </div>
+  <div class="fav-list" id="favList"></div>
+</div>
+
+<div class="cal-panel" id="calPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="calClose" aria-label="Back">&larr;</button>
+    <div id="calTitle">पर्व और तिथि कैलेंडर</div>
+  </div>
+  <div class="cal-body"><div class="cal-wrap" id="calWrap"></div></div>
+</div>
+
+<div class="japa-panel" id="japaPanel" role="dialog" aria-modal="true">
+  <div class="fav-head">
+    <button class="fav-close" id="japaClose" aria-label="Back">&larr;</button>
+    <div id="japaTitle">जप काउंटर</div>
+  </div>
+  <div class="japa-body"><div class="japa-wrap" id="japaWrap"></div></div>
+</div>
+
+<div class="cmf-ov" id="cmfOv">
+  <div class="cmf-sheet" role="dialog" aria-modal="true" aria-labelledby="cmfTitle">
+    <h3 id="cmfTitle">आराम से पढ़ें</h3>
+    <div class="cmf-lbl" id="cmfSizeLbl">अक्षर का आकार</div>
+    <div class="cmf-row" id="cmfSizes"></div>
+    <div class="cmf-lbl" id="cmfModeLbl">रोशनी</div>
+    <div class="cmf-row" id="cmfModes"></div>
+    <div class="cmf-prev" id="cmfPrev"></div>
+    <button class="cmf-done" id="cmfDone" type="button">ठीक है</button>
+  </div>
+</div>
 
 <div class="modal-overlay" id="langModal">
   <div class="modal-card">
@@ -510,11 +836,50 @@ var TXT = {
     error:"कुछ गड़बड़ हो गयी: ",
     micError:"माइक एक्सेस नहीं मिला: ",
     listenBtn:String.fromCodePoint(128266)+" सुनें",
+    shareBtn:String.fromCodePoint(128228)+" शेयर करें",
+    shareMaking:"कार्ड बन रहा है...",
+    shareSaved:"तस्वीर सेव हो गई। इसे WhatsApp या Instagram पर लगाएँ।",
+    shareFail:"तस्वीर नहीं बन सकी, फिर कोशिश करें।",
+    shareTagline:"अपना सवाल सीधे श्री कृष्ण से पूछिए",
+    shareCaption:"श्री कृष्ण वाणी — अपना सवाल सीधे श्री कृष्ण से पूछिए "+PRAY,
+    menuFav:String.fromCodePoint(10084,65039)+" मेरे पसंदीदा",
+    favTitle:"मेरे पसंदीदा",
+    favEmpty:"अभी कुछ सहेजा नहीं है।\nकिसी भी उत्तर के नीचे "+String.fromCodePoint(129293)+" दबाइए, वह यहाँ जुड़ जाएगा।",
+    favAdded:"पसंदीदा में जोड़ा गया",
+    favRemoved:"पसंदीदा से हटाया गया",
+    favRemove:String.fromCodePoint(128148)+" हटाएँ",
+    favOn:"पसंदीदा से हटाएँ",
+    favOff:"पसंदीदा में जोड़ें",
+    paywallTitle:"निःशुल्क सीमा पूरी हुई",
+    paywallText:"आपने 5 प्रश्न पूछ लिए हैं। मात्र ₹9 में 30 दिन तक बातचीत जारी रखें।",
+    paywallBtn:"कृपया, सिर्फ ₹9 दक्षिणा दें।",
+    menuProfile:"प्रोफ़ाइल",
+    menuAarti:"🪔 आरती / Aarti",
+    menuGita:"📖 गीता / Gita",
     menuLang:"भाषा / Language",
+    menuSupport:"सहायता / Support",
+    menuInstall:"ऐप इंस्टॉल करें",
+    installTitle:"श्री कृष्ण वाणी",
+    installBtnText:"जोड़ें",
+    installSubDefault:"होम स्क्रीन पर जोड़ें, ऐप की तरह खोलें",
+    installSubIOS:"नीचे शेयर बटन दबाएँ → \"होम स्क्रीन पर जोड़ें\" चुनें",
+    installSubInApp:"कृपया ऊपर मेन्यू से \"Open in Browser\" चुनें, फिर होम स्क्रीन पर जोड़ें",
+    installSubManual:"कृपया ब्राउज़र के ⋮ मेन्यू में जाकर \"Install app\" या \"Add to Home screen\" चुनें",
+    installAlready:"ऐप पहले से इंस्टॉल है।",
+    installSubConsumed:"इंस्टॉल विकल्प फिर से लाने के लिए रीलोड करें",
+    installReload:"रीलोड करें",
     langTitle:"अपनी भाषा चुनें / Choose your language",
     langClose:"बंद करें / Close",
+    profileTitle:"प्रोफ़ाइल",
+    profileMsgLabel:"पूछे गए प्रश्न",
+    profileStatusLabel:"स्थिति",
+    profileFree:"निःशुल्क उपयोगकर्ता",
+    profilePaid:"सदस्यता सक्रिय",
+    profileClose:"बंद करें",
+    heroTagline:"स्पष्टता पाएं • आंतरिक शांति • बेहतर निर्णय",
     heroPlaceholder:"आज आपके मन में क्या है?",
     topicsLabel:"लोकप्रिय विषय",
+    heroQuote:"\"मन ही सब कुछ है। जो हम सोचते हैं, वही बन जाते हैं।\"",
     heroQuoteSrc:"— भगवद गीता"
   },
   en:{
@@ -532,11 +897,50 @@ var TXT = {
     error:"Something went wrong: ",
     micError:"Mic access denied: ",
     listenBtn:String.fromCodePoint(128266)+" Listen",
+    shareBtn:String.fromCodePoint(128228)+" Share",
+    shareMaking:"Making your card...",
+    shareSaved:"Image saved. Add it to your WhatsApp or Instagram story.",
+    shareFail:"Could not make the image, please try again.",
+    shareTagline:"Ask your question to Shri Krishna",
+    shareCaption:"Shri Krishna Vani — ask your question to Shri Krishna "+PRAY,
+    menuFav:String.fromCodePoint(10084,65039)+" My Favourites",
+    favTitle:"My Favourites",
+    favEmpty:"Nothing saved yet.\nTap "+String.fromCodePoint(129293)+" under any answer and it will appear here.",
+    favAdded:"Added to favourites",
+    favRemoved:"Removed from favourites",
+    favRemove:String.fromCodePoint(128148)+" Remove",
+    favOn:"Remove from favourites",
+    favOff:"Add to favourites",
+    paywallTitle:"Free limit reached",
+    paywallText:"You've asked 5 questions. Continue the conversation for 30 days for just ₹9.",
+    paywallBtn:"Pay ₹9 to continue",
+    menuProfile:"Profile",
+    menuAarti:"🪔 Aarti / आरती",
+    menuGita:"📖 Gita / गीता",
     menuLang:"भाषा / Language",
+    menuSupport:"सहायता / Support",
+    menuInstall:"Install App",
+    installTitle:"Shri Krishna Vani",
+    installBtnText:"Install",
+    installSubDefault:"Add to your home screen, open it like an app",
+    installSubIOS:"Tap the Share button below → choose \"Add to Home Screen\"",
+    installSubInApp:"Please choose \"Open in Browser\" from the menu above, then add to home screen",
+    installSubManual:"Please open your browser's ⋮ menu and choose \"Install app\" or \"Add to Home screen\"",
+    installAlready:"The app is already installed.",
+    installSubConsumed:"Reload to bring the install option back",
+    installReload:"Reload",
     langTitle:"अपनी भाषा चुनें / Choose your language",
     langClose:"बंद करें / Close",
+    profileTitle:"Profile",
+    profileMsgLabel:"Questions asked",
+    profileStatusLabel:"Status",
+    profileFree:"Free user",
+    profilePaid:"Subscription active",
+    profileClose:"Close",
+    heroTagline:"Find Clarity • Inner Peace • Better Decisions",
     heroPlaceholder:"What is on your mind today?",
     topicsLabel:"Popular Topics",
+    heroQuote:"\"The mind is everything. What you think you become.\"",
     heroQuoteSrc:"— Bhagavad Gita"
   }
 };
@@ -555,7 +959,17 @@ function applyStaticText(){
   input.placeholder = t("placeholder");
   mic.title = t("micTitle");
   btn.title = t("sendTitle");
+  document.getElementById("paywallTitle").textContent = t("paywallTitle");
+  document.getElementById("paywallText").textContent = t("paywallText");
+  document.getElementById("paywallBtn").textContent = t("paywallBtn");
+  if(typeof CMF_TXT!=="undefined"){ cmfPaint(); }
+  document.getElementById("favTitle").textContent = t("favTitle");
   document.getElementById("menuLangBtn").textContent = t("menuLang");
+  document.getElementById("menuSupportBtn").textContent = t("menuSupport");
+  document.getElementById("menuInstallBtn").textContent = t("menuInstall");
+  if(typeof window.krishnaRefreshInstallText === "function"){
+    window.krishnaRefreshInstallText();
+  }
   document.getElementById("langTitle").textContent = t("langTitle");
   document.getElementById("langCloseBtn").textContent = t("langClose");
   document.getElementById("topicsLabel").textContent = t("topicsLabel");
@@ -726,9 +1140,861 @@ function addPlayLocal(bubble,blob){
 }
 
 
+/* ---------- Share an answer as a picture card (WhatsApp Status / Instagram) ---------- */
+// Optional: put your public app link here, e.g. "https://gita-sarthi.onrender.com".
+// If left empty, the link of the page the person is using is printed on the card.
+var SHARE_URL = "";
+var CARD_FONT_HI = '"Tiro Devanagari Hindi","Noto Sans Devanagari","Mangal",serif';
+var CARD_FONT_EN = '"Poppins","Helvetica Neue",Arial,sans-serif';
 
+function shareLink(){
+  if(SHARE_URL) return SHARE_URL;
+  try{ return location.origin + location.pathname.replace(/[^\/]*$/,""); }catch(e){ return ""; }
+}
+function shareLinkShort(){
+  return shareLink().replace(/^https?:\/\//,"").replace(/\/$/,"");
+}
+
+var toastEl=null, toastTimer=null;
+function showToast(msg){
+  if(!toastEl){ toastEl=document.createElement("div"); toastEl.className="toast"; document.body.appendChild(toastEl); }
+  toastEl.textContent=msg; toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ toastEl.classList.remove("show"); },3600);
+}
+
+function addShareBtn(bubble,text,verse){
+  if(!bubble||!text) return;
+  var sb=document.createElement("button");
+  sb.className="sharebtn";
+  sb.textContent=t("shareBtn");
+  sb.onclick=function(){ shareReply(sb,text,verse); };
+  bubble.appendChild(sb);
+}
+
+function loadCardImage(src){
+  return new Promise(function(resolve){
+    var im=new Image();
+    im.onload=function(){ resolve(im); };
+    im.onerror=function(){ resolve(null); };      // missing picture: the card still gets made
+    im.src=src;
+  });
+}
+function loadCardFonts(sample){
+  if(!document.fonts||!document.fonts.load) return Promise.resolve();
+  var jobs=Promise.all([
+    document.fonts.load('40px "Tiro Devanagari Hindi"',sample),
+    document.fonts.load('40px "Poppins"',sample)
+  ]).catch(function(){});
+  return Promise.race([jobs,new Promise(function(r){ setTimeout(r,1800); })]);
+}
+function cardWrap(ctx,text,maxW){
+  var out=[];
+  String(text||"").split(/\n+/).forEach(function(para){
+    var words=para.replace(/\s+/g," ").trim().split(" "), cur="";
+    words.forEach(function(w){
+      if(!w) return;
+      var test=cur ? cur+" "+w : w;
+      if(!cur || ctx.measureText(test).width<=maxW){ cur=test; } else { out.push(cur); cur=w; }
+    });
+    if(cur) out.push(cur);
+  });
+  return out;
+}
+function cardRoundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+// Finds the biggest text size at which the answer (and the verse, if it is short) fits the panel.
+function cardLayout(ctx,text,verse,fontMain,textW,maxH,withVerse){
+  var PAD=64;
+  for(var size=46; size>=30; size-=2){
+    ctx.font=size+"px "+fontMain;
+    var lines=cardWrap(ctx,text,textW), lh=Math.round(size*1.55);
+    var h=lines.length*lh, vl=[], vs=0, vlh=0, refH=0;
+    if(withVerse){
+      vs=Math.round(size*0.78); vlh=Math.round(vs*1.6);
+      ctx.font=vs+"px "+CARD_FONT_HI;
+      vl=cardWrap(ctx,verse.sa,textW);
+      if(vl.length>4) return null;
+      h+=44+vl.length*vlh;
+      if(verse.ref){ refH=Math.round(vs*1.5); h+=refH; }
+    }
+    if(h+2*PAD<=maxH) return {size:size,lh:lh,lines:lines,vs:vs,vlh:vlh,vl:vl,refH:refH,height:h+2*PAD,pad:PAD};
+  }
+  return null;
+}
+
+async function buildShareCard(text,verse){
+  var W=1080, H=1920, lang=(currentLang==="en")?"en":"hi";
+  var fontMain=(lang==="en")?CARD_FONT_EN:CARD_FONT_HI;
+  var hasVerse=!!(verse&&verse.sa);
+  await loadCardFonts(text+" "+(hasVerse?verse.sa:"")+" श्री कृष्ण वाणी");
+  var imgs=await Promise.all([loadCardImage("krishna-bg2.jpg"),loadCardImage("icon-192.png")]);
+  var bg=imgs[0], icon=imgs[1];
+
+  var cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  var ctx=cv.getContext("2d");
+
+  // background picture (or a soft gradient if it could not be loaded)
+  if(bg){ ctx.drawImage(bg,0,0,W,H); }
+  else{
+    var g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,"#dff1ee"); g.addColorStop(1,"#f6ecd2");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  // text panel
+  var footerTop=1730, panelBottom=1700, panelX=56, panelW=W-112, textW=panelW-120;
+  var maxH=720;
+  var lay = (hasVerse ? cardLayout(ctx,text,verse,fontMain,textW,maxH,true) : null) || cardLayout(ctx,text,verse,fontMain,textW,maxH,false);
+  if(!lay){                                     // very long answer: smallest size, cut the end
+    ctx.font="30px "+fontMain;
+    var all=cardWrap(ctx,text,textW), keep=Math.floor((maxH-128)/46);
+    if(all.length>keep){ all=all.slice(0,keep); all[keep-1]=all[keep-1].replace(/\s*\S*$/,"")+" ..."; }
+    lay={size:30,lh:46,lines:all,vs:0,vlh:0,vl:[],refH:0,height:all.length*46+128,pad:64};
+  }
+  var panelH=Math.max(lay.height,420), panelTop=panelBottom-panelH;
+  ctx.save();
+  ctx.shadowColor="rgba(40,50,55,0.25)"; ctx.shadowBlur=36; ctx.shadowOffsetY=10;
+  cardRoundRect(ctx,panelX,panelTop,panelW,panelH,44);
+  ctx.fillStyle="rgba(255,252,243,0.93)"; ctx.fill();
+  ctx.restore();
+  cardRoundRect(ctx,panelX,panelTop,panelW,panelH,44);
+  ctx.lineWidth=3; ctx.strokeStyle="rgba(184,146,60,0.75)"; ctx.stroke();
+
+  // answer text, centred inside the panel
+  var cx=W/2, y=panelTop+(panelH-(lay.height-2*lay.pad))/2;
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  ctx.font=lay.size+"px "+fontMain; ctx.fillStyle="#2f3a40";
+  lay.lines.forEach(function(ln,i){ ctx.fillText(ln,cx,y+i*lay.lh+lay.lh/2); });
+  y+=lay.lines.length*lay.lh;
+
+  if(lay.vl.length){
+    ctx.fillStyle="rgba(184,146,60,0.9)"; ctx.fillRect(cx-70,y+20,140,3);
+    y+=44;
+    ctx.font=lay.vs+"px "+CARD_FONT_HI; ctx.fillStyle="#8A6A26";
+    lay.vl.forEach(function(ln,i){ ctx.fillText(ln,cx,y+i*lay.vlh+lay.vlh/2); });
+    y+=lay.vl.length*lay.vlh;
+    if(verse.ref){
+      ctx.font=Math.round(lay.vs*0.85)+"px "+fontMain; ctx.fillStyle="#6d7b82";
+      ctx.fillText(verse.ref,cx,y+lay.refH/2);
+    }
+  }
+
+  // footer band: app icon, app name, tagline, link
+  var fg=ctx.createLinearGradient(0,footerTop,0,H); fg.addColorStop(0,"rgba(34,45,51,0.90)"); fg.addColorStop(1,"rgba(24,32,37,0.97)");
+  ctx.fillStyle=fg; ctx.fillRect(0,footerTop,W,H-footerTop);
+  ctx.fillStyle="rgba(216,179,95,0.9)"; ctx.fillRect(0,footerTop,W,4);
+  var ix=64, iy=footerTop+36, is=118;
+  if(icon){
+    ctx.save(); cardRoundRect(ctx,ix,iy,is,is,26); ctx.clip(); ctx.drawImage(icon,ix,iy,is,is); ctx.restore();
+  }
+  var tx=icon ? ix+is+34 : 64;
+  ctx.textAlign="left"; ctx.textBaseline="middle";
+  ctx.font="54px "+CARD_FONT_HI; ctx.fillStyle="#E8C873";
+  ctx.fillText("श्री कृष्ण वाणी",tx,footerTop+62);
+  ctx.font="29px "+fontMain; ctx.fillStyle="#ffffff";
+  ctx.fillText(t("shareTagline"),tx,footerTop+112);
+  ctx.font="27px "+CARD_FONT_EN; ctx.fillStyle="#D8B35F";
+  ctx.fillText(shareLinkShort(),tx,footerTop+152);
+
+  return new Promise(function(resolve,reject){
+    cv.toBlob(function(b){ b ? resolve(b) : reject(new Error("image failed")); },"image/jpeg",0.92);
+  });
+}
+
+function saveCardImage(blob){
+  var url=URL.createObjectURL(blob), a=document.createElement("a");
+  a.href=url; a.download="krishna-vani.jpg";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },1500);
+}
+
+var sharingNow=false;
+async function shareReply(btn,text,verse){
+  if(sharingNow) return;
+  sharingNow=true;
+  var label=btn.textContent;
+  btn.disabled=true; btn.textContent=t("shareMaking");
+  try{
+    var blob=await buildShareCard(text,verse);
+    var shared=false;
+    try{
+      var file=new File([blob],"krishna-vani.jpg",{type:"image/jpeg"});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        var caption=t("shareCaption")+"\n"+shareLink();
+        await navigator.share({files:[file],text:caption});
+        shared=true;
+      }
+    }catch(err){
+      if(err && err.name==="AbortError") return;      // the person closed the share sheet
+    }
+    if(!shared){ saveCardImage(blob); showToast(t("shareSaved")); }
+  }catch(e){
+    showToast(t("shareFail"));
+  }finally{
+    sharingNow=false; btn.disabled=false; btn.textContent=label;
+  }
+}
+
+
+/* ---------- Favourites: a heart on every answer + "मेरे पसंदीदा" list ---------- */
+var FAV_KEY="krishna_favs", MAX_FAVS=100;
+function favLoad(){
+  try{ var a=JSON.parse(lsGet(FAV_KEY)||"[]"); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+}
+function favSave(a){ lsSet(FAV_KEY,JSON.stringify(a)); }
+function favKey(text){                        // short fingerprint of the answer text
+  var s=String(text), h=5381;
+  for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; }
+  return "f"+(h>>>0).toString(36)+"-"+s.length;
+}
+function favIndex(a,k){ for(var i=0;i<a.length;i++){ if(a[i].k===k) return i; } return -1; }
+function favToggle(text,verse){                // returns true when the answer is now a favourite
+  var a=favLoad(), k=favKey(text), i=favIndex(a,k);
+  if(i>-1){ a.splice(i,1); favSave(a); showToast(t("favRemoved")); return false; }
+  a.unshift({k:k,t:text,v:(verse&&verse.sa)?verse:undefined,ts:Date.now()});
+  if(a.length>MAX_FAVS) a=a.slice(0,MAX_FAVS);
+  favSave(a); showToast(t("favAdded")); return true;
+}
+function setHeart(hb,on){
+  hb.textContent=on ? String.fromCodePoint(10084,65039) : String.fromCodePoint(129293);
+  hb.classList.toggle("on",on);
+  hb.title=t(on?"favOn":"favOff");
+  hb.setAttribute("aria-pressed",on?"true":"false");
+}
+function refreshHearts(){
+  var a=favLoad();
+  document.querySelectorAll(".favbtn").forEach(function(hb){ setHeart(hb,favIndex(a,hb.dataset.fk)>-1); });
+}
+function addHeartBtn(bubble,text,verse){
+  if(!bubble||!text) return;
+  var hb=document.createElement("button");
+  hb.className="favbtn";
+  hb.dataset.fk=favKey(text);
+  setHeart(hb,favIndex(favLoad(),hb.dataset.fk)>-1);
+  hb.onclick=function(){ favToggle(text,verse); refreshHearts(); };
+  bubble.appendChild(hb);
+}
+function addActionBtns(bubble,text,verse){     // heart + share under an answer
+  addHeartBtn(bubble,text,verse);
+  addShareBtn(bubble,text,verse);
+}
+
+var favPanel=document.getElementById("favPanel");
+function renderFavs(){
+  var list=document.getElementById("favList"), a=favLoad();
+  document.getElementById("favTitle").textContent=t("favTitle");
+  list.innerHTML="";
+  if(!a.length){
+    var e=document.createElement("div"); e.className="fav-empty"; e.style.whiteSpace="pre-line";
+    e.textContent=t("favEmpty"); list.appendChild(e); return;
+  }
+  a.forEach(function(it){
+    var c=document.createElement("div"); c.className="fav-card";
+    var p=document.createElement("div"); p.className="fav-text"; p.textContent=it.t; c.appendChild(p);
+    if(it.v && it.v.sa) addVerse(c,it.v);
+    var row=document.createElement("div"); row.className="fav-actions";
+    var sb=document.createElement("button"); sb.className="sharebtn"; sb.textContent=t("shareBtn");
+    sb.onclick=function(){ shareReply(sb,it.t,it.v); };
+    var rb=document.createElement("button"); rb.className="playbtn"; rb.style.marginTop="8px"; rb.textContent=t("favRemove");
+    rb.onclick=function(){
+      favSave(favLoad().filter(function(x){ return x.k!==it.k; }));
+      showToast(t("favRemoved")); renderFavs(); refreshHearts();
+    };
+    row.appendChild(sb); row.appendChild(rb); c.appendChild(row);
+    list.appendChild(c);
+  });
+}
+function openFavs(){
+  renderFavs();
+  favPanel.classList.add("show");
+  try{ history.pushState({fav:1},""); }catch(e){}   // so the phone's Back button closes the list
+}
+function closeFavs(){
+  if(!favPanel.classList.contains("show")) return;
+  favPanel.classList.remove("show");
+  if(history.state && history.state.fav){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ favPanel.classList.remove("show"); });
+document.getElementById("favClose").addEventListener("click",closeFavs);
+
+/* ================= Festival & tithi calendar =================
+ * Janmashtami, Ekadashi, Gita Jayanti, Purnima - each with a short message and aarti.
+ * Tithi is worked out on the phone from the Sun and Moon positions (no internet needed).
+ * Janmashtami and Gita Jayanti dates are fixed from a published panchang (Delhi).
+ * To add more years, add a line to FIXED_DATES below.
+ */
+var FIXED_DATES = {
+  janm: ["2026-09-04","2027-08-25","2028-08-13","2029-09-01","2030-08-21"],
+  gita: ["2026-12-20","2027-12-09","2028-11-27","2029-12-16"]
+};
+var CAL_TITHI = {
+  hi:["प्रतिपदा","द्वितीया","तृतीया","चतुर्थी","पंचमी","षष्ठी","सप्तमी","अष्टमी","नवमी","दशमी","एकादशी","द्वादशी","त्रयोदशी","चतुर्दशी","पूर्णिमा","अमावस्या"],
+  en:["Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami","Shashthi","Saptami","Ashtami","Navami","Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Purnima","Amavasya"]
+};
+var CAL_KINDS = {
+  janm:{cls:"t-janm", icon:"🦚", link:"aarti.html#janmashtami",
+    name:{hi:"श्री कृष्ण जन्माष्टमी", en:"Shri Krishna Janmashtami"},
+    chip:{hi:"जन्माष्टमी", en:"Janmashtami"},
+    sub:{hi:"भाद्रपद कृष्ण अष्टमी", en:"Krishna Ashtami of Bhadrapada"},
+    msg:{hi:"आज नंदलाल का जन्मोत्सव है। कारागार के अँधेरे में भी प्रभु प्रकट हुए। यही संदेश है कि कठिन से कठिन समय में भी आशा जन्म लेती है।\nआज एक संकल्प लें: किसी का मन नहीं दुखाऊँगा, और एक अच्छा काम कृष्ण को अर्पित करूँगा।\nनंद के आनंद भयो, जय कन्हैया लाल की!",
+         en:"Today we celebrate the birth of Nandlal. The Lord appeared even in the darkness of a prison, a reminder that hope is born in the hardest times.\nTake one resolve today: I will not hurt anyone, and I will offer one good deed to Krishna.\nJai Kanhaiya Lal ki!"},
+    aarti:{hi:"आरती उतारूँ नंदलाल की,\nयशोदा के प्यारे गोपाल की।\nमोर-मुकुट सिर, मुरली अधर पर,\nछवि अनुपम गिरिधर-गोपाल की।\nजय कन्हैया लाल की,\nजय जय नंदलाल की॥",
+           en:"I wave the lamp for Nandlal,\nfor Yashoda's beloved Gopal.\nPeacock crown, flute at His lips,\nincomparable is the beauty of Giridhar Gopal.\nVictory to Kanhaiya Lal,\nvictory to Nandlal!"}},
+  ekad:{cls:"t-ekad", icon:"🌿", link:"aarti.html#om-jai-jagdish",
+    name:{hi:"एकादशी", en:"Ekadashi"},
+    chip:{hi:"एकादशी", en:"Ekadashi"},
+    sub:{hi:"भगवान विष्णु का व्रत-दिवस", en:"Fasting day of Lord Vishnu"},
+    msg:{hi:"एकादशी मन और इंद्रियों को विश्राम देने का दिन है। अन्न या अनावश्यक भोग से दूरी रखें और नाम-जप व सत्संग में समय लगाएँ।\nअगर पूरा व्रत संभव न हो, तो आज एक बुरी आदत का उपवास रखें।\nव्रत का पारण द्वादशी को करें।",
+         en:"Ekadashi is a day to rest the mind and senses. Keep away from grain or needless indulgence and spend time in naam-jap and satsang.\nIf a full fast is not possible, fast from one bad habit today.\nBreak the fast (parana) on Dwadashi."},
+    aarti:{hi:"जय श्री हरि विष्णु, जय एकादशी व्रत की।\nशंख-चक्र-गदा-पद्मधारी, करुणा-सिंधु की।\nतुलसी-दल अर्पित है चरणों में, भाव भरे मन से।\nव्रत सफल हो, कृपा करें नारायण॥",
+           en:"Glory to Shri Hari Vishnu, glory to the Ekadashi vow.\nBearer of conch, discus, mace and lotus, ocean of compassion.\nA tulsi leaf at Your feet, offered with a full heart.\nMay the vow bear fruit, bless us, Narayan."}},
+  gita:{cls:"t-gita", icon:"📖", link:"aarti.html#gita-updesh",
+    name:{hi:"गीता जयंती", en:"Gita Jayanti"},
+    chip:{hi:"गीता जयंती", en:"Gita Jayanti"},
+    sub:{hi:"मार्गशीर्ष शुक्ल एकादशी (मोक्षदा एकादशी)", en:"Shukla Ekadashi of Margashirsha (Mokshada Ekadashi)"},
+    msg:{hi:"आज के दिन कुरुक्षेत्र में श्री कृष्ण ने अर्जुन को गीता का उपदेश दिया। आज गीता का एक अध्याय, या कम से कम एक श्लोक, अर्थ सहित पढ़ें।\n\"कर्मण्येवाधिकारस्ते मा फलेषु कदाचन\" (2.47): कर्म करना ही हमारा अधिकार है, फल की चिंता नहीं।",
+         en:"On this day at Kurukshetra, Shri Krishna gave the Gita to Arjuna. Read one chapter of the Gita today, or at least one shloka with its meaning.\n\"Karmanye vadhikaraste ma phaleshu kadachana\" (2.47): you have the right to your action, never to its fruits."},
+    aarti:{hi:"जय भगवद्गीते, माँ, जय भगवद्गीते।\nमोह-अंधकार मिटाने वाली, ज्ञान-दीप की ज्योते।\nकृष्ण-मुख से प्रकटी तू, अर्जुन को जो मिली।\nकर्म, भक्ति और ज्ञान की राह, जग को तूने दिखाई॥",
+           en:"Glory to the Bhagavad Gita, glory to the Gita.\nYou dispel the darkness of delusion, flame of the lamp of knowledge.\nBorn of Krishna's own lips, given to Arjuna.\nYou showed the world the paths of action, devotion and knowledge."}},
+  purn:{cls:"t-purn", icon:"🌕", link:"aarti.html#krishna-govind-hare-aarti",
+    name:{hi:"पूर्णिमा", en:"Purnima (Full Moon)"},
+    chip:{hi:"पूर्णिमा", en:"Purnima"},
+    sub:{hi:"शुक्ल पक्ष की पूर्णता", en:"The full moon of the bright fortnight"},
+    msg:{hi:"पूर्णिमा पूर्णता का प्रतीक है। आज चंद्र-दर्शन करें, कुछ दान दें और सत्यनारायण या श्री कृष्ण का स्मरण करें।\nआज किसी एक व्यक्ति को मन से क्षमा कर दें, मन भी चाँद की तरह हल्का और उजला हो जाएगा।",
+         en:"Purnima stands for wholeness. See the moon today, give something in charity and remember Satyanarayan or Shri Krishna.\nForgive one person from the heart today, and the mind becomes light and bright like the moon."},
+    aarti:{hi:"पूर्णिमा की रात उजियारी, चाँदनी बरसे प्यारी।\nकृष्ण-नाम की माला लेकर, बैठे भक्त दुआरी।\nजय गोविंद, जय गोपाल, जय हो कृपा तुम्हारी।\nशीतल मन में शांति भर दो, हे गिरिधर बनवारी॥",
+           en:"The Purnima night is radiant, moonlight showers down.\nDevotees sit at Your door with the rosary of Krishna's name.\nJai Govind, jai Gopal, glory to Your grace.\nFill the cooled mind with peace, O Giridhar Banwari."}}
+};
+var CAL_UI = {
+  hi:{title:"पर्व और तिथि कैलेंडर", today:"आज की तिथि", all:"सभी", upcoming:"आने वाले पर्व", noneMonth:"इस महीने में कोई चुना हुआ पर्व नहीं",
+      aarti:"🪔 छोटी आरती", full:"पूरी आरती / कथा पढ़ें →", todayB:"आज", tomorrow:"कल", inDays:function(n){return n+" दिन बाद";},
+      shukla:"शुक्ल पक्ष", krishna:"कृष्ण पक्ष",
+      note:"तिथि सूर्योदय के समय के आधार पर निकाली गई है। अलग-अलग शहरों और पंचांगों में एकादशी/पूर्णिमा एक दिन आगे-पीछे हो सकती है। व्रत से पहले अपने स्थानीय पंचांग से मिला लें।",
+      menu:"📅 पर्व-तिथि कैलेंडर", noFixed:"इस वर्ष की तारीख़ अभी जोड़ी नहीं गई है।"},
+  en:{title:"Festival & Tithi Calendar", today:"Today's tithi", all:"All", upcoming:"Upcoming festivals", noneMonth:"No selected festival this month",
+      aarti:"🪔 Short aarti", full:"Read the full aarti / story →", todayB:"Today", tomorrow:"Tomorrow", inDays:function(n){return "in "+n+" days";},
+      shukla:"Shukla Paksha", krishna:"Krishna Paksha",
+      note:"Tithi is taken at sunrise. Ekadashi and Purnima can differ by a day between cities and panchangs. Please check your local panchang before observing a fast.",
+      menu:"📅 Festival Calendar / पर्व-तिथि", noFixed:"Date for this year has not been added yet."}
+};
+var CAL_MONTHS = {
+  hi:["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"],
+  en:["January","February","March","April","May","June","July","August","September","October","November","December"]
+};
+var CAL_DOW = {hi:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"], en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]};
+
+/* ---- tithi maths (Sun and Moon longitudes, good to a fraction of an hour) ---- */
+var CAL_R = Math.PI/180;
+function calSunLon(T){
+  var L0=280.46646+36000.76983*T, M=(357.52911+35999.05029*T)*CAL_R;
+  return L0+(1.914602-0.004817*T)*Math.sin(M)+0.019993*Math.sin(2*M)+0.000289*Math.sin(3*M);
+}
+function calMoonLon(T){
+  var Lp=218.3164477+481267.88123421*T, D=(297.8501921+445267.1114034*T)*CAL_R,
+      M=(357.5291092+35999.0502909*T)*CAL_R, Mp=(134.9633964+477198.8675055*T)*CAL_R, F=(93.272095+483202.0175233*T)*CAL_R, S=Math.sin;
+  return Lp+6.288774*S(Mp)+1.274027*S(2*D-Mp)+0.658314*S(2*D)+0.213618*S(2*Mp)-0.185116*S(M)-0.114332*S(2*F)
+    +0.058793*S(2*D-2*Mp)+0.057066*S(2*D-M-Mp)+0.053322*S(2*D+Mp)+0.045758*S(2*D-M)-0.040923*S(M-Mp)-0.03472*S(D)
+    -0.030383*S(M+Mp)+0.015327*S(2*D-2*F)-0.012528*S(Mp+2*F)+0.01098*S(Mp-2*F)+0.010675*S(4*D-Mp)+0.010034*S(3*Mp)
+    +0.008548*S(4*D-2*Mp)-0.007888*S(2*D+M-Mp)-0.006766*S(2*D+M)-0.005163*S(D-Mp)+0.004987*S(D+M)+0.004036*S(2*D-M+Mp)
+    +0.003994*S(2*Mp+2*D)+0.003861*S(4*D)+0.003665*S(2*D-3*Mp);
+}
+function calTithiAt(ms){            // 1..30 (1-15 Shukla, 16-30 Krishna)
+  var T=(ms/86400000+2440587.5-2451545)/36525;
+  var d=(((calMoonLon(T)-calSunLon(T))%360)+360)%360;
+  return Math.floor(d/12)+1;
+}
+var calSunriseCache={};
+function calKey(y,m,d){ return y+"-"+(m<9?"0":"")+(m+1)+"-"+(d<10?"0":"")+d; }
+function calSunriseTithi(y,m,d){    // tithi at about 6:00 local time
+  var k=calKey(y,m,d);
+  if(calSunriseCache[k]==null) calSunriseCache[k]=calTithiAt(new Date(y,m,d,6,0,0).getTime());
+  return calSunriseCache[k];
+}
+function calDayTithi(y,m,d,h){ return calTithiAt(new Date(y,m,d,h,0,0).getTime()); }
+
+function calNearGita(y,m,day){      // is this day within 1 day of a Gita Jayanti date?
+  var t=new Date(y,m,day,12).getTime();
+  return FIXED_DATES.gita.some(function(s){
+    var p=s.split("-"); return Math.abs(new Date(+p[0],+p[1]-1,+p[2],12).getTime()-t)<=86400000*1.5;
+  });
+}
+/* tithi-based and fixed festival days in a month: returns {dayOfMonth: ["ekad","purn",...]} */
+var calMonthCache={};
+function calMonthEvents(y,m){
+  var ck=y+"-"+m; if(calMonthCache[ck]) return calMonthCache[ck];
+  var out={}, n=new Date(y,m+1,0).getDate();
+  function add(day,kind){ (out[day]=out[day]||[]).push(kind); }
+  // day 0 = last day of previous month, day n+1 = first of next, so a run is never split at a month edge
+  var days=[]; for(var i=0;i<=n+1;i++){ var dt=new Date(y,m,i,12); days.push({y:dt.getFullYear(),m:dt.getMonth(),d:dt.getDate(),day:i}); }
+  function pick(target,kind){
+    var hits=[];
+    for(var j=0;j<days.length;j++){
+      var t0=calSunriseTithi(days[j].y,days[j].m,days[j].d);
+      if(t0===target){ hits.push(j); continue; }
+      if(j+1<days.length && t0===target-1 &&
+         calSunriseTithi(days[j+1].y,days[j+1].m,days[j+1].d)===target+1) hits.push(j+1);   // tithi fell between two sunrises
+    }
+    for(var h=0;h<hits.length;h++){
+      if(h>0 && hits[h]===hits[h-1]+1) continue;     // 2-day run: keep the first day
+      var dd=days[hits[h]].day;
+      if(dd>=1 && dd<=n) add(dd,kind);
+    }
+  }
+  pick(11,"ekad"); pick(26,"ekad"); pick(15,"purn");
+  ["janm","gita"].forEach(function(kind){
+    FIXED_DATES[kind].forEach(function(s){
+      var p=s.split("-"); if(+p[0]===y && +p[1]-1===m) add(+p[2],kind);
+    });
+  });
+  // Gita Jayanti is the Mokshada Ekadashi: show it once, as Gita Jayanti
+  Object.keys(out).forEach(function(day){
+    out[day]=out[day].filter(function(x){ return x!=="ekad" || !calNearGita(y,m,+day); });
+    if(!out[day].length) delete out[day];
+  });
+  calMonthCache[ck]=out; return out;
+}
+
+/* ---- screen ---- */
+var calState={y:0,m:0,sel:null,filter:"all",open:false};
+function calL(){ return currentLang==="en" ? "en" : "hi"; }
+function calEl(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+function calTithiName(n){
+  var L=calL(), p=n>15?CAL_UI[L].krishna:CAL_UI[L].shukla, idx=((n-1)%15);
+  var nm=CAL_TITHI[L][(n===30)?15:idx];
+  return {name:nm, paksha:p};
+}
+function calDateLabel(y,m,d){
+  var L=calL(), dt=new Date(y,m,d,12);
+  return CAL_DOW[L][dt.getDay()]+", "+d+" "+CAL_MONTHS[L][m]+" "+y;
+}
+function calDaysFromToday(y,m,d){
+  var n=new Date(); var a=new Date(n.getFullYear(),n.getMonth(),n.getDate(),12).getTime();
+  return Math.round((new Date(y,m,d,12).getTime()-a)/86400000);
+}
+function calEventCard(kind,y,m,d,hl){
+  var L=calL(), K=CAL_KINDS[kind], U=CAL_UI[L];
+  var c=calEl("div","cal-ev"+(hl?" hl":""));
+  var top=calEl("div","cal-ev-top");
+  top.appendChild(calEl("div","cal-ico",K.icon));
+  var mid=calEl("div"); mid.appendChild(calEl("h4",null,K.name[L]));
+  var tt=calTithiName(calSunriseTithi(y,m,d));
+  mid.appendChild(calEl("div","cal-when",calDateLabel(y,m,d)+"  ·  "+K.sub[L]));
+  top.appendChild(mid);
+  var dd=calDaysFromToday(y,m,d);
+  var b=dd===0?U.todayB:dd===1?U.tomorrow:dd>1?U.inDays(dd):"";
+  if(b) top.appendChild(calEl("div","cal-badge",b));
+  c.appendChild(top);
+  c.appendChild(calEl("div","cal-msg",K.msg[L]));
+  var det=calEl("details","cal-aarti"); det.appendChild(calEl("summary",null,U.aarti));
+  det.appendChild(calEl("pre",null,K.aarti[L])); c.appendChild(det);
+  var a=calEl("a","cal-link",U.full); a.href=K.link; c.appendChild(a);
+  return c;
+}
+function calUpcoming(limit){
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), out=[];
+  for(var step=0; step<18 && out.length<limit; step++){
+    var ev=calMonthEvents(y,m);
+    Object.keys(ev).map(Number).sort(function(a,b){return a-b;}).forEach(function(d){
+      if(calDaysFromToday(y,m,d)<0) return;
+      ev[d].forEach(function(k){
+        if(calState.filter==="all"||calState.filter===k) out.push({k:k,y:y,m:m,d:d});
+      });
+    });
+    m++; if(m>11){m=0;y++;}
+  }
+  return out.slice(0,limit);
+}
+function calRender(){
+  var L=calL(), U=CAL_UI[L], wrap=document.getElementById("calWrap");
+  document.getElementById("calTitle").textContent=U.title;
+  wrap.innerHTML="";
+  var now=new Date(), ny=now.getFullYear(), nm=now.getMonth(), nd=now.getDate();
+
+  // today
+  var tn=calTithiName(calSunriseTithi(ny,nm,nd)), box=calEl("div","cal-today");
+  box.appendChild(calEl("div","k",U.today));
+  box.appendChild(calEl("div","v",tn.paksha+" · "+tn.name));
+  var todayKinds=calMonthEvents(ny,nm)[nd]||[];
+  if(todayKinds.length) box.appendChild(calEl("div","s",todayKinds.map(function(k){return CAL_KINDS[k].icon+" "+CAL_KINDS[k].name[L];}).join("  ·  ")));
+  else box.appendChild(calEl("div","s",calDateLabel(ny,nm,nd)));
+  wrap.appendChild(box);
+
+  // filter chips
+  var chips=calEl("div","cal-chips");
+  [["all",U.all]].concat(["janm","ekad","gita","purn"].map(function(k){return [k,CAL_KINDS[k].chip[L]];})).forEach(function(p){
+    var b=calEl("button","cal-chip"+(calState.filter===p[0]?" on":""),p[1]);
+    b.onclick=function(){ calState.filter=p[0]; calState.sel=null; calRender(); };
+    chips.appendChild(b);
+  });
+  wrap.appendChild(chips);
+
+  // month grid
+  var y=calState.y, m=calState.m, ev=calMonthEvents(y,m), first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+  var mon=calEl("div","cal-month"), mh=calEl("div","cal-mh");
+  var prev=calEl("button","cal-nav","‹"), next=calEl("button","cal-nav","›");
+  prev.setAttribute("aria-label","Previous month"); next.setAttribute("aria-label","Next month");
+  prev.onclick=function(){ calState.m--; if(calState.m<0){calState.m=11;calState.y--;} calState.sel=null; calRender(); };
+  next.onclick=function(){ calState.m++; if(calState.m>11){calState.m=0;calState.y++;} calState.sel=null; calRender(); };
+  mh.appendChild(prev); mh.appendChild(calEl("b",null,CAL_MONTHS[L][m]+" "+y)); mh.appendChild(next); mon.appendChild(mh);
+  var g=calEl("div","cal-grid");
+  CAL_DOW[L].forEach(function(s){ g.appendChild(calEl("div","cal-dow",s)); });
+  for(var i=0;i<first;i++) g.appendChild(calEl("div"));
+  for(var d=1; d<=days; d++){
+    var kinds=(ev[d]||[]).filter(function(k){ return calState.filter==="all"||calState.filter===k; });
+    var isToday=(y===ny&&m===nm&&d===nd);
+    var cell=calEl("button","cal-d"+(kinds.length?" has":"")+(isToday?" today":"")+(calState.sel===d?" sel":""));
+    cell.appendChild(document.createTextNode(String(d)));
+    var tt=calTithiName(calSunriseTithi(y,m,d));
+    cell.appendChild(calEl("small",null,tt.name));
+    if(kinds.length){
+      var dots=calEl("span","cal-dots");
+      kinds.forEach(function(k){ dots.appendChild(calEl("i","cal-dot "+CAL_KINDS[k].cls)); });
+      cell.appendChild(dots);
+      (function(dd){ cell.onclick=function(){ calState.sel=(calState.sel===dd?null:dd); calRender(); }; })(d);
+    }
+    g.appendChild(cell);
+  }
+  mon.appendChild(g);
+  var lg=calEl("div","cal-legend");
+  ["janm","ekad","gita","purn"].forEach(function(k){
+    var s=calEl("span"); var i=calEl("i",CAL_KINDS[k].cls); s.appendChild(i); s.appendChild(document.createTextNode(CAL_KINDS[k].chip[L])); lg.appendChild(s);
+  });
+  mon.appendChild(lg); wrap.appendChild(mon);
+
+  // selected day, or upcoming list
+  if(calState.sel){
+    (ev[calState.sel]||[]).forEach(function(k){
+      if(calState.filter==="all"||calState.filter===k) wrap.appendChild(calEventCard(k,y,m,calState.sel,true));
+    });
+  } else {
+    wrap.appendChild(calEl("div","cal-h",U.upcoming));
+    var list=calUpcoming(8);
+    list.forEach(function(e,i){ wrap.appendChild(calEventCard(e.k,e.y,e.m,e.d,i===0)); });
+    if(!list.length) wrap.appendChild(calEl("div","cal-note",U.noFixed));
+  }
+  wrap.appendChild(calEl("div","cal-note",U.note));
+}
+var calPanel=document.getElementById("calPanel");
+function openCal(){
+  var n=new Date(); calState.y=n.getFullYear(); calState.m=n.getMonth(); calState.sel=null; calState.filter="all";
+  calRender(); calPanel.classList.add("show"); calPanel.querySelector(".cal-body").scrollTop=0;
+  menuDropdown.classList.remove("show");
+  try{ history.pushState({cal:1},""); }catch(e){}
+}
+function closeCal(){
+  if(!calPanel.classList.contains("show")) return;
+  calPanel.classList.remove("show");
+  if(history.state && history.state.cal){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ calPanel.classList.remove("show"); });
+document.getElementById("calClose").addEventListener("click",closeCal);
+
+/* ================= Japa counter & mantra timer =================
+ * Tap counter for two mantras with 11 / 21 / 108 targets, a timer (count-up or countdown),
+ * and daily totals kept on the phone (localStorage). Works offline.
+ */
+var JAPA_MANTRAS = {
+  hk:{text:"हरे कृष्ण हरे कृष्ण\nकृष्ण कृष्ण हरे हरे।\nहरे राम हरे राम\nराम राम हरे हरे॥", short:{hi:"हरे कृष्ण", en:"Hare Krishna"}},
+  nb:{text:"ॐ नमो भगवते वासुदेवाय", short:{hi:"ॐ नमो भगवते वासुदेवाय", en:"Om Namo Bhagavate Vasudevaya"}}
+};
+var JAPA_TARGETS=[11,21,108], JAPA_TIMES=[0,5,10,15,30];
+var JAPA_UI = {
+  hi:{title:"जप काउंटर और मंत्र टाइमर", tap:"गिनने के लिए दबाएँ", target:"संख्या", malas:"माला", today:"आज का जप", all:"कुल माला (आज)",
+      undo:"− एक घटाएँ", reset:"शून्य करें", timer:"मंत्र टाइमर", up:"घड़ी", min:"मि.", start:"शुरू करें", pause:"रोकें", cont:"जारी रखें", resetT:"फिर से",
+      doneJapa:function(n,m){return "🪔 "+n+" जप पूरे हुए। "+m+" की जय!";}, doneTimer:"🪔 समय पूरा हुआ। हरि ॐ तत्सत्।", menu:"📿 जप काउंटर / Japa Counter",
+      resetAsk:"गिनती शून्य करें?", count:"जप",
+      stTitle:"📊 मेरी साधना", stStreak:"दिन की लगातार साधना", stBest:"सर्वश्रेष्ठ", stTotMalas:"कुल माला", stTotJapa:"कुल जप",
+      stWeek:"इस सप्ताह", stWeekJapa:"जप", stWeekMalas:"माला", stDays:"सक्रिय दिन",
+      stNone:"आज एक माला से अपनी साधना शुरू करें 🙏", stKeep:"आज जप करें और अपनी लगातार साधना बनाए रखें 🔥", stOk:"आज की साधना पूरी हुई 🔥",
+      dows:["र","सो","मं","बु","गु","शु","श"]},
+  en:{title:"Japa Counter & Mantra Timer", tap:"tap to count", target:"Target", malas:"Malas", today:"Japa today", all:"Malas today",
+      undo:"− Undo one", reset:"Reset", timer:"Mantra timer", up:"Stopwatch", min:"min", start:"Start", pause:"Pause", cont:"Resume", resetT:"Restart",
+      doneJapa:function(n,m){return "🪔 "+n+" japa complete. Glory to "+m+"!";}, doneTimer:"🪔 Time is up. Hari Om Tat Sat.", menu:"📿 Japa Counter / जप काउंटर",
+      resetAsk:"Reset the count?", count:"japa",
+      stTitle:"📊 My Sadhana", stStreak:"day streak", stBest:"Best streak", stTotMalas:"Total malas", stTotJapa:"Total japa",
+      stWeek:"This week", stWeekJapa:"japa", stWeekMalas:"malas", stDays:"active days",
+      stNone:"Start your sadhana today with one mala 🙏", stKeep:"Chant today to keep your streak alive 🔥", stOk:"Today's sadhana done 🔥",
+      dows:["S","M","T","W","T","F","S"]}
+};
+var japaKey="krishna_japa";
+function japaToday(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function japaLoad(){
+  var s={}; try{ s=JSON.parse(lsGet(japaKey)||"{}")||{}; }catch(e){ s={}; }
+  if(!JAPA_MANTRAS[s.mantra]) s.mantra="hk";
+  if(JAPA_TARGETS.indexOf(s.target)<0) s.target=108;
+  s.count=Math.max(0,parseInt(s.count,10)||0);
+  if(s.day!==japaToday()){ s.day=japaToday(); s.dayJapa=0; s.dayMalas=0; }   // new day, fresh totals
+  s.dayJapa=s.dayJapa||0; s.dayMalas=s.dayMalas||0;
+  return s;
+}
+var japa=japaLoad();
+function japaSave(){ lsSet(japaKey,JSON.stringify(japa)); }
+/* ---- history: one entry per day  { "2026-10-27":[japaCount, malas] }  -> streaks, totals, weekly chart ---- */
+var japaHistKey="krishna_japa_hist";
+function japaDK(d){ function p(n){return n<10?"0"+n:""+n;} return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
+function japaHistLoad(){
+  var h={}; try{ h=JSON.parse(lsGet(japaHistKey)||"{}")||{}; }catch(e){ h={}; }
+  if(typeof h!=="object"||Array.isArray(h)) h={};
+  var k=japaDK(new Date());
+  if(!h[k] && (japa.dayJapa>0||japa.dayMalas>0)) h[k]=[japa.dayJapa,japa.dayMalas];   // carry over today's existing count
+  return h;
+}
+function japaHistAdd(dj,dm){
+  var h={}; try{ h=JSON.parse(lsGet(japaHistKey)||"{}")||{}; }catch(e){ h={}; }
+  if(typeof h!=="object"||Array.isArray(h)) h={};
+  var k=japaDK(new Date()), e=h[k]||[Math.max(0,japa.dayJapa-dj),Math.max(0,japa.dayMalas-dm)];   // japa.day* already updated by the caller
+  e[0]=Math.max(0,(e[0]||0)+dj); e[1]=Math.max(0,(e[1]||0)+dm); h[k]=e;
+  lsSet(japaHistKey,JSON.stringify(h));
+}
+function japaStats(){
+  var h=japaHistLoad(), now=new Date(), tj=0, tm=0, ad=0, day;
+  Object.keys(h).forEach(function(k){ var e=h[k]||[0,0]; tj+=e[0]||0; tm+=e[1]||0; if((e[0]||0)>0) ad++; });
+  function has(d){ var e=h[japaDK(d)]; return !!(e && e[0]>0); }
+  // current streak: counts back from today; if today is still empty, yesterday keeps it alive
+  var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()), todayDone=has(d), streak=0;
+  if(!todayDone) d.setDate(d.getDate()-1);
+  while(has(d)){ streak++; d.setDate(d.getDate()-1); }
+  // best streak
+  var keys=Object.keys(h).filter(function(k){return (h[k][0]||0)>0;}).sort(), best=0, run=0, prev=null;
+  keys.forEach(function(k){
+    var p=k.split("-"), cur=new Date(+p[0],+p[1]-1,+p[2]);
+    if(prev && Math.round((cur-prev)/86400000)===1) run++; else run=1;
+    if(run>best) best=run; prev=cur;
+  });
+  // last 7 days (oldest -> today)
+  var week=[], wj=0, wm=0, i;
+  for(i=6;i>=0;i--){
+    day=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    var e=h[japaDK(day)]||[0,0]; week.push({dow:day.getDay(),j:e[0]||0,m:e[1]||0,today:i===0}); wj+=e[0]||0; wm+=e[1]||0;
+  }
+  return {tj:tj,tm:tm,ad:ad,streak:streak,best:Math.max(best,streak),todayDone:todayDone,week:week,wj:wj,wm:wm};
+}
+function japaPaintStats(){
+  var box=document.getElementById("japaStatsCard"); if(!box) return;
+  var U=japaUI(), S=japaStats(), max=1;
+  S.week.forEach(function(w){ if(w.j>max) max=w.j; });
+  var msg=S.todayDone?U.stOk:(S.streak>0?U.stKeep:U.stNone);
+  var bars=S.week.map(function(w){
+    var hgt=w.j>0?Math.max(6,Math.round(w.j/max*62)):3;
+    return '<div class="jst-col'+(w.j>0?' has':'')+(w.today?' today':'')+'"><div class="jst-n">'+(w.j>0?w.j:'')+'</div><div class="jst-bar" style="height:'+hgt+'px"></div><div class="jst-d">'+U.dows[w.dow]+'</div></div>';
+  }).join("");
+  box.innerHTML='<h5>'+U.stTitle+'</h5>'+
+    '<div class="jst-streak">'+msg+'</div>'+
+    '<div class="jst-top">'+
+      '<div class="jst-box"><b>🔥 '+S.streak+'</b><small>'+U.stStreak+'</small></div>'+
+      '<div class="jst-box"><b>'+S.tm+'</b><small>'+U.stTotMalas+'</small></div>'+
+      '<div class="jst-box"><b>'+S.tj+'</b><small>'+U.stTotJapa+'</small></div>'+
+    '</div>'+
+    '<div class="cal-h" style="margin:0 2px 2px;text-align:left">'+U.stWeek+'</div>'+
+    '<div class="jst-week" role="img" aria-label="'+U.stWeek+'">'+bars+'</div>'+
+    '<div class="jst-sum"><b>'+S.wj+'</b> '+U.stWeekJapa+' · <b>'+S.wm+'</b> '+U.stWeekMalas+' · <b>'+S.ad+'</b> '+U.stDays+' · '+U.stBest+': <b>'+S.best+'</b></div>';
+}
+function japaL(){ return currentLang==="en"?"en":"hi"; }
+
+/* timer: timestamps, so it stays right if the phone sleeps briefly */
+var jt={limit:0,running:false,acc:0,start:0,tick:null,finished:false}, japaWake=null, japaAudio=null;
+function jtElapsed(){ return jt.acc+(jt.running?Date.now()-jt.start:0); }
+function jtFmt(ms){ var s=Math.max(0,Math.floor(ms/1000)), m=Math.floor(s/60); s=s%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+function jtShown(){ return jt.limit? Math.max(0,jt.limit*60000-jtElapsed()) : jtElapsed(); }
+function japaBell(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    japaAudio=japaAudio||new AC(); if(japaAudio.state==="suspended") japaAudio.resume();
+    [528,792].forEach(function(f,i){
+      var o=japaAudio.createOscillator(), g=japaAudio.createGain(), t0=japaAudio.currentTime+i*0.02;
+      o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(i?0.12:0.3,t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+2.4); o.connect(g); g.connect(japaAudio.destination); o.start(t0); o.stop(t0+2.5);
+    });
+  }catch(e){}
+}
+function japaBuzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+function jtWake(on){
+  try{
+    if(on && navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(w){ japaWake=w; }).catch(function(){}); }
+    else if(!on && japaWake){ japaWake.release(); japaWake=null; }
+  }catch(e){}
+}
+function jtStart(){
+  if(jt.running) return; if(jt.finished){ jt.acc=0; jt.finished=false; }
+  jt.running=true; jt.start=Date.now(); jtWake(true);
+  jt.tick=setInterval(jtUpdate,250); japaPaint();
+}
+function jtPause(){
+  if(!jt.running) return;
+  jt.acc=jtElapsed(); jt.running=false; clearInterval(jt.tick); jtWake(false); japaPaint();
+}
+function jtReset(){ jt.running=false; clearInterval(jt.tick); jt.acc=0; jt.finished=false; jtWake(false); japaPaint(); }
+function jtUpdate(){
+  var el=document.getElementById("japaTime"); if(el) el.textContent=jtFmt(jtShown());
+  if(jt.limit && jtElapsed()>=jt.limit*60000 && !jt.finished){
+    jt.finished=true; jt.acc=jt.limit*60000; jt.running=false; clearInterval(jt.tick); jtWake(false);
+    japaBell(); japaBuzz([200,100,200,100,300]); japaBanner(japaUI().doneTimer); japaPaint();
+  }
+}
+function japaUI(){ return JAPA_UI[japaL()]; }
+var japaBannerTxt="";
+function japaBanner(txt){ japaBannerTxt=txt; var b=document.getElementById("japaDone"); if(b){ b.textContent=txt; b.classList.add("show"); } }
+
+function japaTap(){
+  if(!jt.running && !jt.finished) jtStart();                // first tap also starts the timer
+  japa.count++; japa.dayJapa++; var _mala=0;
+  if(japa.count>=japa.target){
+    japa.count=0; japa.dayMalas++; _mala=1;
+    japaBell(); japaBuzz([60,40,60,40,120]);
+    japaBanner(japaUI().doneJapa(japa.target, JAPA_MANTRAS[japa.mantra].short[japaL()]));
+  } else { japaBuzz(10); }
+  japaHistAdd(1,_mala);
+  japaSave(); japaPaintCount();
+}
+function japaPaintCount(){
+  var U=japaUI(), C=2*Math.PI*46;
+  var c=document.getElementById("japaCount"); if(!c) return;
+  c.textContent=japa.count;
+  document.getElementById("japaOf").textContent="/ "+japa.target;
+  var fg=document.getElementById("japaFg"); fg.style.strokeDasharray=C; fg.style.strokeDashoffset=C*(1-japa.count/japa.target);
+  document.getElementById("japaDayJapa").textContent=japa.dayJapa;
+  document.getElementById("japaDayMalas").textContent=japa.dayMalas;
+  japaPaintStats();
+}
+function japaChip(parent,label,on,fn){ var b=document.createElement("button"); b.className="japa-chip"+(on?" on":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
+function japaBtn(parent,label,pri,fn){ var b=document.createElement("button"); b.className="japa-btn"+(pri?" pri":""); b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; }
+function japaPaint(){
+  var L=japaL(), U=japaUI(), w=document.getElementById("japaWrap");
+  document.getElementById("japaTitle").textContent=U.title;
+  w.innerHTML="";
+  function el(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+
+  var mc=el("div","japa-chips");
+  Object.keys(JAPA_MANTRAS).forEach(function(k){
+    japaChip(mc,JAPA_MANTRAS[k].short[L],japa.mantra===k,function(){ japa.mantra=k; japa.count=0; japaSave(); japaPaint(); });
+  });
+  w.appendChild(mc);
+  var mt=el("div","japa-mantra",JAPA_MANTRAS[japa.mantra].text); mt.style.whiteSpace="pre-line"; w.appendChild(mt);
+
+  var tc=el("div","japa-chips");
+  JAPA_TARGETS.forEach(function(n){
+    japaChip(tc,String(n),japa.target===n,function(){ japa.target=n; japa.count=0; japaSave(); japaPaint(); });
+  });
+  w.appendChild(tc);
+
+  var ring=el("div","japa-ring");
+  ring.innerHTML='<svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="46"/><circle class="fg" id="japaFg" cx="50" cy="50" r="46"/></svg>';
+  var tap=el("button","japa-tap"); tap.id="japaTap"; tap.setAttribute("aria-label",U.tap);
+  tap.innerHTML='<b id="japaCount">0</b><span id="japaOf" style="font-size:14px;color:var(--ink-muted);margin-top:2px"></span><small>'+U.tap+'</small>';
+  tap.addEventListener("click",japaTap);
+  ring.appendChild(tap); w.appendChild(ring);
+
+  var bn=el("div","japa-done"+(japaBannerTxt?" show":""),japaBannerTxt); bn.id="japaDone"; w.appendChild(bn);
+
+  var st=el("div","japa-stats");
+  st.innerHTML='<span>'+U.today+': <b id="japaDayJapa">0</b></span><span>'+U.all+': <b id="japaDayMalas">0</b></span>';
+  w.appendChild(st);
+
+  var row=el("div","japa-row");
+  japaBtn(row,U.undo,false,function(){
+    if(japa.count>0){ japa.count--; japa.dayJapa=Math.max(0,japa.dayJapa-1); japaHistAdd(-1,0); japaSave(); japaPaintCount(); }
+  });
+  japaBtn(row,U.reset,false,function(){ if(confirm(U.resetAsk)){ japa.count=0; japaBannerTxt=""; japaSave(); japaPaint(); } });
+  w.appendChild(row);
+
+  var sc=el("div","japa-card"); sc.id="japaStatsCard"; w.appendChild(sc);
+  var card=el("div","japa-card"); card.appendChild(el("h5",null,"⏱ "+U.timer));
+  var lc=el("div","japa-chips");
+  JAPA_TIMES.forEach(function(n){
+    japaChip(lc,n?(n+" "+U.min):U.up,jt.limit===n,function(){ jtReset(); jt.limit=n; japaBannerTxt=""; japaPaint(); });
+  });
+  card.appendChild(lc);
+  var tm=el("div","japa-time",jtFmt(jtShown())); tm.id="japaTime"; card.appendChild(tm);
+  var tr=el("div","japa-row"); tr.style.marginBottom="0";
+  japaBtn(tr, jt.running?U.pause:(jtElapsed()>0&&!jt.finished?U.cont:U.start), true, function(){ if(jt.running) jtPause(); else jtStart(); });
+  japaBtn(tr,U.resetT,false,function(){ jtReset(); japaBannerTxt=""; japaPaint(); });
+  card.appendChild(tr); w.appendChild(card);
+  japaPaintCount();
+}
+var japaPanel=document.getElementById("japaPanel");
+function openJapa(){
+  japa=japaLoad(); japaBannerTxt=""; japaPaint(); japaPanel.classList.add("show");
+  menuDropdown.classList.remove("show");
+  try{ history.pushState({japa:1},""); }catch(e){}
+}
+function closeJapa(){
+  if(!japaPanel.classList.contains("show")) return;
+  japaPanel.classList.remove("show"); jtPause();
+  if(history.state && history.state.japa){ try{ history.back(); }catch(e){} }
+}
+window.addEventListener("popstate",function(){ if(japaPanel.classList.contains("show")){ japaPanel.classList.remove("show"); jtPause(); } });
+document.addEventListener("visibilitychange",function(){ if(!document.hidden && jt.running) jtWake(true); });
+document.getElementById("japaClose").addEventListener("click",closeJapa);
+
+/* ================= Text size and night mode =================
+ * Three text sizes and a day / night switch, saved on the phone.
+ * The choice is also written for the Gita and Aarti pages, so the whole app follows it.
+ */
+var CMF_TXT = {
+  hi:{title:"आराम से पढ़ें", size:"अक्षर का आकार", mode:"रोशनी", sizes:["सामान्य","बड़ा","बहुत बड़ा"], day:"दिन", night:"रात",
+      prev:"जय श्री कृष्ण 🙏\nआपके प्रश्न, श्री कृष्ण के उत्तर", done:"ठीक है", menu:"🔆 अक्षर और रात्रि मोड / Text & Night", btn:"अक्षर और रात्रि मोड"},
+  en:{title:"Easy reading", size:"Text size", mode:"Light", sizes:["Normal","Large","Extra large"], day:"Day", night:"Night",
+      prev:"Jai Shri Krishna 🙏\nYour questions, Shri Krishna's answers", done:"Done", menu:"🔆 Text size & Night mode / अक्षर", btn:"Text size and night mode"}
+};
+var CMF_GITA=[19,23,27], CMF_AARTI=[20,24,28];     // matching sizes on the Gita and Aarti pages
+function cmfLevel(){ var s=parseInt(lsGet("krishna_textsize"),10); return (s>=0&&s<=2)?s:0; }
+function cmfIsNight(){ return lsGet("aarti_theme")==="dark"; }
+function cmfApply(){
+  var b=document.body, s=cmfLevel(), n=cmfIsNight();
+  b.classList.remove("ts1","ts2"); if(s) b.classList.add("ts"+s);
+  b.classList.toggle("night",n);
+  var m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", n?"#0b1030":"#B8923C");
+}
+function cmfSetSize(s){ lsSet("krishna_textsize",String(s)); lsSet("gita_font",String(CMF_GITA[s])); lsSet("aarti_font",String(CMF_AARTI[s])); cmfApply(); cmfPaint(); }
+function cmfSetNight(n){ lsSet("aarti_theme", n?"dark":"light"); cmfApply(); cmfPaint(); }
+function cmfPaint(){
+  var T=CMF_TXT[currentLang==="en"?"en":"hi"], s=cmfLevel(), n=cmfIsNight();
+  $c("cmfTitle").textContent=T.title; $c("cmfSizeLbl").textContent=T.size; $c("cmfModeLbl").textContent=T.mode; $c("cmfDone").textContent=T.done;
+  var px=[20,25,30];
+  $c("cmfSizes").innerHTML=T.sizes.map(function(l,i){ return '<button class="cmf-opt" type="button" data-s="'+i+'" aria-pressed="'+(s===i)+'"><b style="font-size:'+px[i]+'px">अ</b><small>'+l+'</small></button>'; }).join("");
+  $c("cmfModes").innerHTML=[[0,"☀️",T.day],[1,"🌙",T.night]].map(function(o){ return '<button class="cmf-opt" type="button" data-m="'+o[0]+'" aria-pressed="'+((o[0]===1)===n)+'"><b style="font-size:24px">'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join("");
+  var pv=$c("cmfPrev"); pv.textContent=T.prev; pv.style.whiteSpace="pre-line"; pv.style.fontSize=(15*[1,1.2,1.4][s])+"px";
+  var tb=document.getElementById("cmfBtn"); if(tb) tb.title=T.btn;
+}
+function $c(id){ return document.getElementById(id); }
+function openCmf(){ cmfPaint(); $c("cmfOv").classList.add("show"); menuDropdown.classList.remove("show"); }
+function closeCmf(){ $c("cmfOv").classList.remove("show"); }
+$c("cmfBtn").addEventListener("click",openCmf);
+$c("cmfDone").addEventListener("click",closeCmf);
+$c("cmfOv").addEventListener("click",function(e){ if(e.target===this) closeCmf(); });
+$c("cmfSizes").addEventListener("click",function(e){ var b=e.target.closest("[data-s]"); if(b) cmfSetSize(parseInt(b.getAttribute("data-s"),10)); });
+$c("cmfModes").addEventListener("click",function(e){ var b=e.target.closest("[data-m]"); if(b) cmfSetNight(b.getAttribute("data-m")==="1"); });
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeCmf(); });
+cmfApply(); cmfPaint();
+
+var FREE_LIMIT = 1000000; // payment is switched off for now
+var msgCount = parseInt(lsGet("krishna_msgcount") || "0", 10) || 0;
+function saveCount(){ lsSet("krishna_msgcount", String(msgCount)); }
+function bumpCount(){
+  msgCount++;
+  saveCount();
+}
+var subModal = document.getElementById("subModal");
 var langModal = document.getElementById("langModal");
 
+// Subscription is valid for a limited time (default 30 days).
+// subscribe.html stores the expiry timestamp (ms) in "krishna_unlocked_until".
+function isUnlocked(){
+  var until = parseInt(lsGet("krishna_unlocked_until") || "0", 10) || 0;
+  if(until > Date.now()) return true;
+  // expired (or never subscribed): clear any stale values
+  try{ localStorage.removeItem("krishna_unlocked"); }catch(e){}
+  if(until){ try{ localStorage.removeItem("krishna_unlocked_until"); }catch(e){} }
+  return false;
+}
+function showPaywall(){
+  subModal.classList.add("show");
+}
 var isProcessing = false;
 function lockProcessing(){
   isProcessing = true;
@@ -753,6 +2019,11 @@ function unlockProcessing(){
 function canSendMessage(){
   if(isProcessing){
     showMicHint((currentLang==="en") ? "Please wait for the previous answer" : "कृपया पिछले उत्तर की प्रतीक्षा करें");
+    return false;
+  }
+  if(isUnlocked()) return true;
+  if(msgCount >= FREE_LIMIT){
+    showPaywall();
     return false;
   }
   return true;
@@ -789,6 +2060,7 @@ function restoreHistory(){
       var b = add(item.t, item.w, true);
       if(item.id && b.parentNode) b.parentNode.dataset.mid = item.id;
       if(item.v) addVerse(b, item.v);
+      if(item.w === "bot" && item.t !== TXT.hi.noReply && item.t !== TXT.en.noReply) addActionBtns(b, item.t, item.v);
     }
   });
 }
@@ -820,6 +2092,15 @@ function clearAllChat(){
   greetingBubble = add(t("greeting"),"bot");
 }
 
+function handleLimitReached(typingBubble){
+  msgCount = FREE_LIMIT;
+  lsSet("krishna_msgcount", String(FREE_LIMIT));
+  if(typingBubble && typingBubble.parentNode && typingBubble.parentNode.parentNode){
+    typingBubble.parentNode.parentNode.removeChild(typingBubble.parentNode);
+  }
+  showPaywall();
+}
+
 async function sendText(){
   var m=input.value.trim();
   if(!m)return;
@@ -828,14 +2109,17 @@ async function sendText(){
   var ub=add(m,"user",true);
   saveHistory("user", m, ub);
   input.value="";
+  bumpCount();
   lockProcessing();
   var L=addTyping();
   try{
-    var res=await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:m,sessionId:getDeviceId(),lang:currentLang||"hi",deviceId:getDeviceId()})});
+    var res=await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:m,sessionId:getDeviceId(),lang:currentLang||"hi",deviceId:getDeviceId(),phone:lsGet("krishna_phone")||""})});
     var data=await res.json();
+    if(data.limitReached){handleLimitReached(L);return;}
     var reply=data.reply||t("noReply");
     L.textContent=reply;
     var vv=normVerse(data);addVerse(L,vv);
+    if(data.reply) addActionBtns(L,reply,vv);
     saveHistory("bot", reply, L, vv);
   }catch(e){
     L.textContent=t("error")+e.message;
@@ -1118,6 +2402,7 @@ async function sendVoice(blob,filename){
   lockProcessing();
   removeGreeting();
   var userBubble=add(t("listening"),"user",true);
+  bumpCount();
   var L=addTyping();
   try{
     var fd=new FormData();
@@ -1125,6 +2410,7 @@ async function sendVoice(blob,filename){
     fd.append("sessionId",getDeviceId());
     fd.append("lang",currentLang||"hi");
     fd.append("deviceId",getDeviceId());
+    fd.append("phone",lsGet("krishna_phone")||"");
     var res=await fetch(WEBHOOK_URL,{method:"POST",body:fd});
     if(!res.ok){
       var raw="";
@@ -1132,10 +2418,19 @@ async function sendVoice(blob,filename){
       throw new Error("HTTP "+res.status+(raw ? ": "+raw.slice(0,300) : ""));
     }
     var data=await res.json();
+    if(data.limitReached){
+      if(userBubble.parentNode && userBubble.parentNode.parentNode){
+        userBubble.parentNode.parentNode.removeChild(userBubble.parentNode);
+      }
+      handleLimitReached(L);
+      return;
+    }
     var tr=(data.transcript||"").trim();
     // Nothing meaningful heard (empty, or only punctuation/symbols): remove
     // both bubbles, don't count it as a question, and show a hint instead.
     if(!/[\p{L}\p{N}]/u.test(tr)){
+      msgCount=Math.max(0,msgCount-1);
+      saveCount();
       var ur=userBubble.parentNode, br=L.parentNode;
       if(ur && ur.parentNode) ur.parentNode.removeChild(ur);
       if(br && br.parentNode) br.parentNode.removeChild(br);
@@ -1151,6 +2446,7 @@ async function sendVoice(blob,filename){
     saveHistory("bot",reply,L,vv);
     if(data.reply){
       if(data.audioBase64) addPlay(L,data.audioBase64,reply,vv); else addSpeakBtn(L,reply,null,vv);
+      addActionBtns(L,reply,vv);
       speakReply(reply,data.audioBase64,vv);
     }
   }catch(e){
@@ -1173,6 +2469,15 @@ menuBtn.addEventListener("click",function(e){
 });
 document.addEventListener("click",function(){
   menuDropdown.classList.remove("show");
+});
+/* grouped menu: tap a heading to open its items, one group open at a time */
+menuDropdown.addEventListener("click",function(e){
+  var h=e.target.closest(".mg-head"); if(!h) return;
+  e.stopPropagation();
+  var open=h.getAttribute("aria-expanded")!=="true";
+  menuDropdown.querySelectorAll(".mg-head").forEach(function(x){
+    var on=(x===h)&&open; x.setAttribute("aria-expanded",on?"true":"false"); x.nextElementSibling.classList.toggle("open",on);
+  });
 });
 
 function setLanguage(lang){
@@ -1206,7 +2511,17 @@ document.getElementById("menuLangBtn").addEventListener("click",function(){
   langModal.classList.add("show");
 });
 
+document.getElementById("menuSupportBtn").addEventListener("click",function(){
+  window.location.href = "support.html";
+});
+
 document.getElementById("menuClearBtn").addEventListener("click",clearAllChat);
+
+document.getElementById("menuInstallBtn").addEventListener("click",function(){
+  if(typeof window.krishnaShowInstallPrompt === "function"){
+    window.krishnaShowInstallPrompt();
+  }
+});
 
 if(!currentLang){
   document.getElementById("langCloseBtn").style.display="none";
@@ -1227,10 +2542,242 @@ if(!currentLang){
   }
 }
 
+if(!isUnlocked() && msgCount >= FREE_LIMIT){
+  showPaywall();
+}
+</script>
+
+<style>
+#installBanner{
+  position:fixed;left:12px;right:12px;top:calc(64px + env(safe-area-inset-top));z-index:40;
+  display:none;align-items:center;gap:12px;
+  background:#fdfaf2;
+  border:1px solid rgba(184,146,60,0.4);
+  border-radius:16px;padding:12px 14px;
+  box-shadow:0 14px 34px rgba(44,52,56,0.28);
+  font-family:'Poppins',sans-serif;
+}
+#installBanner.show{display:flex}
+#installBanner img{width:44px;height:44px;border-radius:12px;flex-shrink:0}
+#installBanner .ib-text{flex:1;min-width:0}
+#installBanner .ib-title{font-size:14px;font-weight:600;color:#2E3B42;margin:0}
+#installBanner .ib-sub{font-size:12px;color:#66757C;margin:2px 0 0}
+#installBanner button{
+  border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;
+  font-family:inherit;cursor:pointer;flex-shrink:0;
+}
+#installBanner .ib-install{
+  background:linear-gradient(180deg,#D8B35F,#B8923C 60%,#8A6A26);
+  color:#3a2c0c;
+}
+#installBanner .ib-close{
+  background:transparent;color:#66757C;padding:6px;font-size:18px;line-height:1;
+}
+</style>
+
+<div id="installBanner">
+  <img src="icon-192.png" alt="श्री कृष्ण वाणी">
+  <div class="ib-text">
+    <p class="ib-title" id="ibTitle">श्री कृष्ण वाणी</p>
+    <p class="ib-sub" id="ibSub">होम स्क्रीन पर जोड़ें, ऐप की तरह खोलें</p>
+  </div>
+  <button class="ib-install" id="ibInstallBtn">जोड़ें</button>
+  <button class="ib-close" id="ibCloseBtn">&times;</button>
+</div>
+
+<script>
+(function(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(err){
+      console.warn('SW registration failed:', err);
+    });
+  }
+
+  var banner = document.getElementById('installBanner');
+  var installBtn = document.getElementById('ibInstallBtn');
+  var closeBtn = document.getElementById('ibCloseBtn');
+  var titleEl = document.getElementById('ibTitle');
+  var sub = document.getElementById('ibSub');
+  var deferredPrompt = null;
+  // Once deferredPrompt.prompt() has been called, that exact prompt object
+  // can never be shown again (this is a hard browser limitation, not
+  // something we can work around). This flag remembers that we're in that
+  // "spent" state so the button can offer a reload instead of dead-end text.
+  var promptConsumed = false;
+
+  function isInstalledAlready(){
+    return isStandalone() || localStorage.getItem('krishna_app_installed') === '1';
+  }
+  window.addEventListener('appinstalled', function(){
+    try{ localStorage.setItem('krishna_app_installed', '1'); }catch(e){}
+  });
+
+  function tr(key){
+    // Reuses the app's own translation table (t()) when available so the
+    // banner follows the user's chosen language; falls back to Hindi.
+    try{
+      if(typeof t === 'function'){ return t(key); }
+    }catch(e){}
+    var fallback = {
+      installTitle:'श्री कृष्ण वाणी',
+      installBtnText:'जोड़ें',
+      installSubDefault:'होम स्क्रीन पर जोड़ें, ऐप की तरह खोलें',
+      installSubIOS:'नीचे शेयर बटन दबाएँ → "होम स्क्रीन पर जोड़ें" चुनें',
+      installSubInApp:'कृपया ऊपर मेन्यू से "Open in Browser" चुनें, फिर होम स्क्रीन पर जोड़ें',
+      installSubManual:'कृपया ब्राउज़र के ⋮ मेन्यू में जाकर "Install app" या "Add to Home screen" चुनें',
+      installAlready:'ऐप पहले से इंस्टॉल है।'
+    };
+    return fallback[key];
+  }
+
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+  }
+  function isIOS(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent);
+  }
+  function isInAppBrowser(){
+    var ua = navigator.userAgent || '';
+    return /FBAN|FBAV|Instagram|WhatsApp|Line\//i.test(ua);
+  }
+  // Sets the banner's title/subtitle/button to match the current
+  // platform + language, right before the banner is displayed.
+  function refreshInstallText(){
+    if(titleEl) titleEl.textContent = tr('installTitle');
+    if(isInAppBrowser()){
+      sub.textContent = tr('installSubInApp');
+      installBtn.style.display = 'none';
+    } else if(isIOS()){
+      sub.textContent = tr('installSubIOS');
+      installBtn.style.display = 'none';
+    } else if(deferredPrompt){
+      sub.textContent = tr('installSubDefault');
+      installBtn.textContent = tr('installBtnText');
+      installBtn.style.display = '';
+    } else if(promptConsumed){
+      // The one-time native prompt was already used this page-load.
+      // Chrome will never re-issue that same prompt object, so offer a
+      // reload (which fetches a brand new prompt) instead of a dead end.
+      sub.textContent = tr('installSubConsumed');
+      installBtn.textContent = tr('installReload');
+      installBtn.style.display = '';
+    } else {
+      // Desktop / Android Chrome-type browsers, prompt not captured yet:
+      // still show the जोड़ें/Install button. Clicking it will fall back
+      // to manual instructions if the native prompt truly never arrives.
+      sub.textContent = tr('installSubDefault');
+      installBtn.textContent = tr('installBtnText');
+      installBtn.style.display = '';
+    }
+  }
+  window.krishnaRefreshInstallText = refreshInstallText;
+
+  function showBanner(){
+    refreshInstallText();
+    banner.classList.add('show');
+  }
+  function hideBanner(){
+    banner.classList.remove('show');
+  }
+
+  // Remember if the user already dismissed the auto-popup, so it doesn't
+  // nag on every reload. They can still install any time via the menu.
+  var DISMISS_KEY = 'krishna_install_dismissed';
+  function isDismissed(){
+    try{ return localStorage.getItem(DISMISS_KEY) === '1'; }catch(e){ return false; }
+  }
+  function markDismissed(){
+    try{ localStorage.setItem(DISMISS_KEY, '1'); }catch(e){}
+  }
+  function maybeAutoShow(){
+    // Auto popup disabled: the install banner now only appears when the
+    // user taps "Install App" in the menu.
+    return;
+  }
+
+  // Always listen for the native install event so a deferred prompt is
+  // ready whenever the user opens the install option from the menu.
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    console.log('[install-debug] beforeinstallprompt FIRED - native install is available');
+    if(banner.classList.contains('show')) refreshInstallText();
+    maybeAutoShow();
+  });
+
+  // Diagnostic only: if this event never fires within a few seconds of
+  // load, the browser has decided the PWA isn't installable yet (bad
+  // manifest/icons/service worker, not served over https, already
+  // installed, or a browser that doesn't support this API at all).
+  // Check DevTools > Application > Manifest for the exact reason.
+  setTimeout(function(){
+    if(!deferredPrompt){
+      console.warn('[install-debug] beforeinstallprompt NEVER fired within 4s of load. ' +
+        'isStandalone=' + isStandalone() + ' isIOS=' + isIOS() + ' isInAppBrowser=' + isInAppBrowser() +
+        '. If none of those are true and this is Chrome/Edge/Samsung Internet on Android or desktop, ' +
+        'check DevTools > Application > Manifest for installability errors.');
+      // No native install prompt showed up (iOS Safari, in-app browsers,
+      // desktop Firefox/Safari, a page opened over file:// or plain http,
+      // or a manifest issue). Auto-show the banner anyway with manual
+      // "Add to Home Screen" instructions so an install option is always
+      // visible somewhere rather than silently never appearing.
+      maybeAutoShow();
+    }
+  }, 4000);
+
+
+  installBtn.addEventListener('click', function(){
+    if(deferredPrompt){
+      var thisPrompt = deferredPrompt;
+      deferredPrompt = null;
+      thisPrompt.prompt();
+      thisPrompt.userChoice.then(function(choice){
+        if(choice && choice.outcome === 'accepted'){
+          try{ localStorage.setItem('krishna_app_installed', '1'); }catch(e){}
+        }
+      }).finally(function(){
+        promptConsumed = true;
+        hideBanner();
+      });
+    } else if(promptConsumed){
+      // Reload to ask Chrome for a brand new install prompt.
+      window.location.reload();
+    } else {
+      sub.textContent = tr('installSubManual');
+      installBtn.style.display = 'none';
+    }
+  });
+
+  closeBtn.addEventListener('click', function(){
+    hideBanner();
+    markDismissed();
+  });
+
+  // --- Manual re-trigger: reachable any time later from
+  // Menu → सहायता/Support → "ऐप इंस्टॉल करें / Install App" ---
+  window.krishnaShowInstallPrompt = function(){
+    if(isInstalledAlready()){
+      alert(tr('installAlready'));
+      return;
+    }
+    showBanner();
+  };
+})();
 </script>
 
 <script>
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
+/* open a panel directly from the shared menu on other pages (index.html#japa / #cal / #fav / #lang) */
+(function(){
+  var h=(location.hash||"").slice(1); if(!h) return;
+  setTimeout(function(){
+    try{
+      if(h==="japa") openJapa(); else if(h==="cal") openCal(); else if(h==="fav") openFavs();
+      else if(h==="lang") document.getElementById("menuLangBtn").click();
+    }catch(e){}
+    try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  },400);
+})();
 </script>
 <script src="connect.js"></script>
 </body></html>
