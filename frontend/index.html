@@ -500,40 +500,6 @@ body.chatting #hero .aarti-home-btn{display:none}
 .japa-time{font-size:40px;font-weight:600;color:var(--slate-deep);letter-spacing:.02em;margin:2px 0 10px;font-variant-numeric:tabular-nums}
 .japa-done{display:none;margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(184,146,60,.15);color:var(--gold-deep);font-size:14px;font-weight:600;line-height:1.6}
 .japa-done.show{display:block}
-/* ---- Meditation & ॐ timer: always a calm deep-indigo screen, day or night ---- */
-.med-panel{position:fixed;inset:0;z-index:48;display:none;flex-direction:column;color:#FFF6DF;background:radial-gradient(ellipse at 50% 36%,#2a3584 0%,#161e55 52%,#0a0f2e 100%)}
-.med-panel.show{display:flex}
-.med-top{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 6px;font-weight:600;font-size:calc(18px*var(--ts,1));color:#F0CC72}
-.med-back{width:40px;height:40px;border-radius:50%;border:1px solid rgba(240,204,114,.5);background:rgba(255,255,255,.08);color:#F0CC72;font-size:20px;cursor:pointer;font-family:inherit;flex-shrink:0;touch-action:manipulation}
-.med-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:flex;padding:8px 16px calc(26px + env(safe-area-inset-bottom))}
-.med-wrap{max-width:460px;width:100%;margin:auto;text-align:center}
-.med-orb{position:relative;width:min(66vw,270px);aspect-ratio:1;margin:8px auto 18px}
-.med-orb::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(240,204,114,.28)}
-.med-breath{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform;--glow:.5}
-.med-halo{position:absolute;inset:-16%;border-radius:50%;opacity:var(--glow);background:radial-gradient(circle,rgba(240,204,114,.34) 0%,rgba(240,204,114,.10) 48%,rgba(240,204,114,0) 70%)}
-.med-core{position:relative;width:80%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 36% 30%,rgba(255,246,223,.20),rgba(240,204,114,.10) 55%,rgba(240,204,114,.04));
-  border:1.5px solid rgba(240,204,114,.6);box-shadow:0 0 38px rgba(240,204,114,.26),inset 0 0 28px rgba(240,204,114,.12)}
-.med-core span{font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:clamp(66px,21vw,104px);line-height:1.1;color:#F6DC94;text-shadow:0 0 22px rgba(240,204,114,.65)}
-.med-orb.idle .med-breath{animation:medIdle 9s ease-in-out infinite}
-@keyframes medIdle{0%,100%{transform:scale(.8)}50%{transform:scale(.96)}}
-@media (prefers-reduced-motion:reduce){.med-orb.idle .med-breath{animation:none;transform:scale(.9)}}
-.med-phase{font-family:'Tiro Devanagari Hindi','Poppins',serif;font-size:calc(24px*var(--ts,1));color:#F6DC94;min-height:1.5em;line-height:1.5}
-.med-cnt{font-size:15px;color:#D2D9F0;font-variant-numeric:tabular-nums;height:22px}
-.med-time{font-size:34px;font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:#FFF6DF;margin:8px 0 6px}
-.med-note{font-size:calc(14px*var(--ts,1));line-height:1.75;color:#D2D9F0;margin:0 0 6px}
-.med-lbl{font-size:calc(12.5px*var(--ts,1));letter-spacing:.03em;color:#D2D9F0;margin:14px 0 7px}
-.med-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-.med-chip,.med-btn{border:1px solid rgba(240,204,114,.5);background:rgba(255,255,255,.08);color:#F6DC94;font-weight:600;font-family:inherit;cursor:pointer;touch-action:manipulation}
-.med-chip{border-radius:999px;padding:8px 14px;font-size:calc(13.5px*var(--ts,1))}
-.med-btn{border-radius:14px;padding:11px 20px;font-size:calc(14.5px*var(--ts,1))}
-.med-chip.on,.med-btn.pri{background:#EBC56B;color:#2a1f05;border-color:#EBC56B}
-.med-btn.pri{padding:13px 28px;font-size:calc(16px*var(--ts,1))}
-.med-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0 0}
-.med-today{font-size:calc(12.5px*var(--ts,1));color:#D2D9F0;margin:14px 0 0}
-.med-today b{color:#F6DC94}
-.med-done{margin:0 0 4px;padding:12px 14px;border-radius:14px;background:rgba(240,204,114,.16);color:#F6DC94;font-size:calc(15px*var(--ts,1));font-weight:600;line-height:1.7}
-.med-back:focus-visible,.med-chip:focus-visible,.med-btn:focus-visible{outline:2px solid #F0CC72;outline-offset:2px}
 
 /* ---- Text size (--ts) ---- */
 body.ts1{--ts:1.2}
@@ -693,7 +659,6 @@ body.night #installBanner .ib-sub{color:#D2D9F0}
       <button class="account-item" id="menuAartiBtn">🪔 आरती / Aarti</button>
       <button class="account-item" id="menuCmfBtn">🔆 अक्षर और रात्रि मोड / Text & Night</button>
       <button class="account-item" id="menuJapaBtn">📿 जप काउंटर / Japa Counter</button>
-      <button class="account-item" id="menuMedBtn">🧘 ध्यान और ॐ टाइमर / Meditation</button>
       <button class="account-item" id="menuPathBtn">🛤 गीता पाठ पथ / Gita Reading Path</button>
       <button class="account-item" id="menuNotesBtn">🔖 बुकमार्क और नोट्स / Bookmarks &amp; Notes</button>
       <button class="account-item" id="menuPanchangBtn">🗓 पंचांग / Panchang</button>
@@ -784,14 +749,6 @@ body.night #installBanner .ib-sub{color:#D2D9F0}
     <div id="japaTitle">जप काउंटर</div>
   </div>
   <div class="japa-body"><div class="japa-wrap" id="japaWrap"></div></div>
-</div>
-
-<div class="med-panel" id="medPanel" role="dialog" aria-modal="true" aria-labelledby="medTitle">
-  <div class="med-top">
-    <button class="med-back" id="medBack" type="button" aria-label="Back">&larr;</button>
-    <div id="medTitle">ध्यान और ॐ टाइमर</div>
-  </div>
-  <div class="med-body"><div class="med-wrap" id="medWrap"></div></div>
 </div>
 
 <div class="cmf-ov" id="cmfOv">
@@ -1010,7 +967,6 @@ function applyStaticText(){
   document.getElementById("menuFavBtn").textContent = t("menuFav");
   if(typeof CMF_TXT!=="undefined"){ cmfPaint(); }
   if(typeof JAPA_UI!=="undefined"){ document.getElementById("menuJapaBtn").textContent = JAPA_UI[currentLang==="en"?"en":"hi"].menu; if(japaPanel.classList.contains("show")) japaPaint(); }
-  if(typeof MED_UI!=="undefined"){ document.getElementById("menuMedBtn").textContent = MED_UI[currentLang==="en"?"en":"hi"].menu; if(medPanel&&medPanel.classList.contains("show")) medPaint(); }
   if(typeof CAL_UI!=="undefined"){ document.getElementById("menuCalBtn").textContent = CAL_UI[currentLang==="en"?"en":"hi"].menu; if(calPanel.classList.contains("show")) calRender(); }
   document.getElementById("favTitle").textContent = t("favTitle");
   document.getElementById("aartiHomeText").textContent = t("aartiHome");
@@ -1759,7 +1715,7 @@ var JAPA_TARGETS=[11,21,108], JAPA_TIMES=[0,5,10,15,30];
 var JAPA_UI = {
   hi:{title:"जप काउंटर और मंत्र टाइमर", tap:"गिनने के लिए दबाएँ", target:"संख्या", malas:"माला", today:"आज का जप", all:"कुल माला (आज)",
       undo:"− एक घटाएँ", reset:"शून्य करें", timer:"मंत्र टाइमर", up:"घड़ी", min:"मि.", start:"शुरू करें", pause:"रोकें", cont:"जारी रखें", resetT:"फिर से",
-      doneJapa:function(n,m){return "🪔 "+n+" जप पूरे हुए। "+m+" की जय!";}, doneTimer:"🪔 समय पूरा हुआ। हरि ॐ तत्सत्।", menu:"📿 जप काउंटर / Japa Counter", medBtn:"🧘 पहले ॐ ध्यान करें",
+      doneJapa:function(n,m){return "🪔 "+n+" जप पूरे हुए। "+m+" की जय!";}, doneTimer:"🪔 समय पूरा हुआ। हरि ॐ तत्सत्।", menu:"📿 जप काउंटर / Japa Counter",
       resetAsk:"गिनती शून्य करें?", count:"जप",
       stTitle:"📊 मेरी साधना", stStreak:"दिन की लगातार साधना", stBest:"सर्वश्रेष्ठ", stTotMalas:"कुल माला", stTotJapa:"कुल जप",
       stWeek:"इस सप्ताह", stWeekJapa:"जप", stWeekMalas:"माला", stDays:"सक्रिय दिन",
@@ -1767,7 +1723,7 @@ var JAPA_UI = {
       dows:["र","सो","मं","बु","गु","शु","श"]},
   en:{title:"Japa Counter & Mantra Timer", tap:"tap to count", target:"Target", malas:"Malas", today:"Japa today", all:"Malas today",
       undo:"− Undo one", reset:"Reset", timer:"Mantra timer", up:"Stopwatch", min:"min", start:"Start", pause:"Pause", cont:"Resume", resetT:"Restart",
-      doneJapa:function(n,m){return "🪔 "+n+" japa complete. Glory to "+m+"!";}, doneTimer:"🪔 Time is up. Hari Om Tat Sat.", menu:"📿 Japa Counter / जप काउंटर", medBtn:"🧘 Meditate with ॐ first",
+      doneJapa:function(n,m){return "🪔 "+n+" japa complete. Glory to "+m+"!";}, doneTimer:"🪔 Time is up. Hari Om Tat Sat.", menu:"📿 Japa Counter / जप काउंटर",
       resetAsk:"Reset the count?", count:"japa",
       stTitle:"📊 My Sadhana", stStreak:"day streak", stBest:"Best streak", stTotMalas:"Total malas", stTotJapa:"Total japa",
       stWeek:"This week", stWeekJapa:"japa", stWeekMalas:"malas", stDays:"active days",
@@ -1922,10 +1878,6 @@ function japaPaint(){
   w.innerHTML="";
   function el(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
 
-  var mrow=el("div","japa-row"); mrow.style.marginBottom="10px";
-  japaBtn(mrow,U.medBtn,false,japaToMed);
-  w.appendChild(mrow);
-
   var mc=el("div","japa-chips");
   Object.keys(JAPA_MANTRAS).forEach(function(k){
     japaChip(mc,JAPA_MANTRAS[k].short[L],japa.mantra===k,function(){ japa.mantra=k; japa.count=0; japaSave(); japaPaint(); });
@@ -1974,10 +1926,10 @@ function japaPaint(){
   japaPaintCount();
 }
 var japaPanel=document.getElementById("japaPanel");
-function openJapa(noPush){
+function openJapa(){
   japa=japaLoad(); japaBannerTxt=""; japaPaint(); japaPanel.classList.add("show");
   menuDropdown.classList.remove("show");
-  if(noPush!==true){ try{ history.pushState({japa:1},""); }catch(e){} }
+  try{ history.pushState({japa:1},""); }catch(e){}
 }
 function closeJapa(){
   if(!japaPanel.classList.contains("show")) return;
@@ -1987,215 +1939,7 @@ function closeJapa(){
 window.addEventListener("popstate",function(){ if(japaPanel.classList.contains("show")){ japaPanel.classList.remove("show"); jtPause(); } });
 document.addEventListener("visibilitychange",function(){ if(!document.hidden && jt.running) jtWake(true); });
 document.getElementById("japaClose").addEventListener("click",closeJapa);
-document.getElementById("menuJapaBtn").addEventListener("click",function(){ openJapa(); });
-
-/* ================= Meditation & ॐ timer =================
- * A calm full-screen breathing screen: a glowing ॐ swells and settles with the breath, a soft
- * singing-bowl bell rings at the start and the end, and the japa counter is one tap away.
- * Timestamp based (stays right if the phone sleeps briefly). Settings and daily minutes are
- * kept on the phone (localStorage). Works offline.
- */
-var MED_TIMES=[1,3,5,10,15,20];
-var MED_PATS={calm:{i:4,h:0,o:6},even:{i:5,h:0,o:5},relax:{i:4,h:7,o:8}};
-var MED_UI={
-  hi:{title:"ध्यान और ॐ टाइमर", menu:"🧘 ध्यान और ॐ टाइमर / Meditation", back:"वापस",
-      ready:"आराम से बैठें, आँखें बंद करें और श्वास के साथ ॐ का स्मरण करें।",
-      dur:"समय", min:"मि.", pat:"श्वास की लय", pats:{calm:"शांत · 4-6", even:"सम · 5-5", relax:"गहरी · 4-7-8"},
-      bellOn:"🔔 घंटी चालू", bellOff:"🔕 घंटी बंद", begin:"ध्यान शुरू करें", pause:"रोकें", cont:"जारी रखें", end:"समाप्त करें",
-      "in":"श्वास लें", hold:"रोकें", out:"श्वास छोड़ें", today:"आज का ध्यान", mins:"मिनट",
-      done:function(n){return "🪔 "+n+" मिनट का ध्यान पूरा हुआ। हरि ॐ तत्सत्।";}, japa:"📿 अब जप करें", again:"🧘 फिर से ध्यान करें", japaFirst:"📿 जप काउंटर पर जाएँ"},
-  en:{title:"Meditation & ॐ Timer", menu:"🧘 Meditation & ॐ Timer / ध्यान", back:"Back",
-      ready:"Sit comfortably, close your eyes and remember ॐ with each breath.",
-      dur:"Duration", min:"min", pat:"Breath rhythm", pats:{calm:"Calm · 4-6", even:"Even · 5-5", relax:"Deep · 4-7-8"},
-      bellOn:"🔔 Bell on", bellOff:"🔕 Bell off", begin:"Begin meditation", pause:"Pause", cont:"Resume", end:"End session",
-      "in":"Breathe in", hold:"Hold", out:"Breathe out", today:"Meditation today", mins:"min",
-      done:function(n){return "🪔 "+n+" min of meditation complete. Hari Om Tat Sat.";}, japa:"📿 Continue with japa", again:"🧘 Meditate again", japaFirst:"📿 Go to japa counter"}
-};
-var medKey="krishna_med", medHistKey="krishna_med_hist";
-function medLoad(){
-  var s={}; try{ s=JSON.parse(lsGet(medKey)||"{}")||{}; }catch(e){ s={}; }
-  if(MED_TIMES.indexOf(s.dur)<0) s.dur=5;
-  if(!MED_PATS[s.pat]) s.pat="calm";
-  s.sound=s.sound!==false;
-  return s;
-}
-var med=medLoad();
-med.view="setup"; med.running=false; med.acc=0; med.start=0; med.raf=0; med.tick=null; med.finished=false; med.doneMin=0;
-var medWakeLock=null, medReduce=false;
-try{ medReduce=!!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }catch(e){}
-function medSave(){ lsSet(medKey,JSON.stringify({dur:med.dur,pat:med.pat,sound:med.sound})); }
-function medUI(){ return MED_UI[japaL()]; }
-function medHist(){ var h={}; try{ h=JSON.parse(lsGet(medHistKey)||"{}")||{}; }catch(e){ h={}; } return h; }
-function medToday(){ return medHist()[japaDK(new Date())]||0; }
-function medAdd(n){
-  if(!(n>0)) return;
-  var h=medHist(), k=japaDK(new Date()); h[k]=(h[k]||0)+n;
-  var keys=Object.keys(h).sort(); while(keys.length>400) delete h[keys.shift()];      // keep roughly a year
-  lsSet(medHistKey,JSON.stringify(h));
-}
-function medElapsed(){ return med.acc+(med.running?Date.now()-med.start:0); }
-function medWake(on){
-  try{
-    if(on && navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(w){ medWakeLock=w; }).catch(function(){}); }
-    else if(!on && medWakeLock){ medWakeLock.release(); medWakeLock=null; }
-  }catch(e){}
-}
-/* soft singing bowl: a low tone, two quiet overtones and a slightly detuned twin for a gentle shimmer */
-function medBowl(){
-  if(!med.sound) return;
-  try{
-    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
-    japaAudio=japaAudio||new AC(); if(japaAudio.state==="suspended") japaAudio.resume();
-    var ctx=japaAudio, t0=ctx.currentTime+0.02;
-    [[1,0.26,7],[1.004,0.16,7],[2.76,0.08,4.5],[5.4,0.03,2.6]].forEach(function(p){
-      var o=ctx.createOscillator(), g=ctx.createGain();
-      o.type="sine"; o.frequency.value=396*p[0];
-      g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(p[1],t0+0.05);
-      g.gain.exponentialRampToValueAtTime(0.0001,t0+p[2]);
-      o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0+p[2]+0.1);
-    });
-  }catch(e){}
-}
-function medPhase(ms){
-  var P=MED_PATS[med.pat], c=P.i+P.h+P.o, t=(ms/1000)%c;
-  if(t<P.i) return {k:"in",p:t/P.i,left:P.i-t};
-  t-=P.i; if(t<P.h) return {k:"hold",p:t/P.h,left:P.h-t};
-  t-=P.h; return {k:"out",p:t/P.o,left:P.o-t};
-}
-function medEase(p){ return .5-.5*Math.cos(Math.PI*p); }
-function medDraw(){
-  var b=document.getElementById("medBreath"); if(!b || med.view!=="run") return;
-  var ph=medPhase(medElapsed()), s=ph.k==="in"?medEase(ph.p):(ph.k==="hold"?1:1-medEase(ph.p)), lo=medReduce?.94:.66, U=medUI();
-  b.style.transform="scale("+(lo+(1-lo)*s).toFixed(4)+")";
-  b.style.setProperty("--glow",(.35+.65*s).toFixed(3));
-  var L=document.getElementById("medLbl"), N=document.getElementById("medCnt");
-  if(L && L.getAttribute("data-k")!==ph.k){ L.setAttribute("data-k",ph.k); L.textContent=U[ph.k]; }
-  if(N) N.textContent=Math.max(1,Math.ceil(ph.left-0.001));
-}
-function medFrame(){ if(!med.running) return; medDraw(); med.raf=requestAnimationFrame(medFrame); }
-function medTick(){
-  if(!med.running) return;
-  var left=med.dur*60000-medElapsed();
-  if(left<=0){ medFinish(); return; }
-  var t=document.getElementById("medTime"); if(t) t.textContent=jtFmt(left+999);     // round up, so 00:00 only shows at the very end
-}
-function medHalt(){ med.running=false; clearInterval(med.tick); cancelAnimationFrame(med.raf); medWake(false); }
-function medStart(){
-  if(med.running) return;
-  var first=med.acc===0;
-  med.running=true; med.start=Date.now(); med.view="run"; med.finished=false;
-  medWake(true); if(first) medBowl();
-  medPaint();
-  med.tick=setInterval(medTick,250); med.raf=requestAnimationFrame(medFrame);
-}
-function medPause(){
-  if(!med.running) return;
-  med.acc=medElapsed(); medHalt(); medPaint();
-}
-function medFinish(){
-  if(med.finished) return;
-  med.finished=true; medHalt(); med.acc=0; med.doneMin=med.dur; medAdd(med.dur); med.view="done";
-  medBowl(); setTimeout(function(){ if(med.view==="done") medBowl(); },3600);
-  japaBuzz([200,100,200,100,300]); medPaint();
-}
-/* leaving early still counts the whole minutes already sat */
-function medStop(){
-  var mins=Math.floor(medElapsed()/60000), was=med.view==="run";
-  medHalt(); med.acc=0; med.finished=false; med.view="setup";
-  if(was && mins>=1) medAdd(mins);
-}
-function medEl(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
-function medChip(parent,label,on,fn){ var b=medEl("button","med-chip"+(on?" on":""),label); b.type="button"; b.setAttribute("aria-pressed",on?"true":"false"); b.onclick=fn; parent.appendChild(b); return b; }
-function medBtn(parent,label,pri,fn){ var b=medEl("button","med-btn"+(pri?" pri":""),label); b.type="button"; b.onclick=fn; parent.appendChild(b); return b; }
-function medOrb(cls){
-  var o=medEl("div","med-orb"+(cls?" "+cls:""));
-  o.setAttribute("aria-hidden","true");
-  o.innerHTML='<div class="med-breath" id="medBreath"><div class="med-halo"></div><div class="med-core"><span>ॐ</span></div></div>';
-  return o;
-}
-function medPaint(){
-  var w=document.getElementById("medWrap"); if(!w) return;
-  var U=medUI(), L=japaL();
-  document.getElementById("medTitle").textContent=U.title;
-  document.getElementById("medBack").setAttribute("aria-label",U.back);
-  w.innerHTML="";
-  if(med.view==="run"){
-    w.appendChild(medOrb(""));
-    var ph=medEl("div","med-phase"); ph.id="medLbl"; w.appendChild(ph);
-    var cn=medEl("div","med-cnt"); cn.id="medCnt"; cn.setAttribute("aria-hidden","true"); w.appendChild(cn);
-    var tm=medEl("div","med-time",jtFmt(med.dur*60000-medElapsed()+999)); tm.id="medTime"; w.appendChild(tm);
-    var r=medEl("div","med-row");
-    medBtn(r, med.running?U.pause:U.cont, true, function(){ if(med.running) medPause(); else medStart(); });
-    medBtn(r, U.end, false, function(){ medStop(); medPaint(); });
-    w.appendChild(r);
-    medDraw();
-    return;
-  }
-  if(med.view==="done"){
-    var o=medOrb(""); w.appendChild(o);
-    var b=o.querySelector(".med-breath"); b.style.transform="scale(1)"; b.style.setProperty("--glow","1");
-    var dn=medEl("div","med-done",U.done(med.doneMin)); dn.setAttribute("role","status"); w.appendChild(dn);
-    var td=medEl("div","med-today"); td.innerHTML=U.today+': <b>'+medToday()+'</b> '+U.mins; w.appendChild(td);
-    var r2=medEl("div","med-row");
-    medBtn(r2,U.japa,true,medToJapa);
-    medBtn(r2,U.again,false,function(){ med.view="setup"; medPaint(); });
-    w.appendChild(r2);
-    return;
-  }
-  /* setup */
-  w.appendChild(medOrb("idle"));
-  w.appendChild(medEl("p","med-note",U.ready));
-  w.appendChild(medEl("div","med-lbl",U.dur));
-  var dc=medEl("div","med-chips");
-  MED_TIMES.forEach(function(n){ medChip(dc,n+" "+U.min,med.dur===n,function(){ med.dur=n; medSave(); medPaint(); }); });
-  w.appendChild(dc);
-  w.appendChild(medEl("div","med-lbl",U.pat));
-  var pc=medEl("div","med-chips");
-  Object.keys(MED_PATS).forEach(function(k){ medChip(pc,U.pats[k],med.pat===k,function(){ med.pat=k; medSave(); medPaint(); }); });
-  w.appendChild(pc);
-  var sc=medEl("div","med-chips"); sc.style.marginTop="12px";
-  medChip(sc, med.sound?U.bellOn:U.bellOff, med.sound, function(){ med.sound=!med.sound; medSave(); if(med.sound) medBowl(); medPaint(); });
-  w.appendChild(sc);
-  var r3=medEl("div","med-row");
-  medBtn(r3,U.begin,true,medStart);
-  w.appendChild(r3);
-  var r4=medEl("div","med-row"); r4.style.marginTop="10px";
-  medBtn(r4,U.japaFirst,false,medToJapa);
-  w.appendChild(r4);
-  var t2=medEl("div","med-today"); t2.innerHTML=U.today+': <b>'+medToday()+'</b> '+U.mins; w.appendChild(t2);
-}
-var medPanel=document.getElementById("medPanel");
-function medShow(){ med.view="setup"; medPaint(); medPanel.classList.add("show"); }
-function openMed(){
-  menuDropdown.classList.remove("show");
-  if(medPanel.classList.contains("show")) return;
-  medShow();
-  try{ history.pushState({med:1},""); }catch(e){}
-}
-function medHide(){ medStop(); medPanel.classList.remove("show"); }
-function closeMed(){
-  if(!medPanel.classList.contains("show")) return;
-  medHide();
-  if(history.state && history.state.med){ try{ history.back(); }catch(e){} }
-}
-/* japa <-> meditation: swap screens in place, so the phone's Back button still leaves in one step */
-function medToJapa(){
-  medHide();
-  try{ history.replaceState({japa:1},""); }catch(e){}
-  openJapa(true);
-}
-function japaToMed(){
-  japaPanel.classList.remove("show"); jtPause();
-  try{ history.replaceState({med:1},""); }catch(e){}
-  medShow();
-}
-window.addEventListener("popstate",function(){ if(medPanel.classList.contains("show")) medHide(); });
-document.addEventListener("visibilitychange",function(){
-  if(!document.hidden && med.running){ medWake(true); medTick(); cancelAnimationFrame(med.raf); if(med.running) med.raf=requestAnimationFrame(medFrame); }
-});
-document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeMed(); });
-document.getElementById("medBack").addEventListener("click",closeMed);
-document.getElementById("menuMedBtn").addEventListener("click",openMed);
+document.getElementById("menuJapaBtn").addEventListener("click",openJapa);
 
 /* ================= Text size and night mode =================
  * Three text sizes and a day / night switch, saved on the phone.
@@ -3050,12 +2794,12 @@ if(!isUnlocked() && msgCount >= FREE_LIMIT){
 </script>
 
 <script>
-/* open a panel directly from the shared menu on other pages (index.html#japa / #med / #cal / #fav / #lang) */
+/* open a panel directly from the shared menu on other pages (index.html#japa / #cal / #fav / #lang) */
 (function(){
   var h=(location.hash||"").slice(1); if(!h) return;
   setTimeout(function(){
     try{
-      if(h==="japa") openJapa(); else if(h==="med") openMed(); else if(h==="cal") openCal(); else if(h==="fav") openFavs();
+      if(h==="japa") openJapa(); else if(h==="cal") openCal(); else if(h==="fav") openFavs();
       else if(h==="lang") document.getElementById("menuLangBtn").click();
     }catch(e){}
     try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
