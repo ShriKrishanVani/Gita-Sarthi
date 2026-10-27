@@ -1,156 +1,126 @@
-/* श्री कृष्ण वाणी - service worker
- * Lets the chat page open without internet.
- *
- * - On first visit it saves the main pages and images on the phone.
- * - Pages and scripts: tries the internet first (so updates arrive), and falls back
- *   to the saved copy when offline or when the network is slow.
- * - Images: saved copy first (fast, works offline).
- * - Google Fonts: saved after the first load so the Hindi fonts also work offline.
- * - Chat (/api/chat), health check and every POST request are never touched.
- *
- * When you add or rename a file in PRECACHE below, change CACHE_VERSION (v2 -> v3)
- * so phones pick up the new list.
- *
- * Self-healing: if the first download of a page was interrupted (weak network, app
- * closed too early), the worker quietly downloads the missing pages the next time
- * the app is opened online, so the chat page and its images end up saved on the phone.
+/* श्री कृष्ण वाणी - shared menu (☰) for every page.
+ * Add <script src="menu.js" defer></script> to a page and the menu appears in its top bar.
+ * Pages without a top bar get a floating ☰ button in the top-right corner.
  */
-const CACHE_VERSION = "v6";
-const CACHE = "krishna-vani-" + CACHE_VERSION;
+(function(){
+  if(window.__krishnaMenu) return; window.__krishnaMenu = true;
+  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  var page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  var en = lsGet("krishna_lang") === "en";
+  var T = function(hi,e){ return en ? e : hi; };
 
-const PRECACHE = [
-  "./",
-  "./index.html",
-  "./connect.js",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./krishna-hero.jpg",
-  "./krishna-bg2.jpg"
-];
+  var items = [
+    {id:"home",  href:"index.html",         label:T("🏠 होम / चैट","🏠 Home / Chat")},
+    {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
+    {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}
+  ];
+  var here = {"index.html":"home","gita.html":"gita","aarti.html":"aarti","profile.html":"profile","support.html":"support","panchang.html":"panchang"}[page];
+  var hasTheme = document.documentElement.hasAttribute("data-theme");
 
-const NETWORK_TIMEOUT_MS = 4000;
+  var css = document.createElement("style");
+  css.textContent =
+    ".kmenu-btn{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;"+
+      "border:1px solid var(--km-line);background:var(--km-chip);color:var(--km-gold);font-family:inherit;margin-left:auto;}"+
+    ".kmenu-btn svg{width:20px;height:20px}"+
+    ".kmenu-btn.km-float{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:9998;margin:0;background:var(--km-bg)}"+
+    ".topbar .kmenu-btn.km-inbar{margin-left:0}"+
+    ".kmenu-pop{position:fixed;z-index:9999;min-width:210px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);overflow-y:auto;display:none;"+
+      "background:var(--km-bg);border:1px solid var(--km-line);border-radius:14px;box-shadow:0 16px 36px rgba(0,0,0,.38);}"+
+    ".kmenu-pop.show{display:block}"+
+    ".kmenu-pop a,.kmenu-pop button{display:block;width:100%;text-align:left;padding:12px 16px;font:500 14px/1.3 Poppins,'Tiro Devanagari Hindi',-apple-system,Segoe UI,sans-serif;"+
+      "color:var(--km-text);background:none;border:0;text-decoration:none;cursor:pointer;border-bottom:1px solid var(--km-line2)}"+
+    ".kmenu-pop a:last-child,.kmenu-pop button:last-child{border-bottom:0}"+
+    ".kmenu-pop a:active,.kmenu-pop button:active{background:var(--km-chip)}"+
+    ".kmenu-pop a.cur{color:var(--km-gold);font-weight:600;background:var(--km-chip)}"+
+    ".kmenu-pop .kg-head{display:flex;align-items:center;justify-content:space-between;font-weight:600}"+
+    ".kmenu-pop .kg-head::after{content:\"\";width:7px;height:7px;border-right:2px solid var(--km-gold);border-bottom:2px solid var(--km-gold);transform:rotate(45deg);margin-top:-3px;transition:transform .15s}"+
+    ".kmenu-pop .kg-head[aria-expanded=true]{background:var(--km-chip)}"+
+    ".kmenu-pop .kg-head[aria-expanded=true]::after{transform:rotate(-135deg);margin-top:3px}"+
+    ".kmenu-pop .kg-body{display:none;background:var(--km-chip)}"+
+    ".kmenu-pop .kg-body.open{display:block}"+
+    ".kmenu-pop .kg-body a{padding-left:30px;font-size:13px}"+
+    ".kmenu-btn:focus-visible,.kmenu-pop a:focus-visible,.kmenu-pop button:focus-visible{outline:2px solid var(--km-gold);outline-offset:-2px}";
+  document.head.appendChild(css);
 
-self.addEventListener("install", function (e) {
-  e.waitUntil(healCache(true).then(function () { return self.skipWaiting(); }));
-});
-
-// Download one file and store a clean copy (works even if the server redirected it).
-function addClean(cache, url) {
-  return fetch(new Request(url, { cache: "reload" })).then(function (res) {
-    if (!res || !res.ok) throw new Error("bad response for " + url);
-    if (res.redirected) {
-      return res.blob().then(function (blob) {
-        return cache.put(url, new Response(blob, { status: 200, statusText: "OK", headers: res.headers }));
-      });
-    }
-    return cache.put(url, res);
-  });
-}
-
-// Save every file in PRECACHE. force = download all again; otherwise only the missing ones.
-var lastHeal = 0;
-function healCache(force) {
-  var now = Date.now();
-  if (!force && now - lastHeal < 5 * 60 * 1000) return Promise.resolve();
-  lastHeal = now;
-  var failed = 0;
-  return caches.open(CACHE).then(function (cache) {
-    return Promise.all(PRECACHE.map(function (url) {
-      var check = force ? Promise.resolve(null) : cache.match(url);
-      return check.then(function (hit) {
-        return hit ? null : addClean(cache, url).catch(function () { failed++; });   // one failure never blocks the rest
-      });
-    }));
-  }).then(function () {
-    if (failed) lastHeal = 0;      // something is still missing: try again the next time a page opens
-  });
-}
-
-self.addEventListener("activate", function (e) {
-  e.waitUntil(
-    caches.keys().then(function (keys) {
-      return Promise.all(keys.filter(function (k) {
-        return k.indexOf("krishna-vani-") === 0 && k !== CACHE;
-      }).map(function (k) { return caches.delete(k); }));
-    }).then(function () { return healCache(false); })
-      .then(function () { return self.clients.claim(); })
-  );
-});
-
-self.addEventListener("fetch", function (e) {
-  var req = e.request;
-  if (req.method !== "GET") return;                       // chat/voice (POST) goes straight to the server
-
-  var url = new URL(req.url);
-
-  if (url.origin === self.location.origin) {
-    if (url.pathname.indexOf("/api/") === 0 || url.pathname === "/health") return;
-    if (req.mode === "navigate") e.waitUntil(healCache(false));   // fill any file not saved yet
-    if (/\.(png|jpe?g|webp|gif|svg|ico)$/i.test(url.pathname)) {
-      e.respondWith(cacheFirst(req));
+  function palette(){
+    var dark = (document.documentElement.getAttribute("data-theme")
+                ? document.documentElement.getAttribute("data-theme") === "dark"
+                : (page === "profile.html" || lsGet("aarti_theme") !== "light" && page !== "support.html" && page !== "subscribe.html"));
+    var r = document.documentElement.style;
+    if(dark){
+      r.setProperty("--km-bg","#1B2560"); r.setProperty("--km-text","#FFF6DF"); r.setProperty("--km-gold","#F0CC72");
+      r.setProperty("--km-line","rgba(240,204,114,.55)"); r.setProperty("--km-line2","rgba(240,204,114,.18)"); r.setProperty("--km-chip","rgba(255,255,255,.10)");
     } else {
-      e.respondWith(networkFirst(req));
+      r.setProperty("--km-bg","#FFFDF6"); r.setProperty("--km-text","#1B2650"); r.setProperty("--km-gold","#7A5A18");
+      r.setProperty("--km-line","rgba(138,106,38,.45)"); r.setProperty("--km-line2","rgba(138,106,38,.18)"); r.setProperty("--km-chip","rgba(27,38,80,.07)");
     }
-    return;
+    return dark;
   }
 
-  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
-    e.respondWith(staleWhileRevalidate(req));
+  function build(){
+    var dark = palette();
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "kmenu-btn";
+    btn.setAttribute("aria-label", T("मेनू","Menu")); btn.setAttribute("aria-haspopup","true"); btn.setAttribute("aria-expanded","false");
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+    var bar = document.querySelector(".topbar");
+    if(bar){ btn.classList.add("km-inbar"); if(!bar.querySelector(".spacer,.crumb")) btn.style.marginLeft = "auto"; bar.appendChild(btn); }
+    else { btn.classList.add("km-float"); document.body.appendChild(btn); document.body.style.paddingTop = "58px"; }
+
+    var pop = document.createElement("div"); pop.className = "kmenu-pop"; pop.setAttribute("role","menu");
+    function mkLink(it){
+      var a = document.createElement("a"); a.href = it.href; a.textContent = it.label; a.setAttribute("role","menuitem");
+      if(it.id === here) a.className = "cur";
+      if(page === "index.html" && /^index\.html#/.test(it.href)){
+        a.addEventListener("click", function(e){ e.preventDefault(); close(); location.hash = it.href.split("#")[1]; location.reload(); });
+      }
+      return a;
+    }
+    var groups = [];
+    function setOpen(h, body, on){ h.setAttribute("aria-expanded", on ? "true" : "false"); body.classList.toggle("open", on); }
+    items.forEach(function(it){
+      if(it.group){
+        var h = document.createElement("button"); h.type = "button"; h.className = "kg-head"; h.textContent = it.group; h.setAttribute("aria-expanded","false");
+        var body = document.createElement("div"); body.className = "kg-body";
+        var hasCur = false;
+        it.items.forEach(function(sub){ if(sub.id === here) hasCur = true; body.appendChild(mkLink(sub)); });
+        h.addEventListener("click", function(e){
+          e.stopPropagation();
+          var on = h.getAttribute("aria-expanded") !== "true";
+          groups.forEach(function(g){ setOpen(g[0], g[1], false); });
+          setOpen(h, body, on);
+        });
+        groups.push([h, body, hasCur]);
+        pop.appendChild(h); pop.appendChild(body);
+      } else {
+        if(page === "index.html" && it.id === "home") return;
+        pop.appendChild(mkLink(it));
+      }
+    });
+    groups.forEach(function(g){ if(g[2]) setOpen(g[0], g[1], true); });   // the group holding this page starts open
+    if(hasTheme){
+      var tb = document.createElement("button"); tb.type = "button"; tb.setAttribute("role","menuitem");
+      tb.textContent = dark ? T("☀️ दिन मोड","☀️ Day mode") : T("🌙 रात्रि मोड","🌙 Night mode");
+      tb.addEventListener("click", function(){ lsSet("aarti_theme", dark ? "light" : "dark"); location.reload(); });
+      pop.appendChild(tb);
+    }
+    document.body.appendChild(pop);
+
+    function place(){
+      var r = btn.getBoundingClientRect();
+      pop.style.top = (r.bottom + 6) + "px";
+      pop.style.right = Math.max(12, window.innerWidth - r.right) + "px"; pop.style.left = "auto";
+    }
+    function close(){ pop.classList.remove("show"); btn.setAttribute("aria-expanded","false"); }
+    btn.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(pop.classList.contains("show")) return close();
+      place(); pop.classList.add("show"); btn.setAttribute("aria-expanded","true");
+    });
+    document.addEventListener("click", function(e){ if(!pop.contains(e.target)) close(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") close(); });
+    window.addEventListener("resize", close);
   }
-  // anything else (YouTube, Google Apps Script leads form, etc.) is left alone
-});
-
-function networkFirst(req) {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(req, { ignoreSearch: true }).then(function (cached) {
-      var net = fetch(req);
-      net.catch(function () {});                           // avoid "unhandled" noise if we stop waiting
-
-      var result = cached
-        ? Promise.race([net, new Promise(function (_, reject) {
-            setTimeout(function () { reject(new Error("slow network")); }, NETWORK_TIMEOUT_MS);
-          })])
-        : net;
-
-      return result.then(function (res) {
-        if (res && res.ok && res.type === "basic") cache.put(req, res.clone());
-        return res;
-      }).catch(function () {
-        if (cached) return cached;
-        if (req.mode === "navigate") {
-          return cache.match("./index.html").then(function (home) {
-            return home || new Response("Offline", { status: 503, statusText: "Offline" });
-          });
-        }
-        return new Response("Offline", { status: 503, statusText: "Offline" });
-      });
-    });
-  });
-}
-
-function cacheFirst(req) {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(req).then(function (cached) {
-      if (cached) return cached;
-      return fetch(req).then(function (res) {
-        if (res && res.ok) cache.put(req, res.clone());
-        return res;
-      }).catch(function () {
-        return new Response("", { status: 504, statusText: "Offline" });
-      });
-    });
-  });
-}
-
-function staleWhileRevalidate(req) {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(req).then(function (cached) {
-      var fresh = fetch(req).then(function (res) {
-        if (res && (res.ok || res.type === "opaque")) cache.put(req, res.clone());
-        return res;
-      }).catch(function () { return cached; });
-      return cached || fresh;
-    });
-  });
-}
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
