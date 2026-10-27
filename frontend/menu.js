@@ -13,20 +13,8 @@
   var items = [
     {id:"home",  href:"index.html",         label:T("🏠 होम / चैट","🏠 Home / Chat")},
     {id:"profile",href:"profile.html",      label:T("👤 प्रोफ़ाइल","👤 Profile")},
-    {group:T("📖 गीता","📖 Gita"), items:[
-      {id:"gita",  href:"gita.html",          label:T("📖 गीता","📖 Gita")},
-      {id:"path",  href:"gita.html#path",      label:T("🛤 गीता पाठ पथ","🛤 Gita Reading Path")},
-      {id:"notes", href:"gita.html#notes",     label:T("🔖 बुकमार्क और नोट्स","🔖 Bookmarks & Notes")},
-      {id:"fav",   href:"index.html#fav",     label:T("❤️ मेरे पसंदीदा","❤️ Favourites")}]},
-    {group:T("🙏 साधना","🙏 Practice"), items:[
-      {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
-      {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")}]},
-    {group:T("🗓 पंचांग","🗓 Calendar"), items:[
-      {id:"panchang",href:"panchang.html",     label:T("🗓 पंचांग","🗓 Panchang")},
-      {id:"cal",   href:"index.html#cal",     label:T("📅 पर्व-तिथि कैलेंडर","📅 Festival Calendar")}]},
-    {group:T("⚙️ सेटिंग","⚙️ Settings"), items:[
-      {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
-      {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}]}
+    {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
+    {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}
   ];
   var here = {"index.html":"home","gita.html":"gita","aarti.html":"aarti","profile.html":"profile","support.html":"support","panchang.html":"panchang"}[page];
   var hasTheme = document.documentElement.hasAttribute("data-theme");
