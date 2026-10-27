@@ -12,17 +12,21 @@
 
   var items = [
     {id:"home",  href:"index.html",         label:T("🏠 होम / चैट","🏠 Home / Chat")},
-    {id:"gita",  href:"gita.html",          label:T("📖 गीता","📖 Gita")},
-    {id:"path",  href:"gita.html#path",      label:T("🛤 गीता पाठ पथ","🛤 Gita Reading Path")},
-    {id:"notes", href:"gita.html#notes",     label:T("🔖 बुकमार्क और नोट्स","🔖 Bookmarks & Notes")},
-    {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
-    {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")},
-    {id:"panchang",href:"panchang.html",     label:T("🗓 पंचांग","🗓 Panchang")},
-    {id:"cal",   href:"index.html#cal",     label:T("📅 पर्व-तिथि कैलेंडर","📅 Festival Calendar")},
-    {id:"fav",   href:"index.html#fav",     label:T("❤️ मेरे पसंदीदा","❤️ Favourites")},
     {id:"profile",href:"profile.html",      label:T("👤 प्रोफ़ाइल","👤 Profile")},
-    {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
-    {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}
+    {group:T("📖 गीता","📖 Gita"), items:[
+      {id:"gita",  href:"gita.html",          label:T("📖 गीता","📖 Gita")},
+      {id:"path",  href:"gita.html#path",      label:T("🛤 गीता पाठ पथ","🛤 Gita Reading Path")},
+      {id:"notes", href:"gita.html#notes",     label:T("🔖 बुकमार्क और नोट्स","🔖 Bookmarks & Notes")},
+      {id:"fav",   href:"index.html#fav",     label:T("❤️ मेरे पसंदीदा","❤️ Favourites")}]},
+    {group:T("🙏 साधना","🙏 Practice"), items:[
+      {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
+      {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")}]},
+    {group:T("🗓 पंचांग","🗓 Calendar"), items:[
+      {id:"panchang",href:"panchang.html",     label:T("🗓 पंचांग","🗓 Panchang")},
+      {id:"cal",   href:"index.html#cal",     label:T("📅 पर्व-तिथि कैलेंडर","📅 Festival Calendar")}]},
+    {group:T("⚙️ सेटिंग","⚙️ Settings"), items:[
+      {id:"support",href:"support.html",      label:T("🙏 सहायता","🙏 Support")},
+      {id:"lang",  href:"index.html#lang",    label:T("🌐 भाषा / Language","🌐 Language / भाषा")}]}
   ];
   var here = {"index.html":"home","gita.html":"gita","aarti.html":"aarti","profile.html":"profile","support.html":"support","panchang.html":"panchang"}[page];
   var hasTheme = document.documentElement.hasAttribute("data-theme");
@@ -42,6 +46,13 @@
     ".kmenu-pop a:last-child,.kmenu-pop button:last-child{border-bottom:0}"+
     ".kmenu-pop a:active,.kmenu-pop button:active{background:var(--km-chip)}"+
     ".kmenu-pop a.cur{color:var(--km-gold);font-weight:600;background:var(--km-chip)}"+
+    ".kmenu-pop .kg-head{display:flex;align-items:center;justify-content:space-between;font-weight:600}"+
+    ".kmenu-pop .kg-head::after{content:\"\";width:7px;height:7px;border-right:2px solid var(--km-gold);border-bottom:2px solid var(--km-gold);transform:rotate(45deg);margin-top:-3px;transition:transform .15s}"+
+    ".kmenu-pop .kg-head[aria-expanded=true]{background:var(--km-chip)}"+
+    ".kmenu-pop .kg-head[aria-expanded=true]::after{transform:rotate(-135deg);margin-top:3px}"+
+    ".kmenu-pop .kg-body{display:none;background:var(--km-chip)}"+
+    ".kmenu-pop .kg-body.open{display:block}"+
+    ".kmenu-pop .kg-body a{padding-left:30px;font-size:13px}"+
     ".kmenu-btn:focus-visible,.kmenu-pop a:focus-visible,.kmenu-pop button:focus-visible{outline:2px solid var(--km-gold);outline-offset:-2px}";
   document.head.appendChild(css);
 
@@ -71,15 +82,36 @@
     else { btn.classList.add("km-float"); document.body.appendChild(btn); document.body.style.paddingTop = "58px"; }
 
     var pop = document.createElement("div"); pop.className = "kmenu-pop"; pop.setAttribute("role","menu");
-    items.forEach(function(it){
-      if(page === "index.html" && /#/.test(it.href) === false && it.id === "home") return;
+    function mkLink(it){
       var a = document.createElement("a"); a.href = it.href; a.textContent = it.label; a.setAttribute("role","menuitem");
       if(it.id === here) a.className = "cur";
       if(page === "index.html" && /^index\.html#/.test(it.href)){
         a.addEventListener("click", function(e){ e.preventDefault(); close(); location.hash = it.href.split("#")[1]; location.reload(); });
       }
-      pop.appendChild(a);
+      return a;
+    }
+    var groups = [];
+    function setOpen(h, body, on){ h.setAttribute("aria-expanded", on ? "true" : "false"); body.classList.toggle("open", on); }
+    items.forEach(function(it){
+      if(it.group){
+        var h = document.createElement("button"); h.type = "button"; h.className = "kg-head"; h.textContent = it.group; h.setAttribute("aria-expanded","false");
+        var body = document.createElement("div"); body.className = "kg-body";
+        var hasCur = false;
+        it.items.forEach(function(sub){ if(sub.id === here) hasCur = true; body.appendChild(mkLink(sub)); });
+        h.addEventListener("click", function(e){
+          e.stopPropagation();
+          var on = h.getAttribute("aria-expanded") !== "true";
+          groups.forEach(function(g){ setOpen(g[0], g[1], false); });
+          setOpen(h, body, on);
+        });
+        groups.push([h, body, hasCur]);
+        pop.appendChild(h); pop.appendChild(body);
+      } else {
+        if(page === "index.html" && it.id === "home") return;
+        pop.appendChild(mkLink(it));
+      }
     });
+    groups.forEach(function(g){ if(g[2]) setOpen(g[0], g[1], true); });   // the group holding this page starts open
     if(hasTheme){
       var tb = document.createElement("button"); tb.type = "button"; tb.setAttribute("role","menuitem");
       tb.textContent = dark ? T("☀️ दिन मोड","☀️ Day mode") : T("🌙 रात्रि मोड","🌙 Night mode");
