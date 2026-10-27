@@ -13,6 +13,7 @@
   var items = [
     {id:"home",  href:"index.html",         label:T("🏠 होम / चैट","🏠 Home / Chat")},
     {id:"gita",  href:"gita.html",          label:T("📖 गीता","📖 Gita")},
+    {id:"path",  href:"gita.html#path",      label:T("🛤 गीता पाठ पथ","🛤 Gita Reading Path")},
     {id:"notes", href:"gita.html#notes",     label:T("🔖 बुकमार्क और नोट्स","🔖 Bookmarks & Notes")},
     {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
     {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")},
