@@ -356,7 +356,7 @@ body.chatting .back-btn{display:flex}
 .account-item:active{background:rgba(184,146,60,0.1)}
 
 /* ---------- hero (landing view, shown until first message) ---------- */
-#hero{position:relative;z-index:2;flex:1;min-height:0;overflow:hidden;padding:8px 18px 24px;text-align:center}
+#hero{position:relative;z-index:2;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 18px 24px;text-align:center}
 #hero::-webkit-scrollbar{width:0}
 .hero-photo{
   width:132px;height:132px;margin:6px auto 12px;border-radius:22px;
@@ -553,6 +553,39 @@ body.ts2{--ts:1.4}
 .cmf-done{display:block;width:100%;margin-top:16px;height:46px;border-radius:14px;border:0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
   background:linear-gradient(180deg,var(--gold-light),var(--gold) 60%,var(--gold-deep));color:#3a2c0c}
 
+/* ---- Panchang card ---- */
+.pan-card{max-width:420px;margin:14px auto 0;text-align:left}
+.pan-head{display:block;position:relative;width:100%;text-align:left;font-family:inherit;cursor:pointer;touch-action:manipulation;
+  padding:10px 38px 10px 14px;border-radius:14px;border:1px solid rgba(184,146,60,.5);background:var(--bot-glass);color:var(--slate-deep)}
+.pan-h1{display:block;font-size:calc(14px*var(--ts,1));line-height:1.4;color:var(--slate-deep)}
+.pan-h1 b{font-weight:600}
+.pan-h2{display:block;font-size:calc(12px*var(--ts,1));line-height:1.5;color:var(--ink-muted);margin-top:2px}
+.pan-arr{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gold-deep);font-size:14px}
+.pan-body{margin-top:8px;padding:12px;border-radius:14px;border:1px solid rgba(184,146,60,.45);background:var(--bot-glass)}
+.pan-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pan-grid>div{padding:8px 10px;border-radius:12px;background:rgba(184,146,60,.1);border:1px solid rgba(184,146,60,.3);min-width:0}
+.pan-grid small{display:block;font-size:calc(11.5px*var(--ts,1));color:var(--ink-muted)}
+.pan-grid b{display:block;font-size:calc(14px*var(--ts,1));color:var(--slate-deep);font-weight:600;margin-top:2px;line-height:1.35}
+.pan-grid em{display:block;font-style:normal;font-size:calc(11px*var(--ts,1));color:var(--ink-muted);margin-top:2px;line-height:1.35}
+.pan-bad{border-color:rgba(194,65,12,.5)!important}
+.pan-good{border-color:rgba(46,139,87,.55)!important}
+.pan-ekad{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(46,139,87,.12);border:1px solid rgba(46,139,87,.5)}
+.pan-et{font-size:calc(13.5px*var(--ts,1));color:var(--slate-deep);margin-bottom:4px;line-height:1.5}
+.pan-er{font-size:calc(12.5px*var(--ts,1));color:var(--ink-muted);line-height:1.65}
+.pan-er b,.pan-et b{color:var(--slate-deep);font-weight:600}
+.pan-loc,.pan-cal{display:block;width:100%;margin-top:10px;padding:9px 10px;border-radius:12px;font-family:inherit;font-size:calc(12.5px*var(--ts,1));font-weight:600;cursor:pointer;touch-action:manipulation;
+  border:1px solid rgba(184,146,60,.5);background:rgba(184,146,60,.1);color:var(--gold-deep)}
+.pan-note{margin-top:10px;font-size:calc(11px*var(--ts,1));line-height:1.6;color:var(--ink-muted);text-align:center}
+body.chatting .pan-card{display:none}
+body.night .pan-head,body.night .pan-body{background:#1B2560;border-color:rgba(240,204,114,.55)}
+body.night .pan-h2,body.night .pan-grid small,body.night .pan-grid em,body.night .pan-er,body.night .pan-note{color:#D2D9F0}
+body.night .pan-grid>div{background:rgba(240,204,114,.1);border-color:rgba(240,204,114,.4)}
+body.night .pan-bad{border-color:rgba(255,138,76,.7)!important}
+body.night .pan-good{border-color:rgba(92,201,138,.7)!important}
+body.night .pan-ekad{background:rgba(92,201,138,.14);border-color:rgba(92,201,138,.65)}
+body.night .pan-loc,body.night .pan-cal{background:rgba(255,255,255,.1);border-color:rgba(240,204,114,.55);color:#F6DC94}
+body.night .pan-arr{color:#F6DC94}
+
 /* ---- Night mode ---- */
 body.night{
   color-scheme:dark;
@@ -673,6 +706,7 @@ body.night #installBanner .ib-sub{color:#D2D9F0}
   <img class="hero-photo" src="krishna-hero.jpg" alt="Shri Krishna">
   <h1 id="headerTitle">श्री कृष्ण वाणी</h1>
   <div class="hero-sub2" id="headerSub">आपके प्रश्न, श्री कृष्ण के उत्तर</div>
+  <div class="pan-card" id="panCard"></div>
 
   <div class="topics-label" id="topicsLabel">लोकप्रिय विषय</div>
   <div class="topics-grid" id="topicsGrid">
@@ -2788,6 +2822,150 @@ if(!isUnlocked() && msgCount >= FREE_LIMIT){
     }catch(e){}
     try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
   },400);
+})();
+</script>
+<script>
+/* ================= Panchang card (home screen) =================
+ * Today's tithi with its end time, nakshatra, sunrise, sunset, Rahu Kaal, Abhijit muhurat and the next Ekadashi
+ * with its start / end and parana time. Everything is worked out on the phone from the Sun and Moon positions,
+ * so it also works offline. Location: New Delhi by default, or the user's own place (saved on the phone).
+ */
+var PAN_DEFAULT={lat:28.6139,lon:77.2090};
+var PAN_UI={
+  hi:{title:"आज का पंचांग", tithi:"तिथि", nak:"नक्षत्र", rise:"सूर्योदय", set:"सूर्यास्त", rahu:"राहु काल", abhi:"अभिजित मुहूर्त",
+      till:"तक", ekad:"अगली एकादशी", start:"प्रारम्भ", end:"समाप्त", parana:"पारण (व्रत खोलने) का समय", next:"अगले दिन",
+      locDef:"📍 नई दिल्ली के अनुसार · अपना स्थान चुनें", locMine:"📍 आपके स्थान के अनुसार · फिर से लें", locWait:"📍 स्थान खोज रहे हैं…", locFail:"स्थान नहीं मिल पाया। अनुमति जाँचें।",
+      note:"समय अनुमानित हैं (कुछ मिनट का अंतर हो सकता है)। व्रत-पूजा से पहले अपने स्थानीय पंचांग से मिलान करें।", cal:"📅 पूरा कैलेंडर खोलें →",
+      today:"आज", tomorrow:"कल", more:"विवरण", less:"बंद करें"},
+  en:{title:"Today's Panchang", tithi:"Tithi", nak:"Nakshatra", rise:"Sunrise", set:"Sunset", rahu:"Rahu Kaal", abhi:"Abhijit Muhurat",
+      till:"until", ekad:"Next Ekadashi", start:"Begins", end:"Ends", parana:"Parana (fast-breaking) time", next:"next day",
+      locDef:"📍 Based on New Delhi · Use my location", locMine:"📍 Based on your location · Refresh", locWait:"📍 Finding your location…", locFail:"Could not get location. Please check permission.",
+      note:"Times are approximate (a few minutes' difference is possible). Please confirm with your local panchang before a fast or puja.", cal:"📅 Open full calendar →",
+      today:"Today", tomorrow:"Tomorrow", more:"Details", less:"Close"}
+};
+var PAN_NAK={
+  hi:["अश्विनी","भरणी","कृत्तिका","रोहिणी","मृगशिरा","आर्द्रा","पुनर्वसु","पुष्य","आश्लेषा","मघा","पूर्वा फाल्गुनी","उत्तरा फाल्गुनी","हस्त","चित्रा","स्वाती","विशाखा","अनुराधा","ज्येष्ठा","मूल","पूर्वाषाढ़ा","उत्तराषाढ़ा","श्रवण","धनिष्ठा","शतभिषा","पूर्वा भाद्रपद","उत्तरा भाद्रपद","रेवती"],
+  en:["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"]
+};
+var PAN_RAHU_PART={0:8,1:2,2:7,3:5,4:6,5:4,6:3};      // Sun..Sat -> which eighth of the day is Rahu Kaal
+var panOpen=false, panMsg="";
+function panL(){ return currentLang==="en"?"en":"hi"; }
+function panLoc(){
+  try{ var o=JSON.parse(lsGet("krishna_loc")||"null"); if(o && isFinite(o.lat) && isFinite(o.lon)) return {lat:+o.lat,lon:+o.lon,mine:true}; }catch(e){}
+  return {lat:PAN_DEFAULT.lat,lon:PAN_DEFAULT.lon,mine:false};
+}
+/* sunrise and sunset (NOAA method) -> milliseconds, or null where the sun does not rise or set */
+function panSun(y,m,d,lat,lon){
+  var R=Math.PI/180, base=Date.UTC(y,m,d), jd=base/86400000+2440587.5+(720-4*lon)/1440, t=(jd-2451545)/36525;
+  var L0=280.46646+t*(36000.76983+t*0.0003032), M=357.52911+t*(35999.05029-0.0001537*t), e=0.016708634-t*(0.000042037+0.0000001267*t);
+  var C=Math.sin(M*R)*(1.914602-t*(0.004817+0.000014*t))+Math.sin(2*M*R)*(0.019993-0.000101*t)+Math.sin(3*M*R)*0.000289;
+  var om=125.04-1934.136*t, lam=L0+C-0.00569-0.00478*Math.sin(om*R);
+  var eps=23+(26+(21.448-t*(46.815+t*(0.00059-t*0.001813)))/60)/60+0.00256*Math.cos(om*R);
+  var decl=Math.asin(Math.sin(eps*R)*Math.sin(lam*R)), yy=Math.pow(Math.tan(eps*R/2),2);
+  var eq=4/R*(yy*Math.sin(2*L0*R)-2*e*Math.sin(M*R)+4*e*yy*Math.sin(M*R)*Math.cos(2*L0*R)-0.5*yy*yy*Math.sin(4*L0*R)-1.25*e*e*Math.sin(2*M*R));
+  var x=Math.cos(90.833*R)/(Math.cos(lat*R)*Math.cos(decl))-Math.tan(lat*R)*Math.tan(decl);
+  if(x<-1||x>1) return null;
+  var ha=Math.acos(x)/R, noon=720-4*lon-eq;
+  return {rise:base+(noon-4*ha)*60000, set:base+(noon+4*ha)*60000};
+}
+function panElong(ms){
+  var T=(ms/86400000+2440587.5-2451545)/36525;
+  return (((calMoonLon(T)-calSunLon(T))%360)+360)%360;
+}
+function panTithiNo(ms){ return Math.floor(panElong(ms)/12)+1; }
+function panNakshatra(ms){
+  var T=(ms/86400000+2440587.5-2451545)/36525, yr=2000+T*100;
+  var sid=((calMoonLon(T)-(23.857+0.01397*(yr-2000)))%360+360)%360;     // Lahiri ayanamsa (approx.)
+  return Math.floor(sid/(360/27));
+}
+/* moment (ms) when tithi number changes, searching forward (dir=1) or backward (dir=-1) from ms */
+function panTithiEdge(ms,dir){
+  var cur=panTithiNo(ms), step=30*60000*dir, a=ms, b=ms, i;
+  for(i=0;i<80;i++){ b=a+step; if(panTithiNo(b)!==cur) break; a=b; }
+  var lo=Math.min(a,b), hi=Math.max(a,b);
+  for(i=0;i<22;i++){ var mid=(lo+hi)/2; if((panTithiNo(mid)===cur)===(dir>0)) lo=mid; else hi=mid; }
+  return Math.round((lo+hi)/2);
+}
+function panFmt(ms){
+  var d=new Date(ms); return d.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit",hour12:true}).replace(/\s?([ap])m/i,function(_,x){return " "+x.toUpperCase()+"M";});
+}
+function panFmtDay(ms,refDay){            // time, and a short date when it is not the reference day
+  var d=new Date(ms), t=panFmt(ms);
+  if(d.getDate()===refDay.getDate() && d.getMonth()===refDay.getMonth()) return t;
+  return d.getDate()+" "+CAL_MONTHS[panL()][d.getMonth()].slice(0,3)+", "+t;
+}
+function panData(){
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), d=now.getDate(), loc=panLoc();
+  var sun=panSun(y,m,d,loc.lat,loc.lon), riseMs=sun?sun.rise:new Date(y,m,d,6,0).getTime(), setMs=sun?sun.set:new Date(y,m,d,18,0).getTime();
+  var out={loc:loc,rise:sun?riseMs:null,set:sun?setMs:null,day:now};
+  var tn=panTithiNo(riseMs); out.tithiNo=tn; out.tithiEnd=panTithiEdge(riseMs,1); out.nak=panNakshatra(riseMs);
+  var part=(setMs-riseMs)/8, p=PAN_RAHU_PART[now.getDay()];
+  out.rahu=[riseMs+(p-1)*part, riseMs+p*part];
+  var dur=(setMs-riseMs)/15; out.abhi=[riseMs+7*dur, riseMs+8*dur];
+  // next Ekadashi (tithi 11 Shukla / 26 Krishna at sunrise), within the next 20 days
+  out.ekad=null;
+  for(var j=0;j<20;j++){
+    var dd=new Date(y,m,d+j), s=panSun(dd.getFullYear(),dd.getMonth(),dd.getDate(),loc.lat,loc.lon), sr=s?s.rise:new Date(dd.getFullYear(),dd.getMonth(),dd.getDate(),6,0).getTime();
+    var tt=panTithiNo(sr);
+    if(tt===11||tt===26){
+      var st=panTithiEdge(sr,-1), en=panTithiEdge(sr,1);
+      var nd=new Date(dd.getFullYear(),dd.getMonth(),dd.getDate()+1), s2=panSun(nd.getFullYear(),nd.getMonth(),nd.getDate(),loc.lat,loc.lon);
+      var sr2=s2?s2.rise:new Date(nd.getFullYear(),nd.getMonth(),nd.getDate(),6,0).getTime();
+      var dwEnd=panTithiEdge(en+60000,1), pStart=Math.max(en,sr2);
+      out.ekad={date:dd,days:j,start:st,end:en,pStart:pStart,pEnd:Math.max(dwEnd,pStart),pDay:nd,paksha:tt===26};
+      break;
+    }
+  }
+  return out;
+}
+function panRender(){
+  var box=document.getElementById("panCard"); if(!box) return;
+  var L=panL(), U=PAN_UI[L], D;
+  try{ D=panData(); }catch(e){ box.style.display="none"; return; }
+  box.style.display="";
+  var tn=calTithiName(D.tithiNo), nak=PAN_NAK[L][D.nak];
+  var rng=function(a){ return D.rise?panFmt(a[0])+" – "+panFmt(a[1]):"—"; };
+  var h='<button type="button" class="pan-head" id="panHead" aria-expanded="'+panOpen+'">'+
+    '<span class="pan-h1">🗓 <b>'+tn.paksha+' · '+tn.name+'</b></span>'+
+    '<span class="pan-h2">'+(D.rise?'🌅 '+panFmt(D.rise)+' &nbsp;·&nbsp; ':'')+'⚠ '+U.rahu+' '+(D.rise?panFmt(D.rahu[0])+'–'+panFmt(D.rahu[1]):'—')+'</span>'+
+    '<span class="pan-arr" aria-hidden="true">'+(panOpen?"▴":"▾")+'</span></button>';
+  if(panOpen){
+    h+='<div class="pan-body">'+
+      '<div class="pan-grid">'+
+        '<div><small>'+U.tithi+'</small><b>'+tn.name+'</b><em>'+tn.paksha+' · '+panFmtDay(D.tithiEnd,D.day)+' '+U.till+'</em></div>'+
+        '<div><small>'+U.nak+'</small><b>'+nak+'</b><em>&nbsp;</em></div>'+
+        '<div><small>🌅 '+U.rise+'</small><b>'+(D.rise?panFmt(D.rise):"—")+'</b></div>'+
+        '<div><small>🌇 '+U.set+'</small><b>'+(D.set?panFmt(D.set):"—")+'</b></div>'+
+        '<div class="pan-bad"><small>⚠ '+U.rahu+'</small><b>'+rng(D.rahu)+'</b></div>'+
+        '<div class="pan-good"><small>✨ '+U.abhi+'</small><b>'+rng(D.abhi)+'</b></div>'+
+      '</div>';
+    if(D.ekad){
+      var E=D.ekad, when=E.days===0?U.today:(E.days===1?U.tomorrow:calDateLabel(E.date.getFullYear(),E.date.getMonth(),E.date.getDate()));
+      h+='<div class="pan-ekad"><div class="pan-et">🌿 '+U.ekad+' — <b>'+when+'</b></div>'+
+        '<div class="pan-er">'+U.start+': <b>'+panFmtDay(E.start,E.date)+'</b></div>'+
+        '<div class="pan-er">'+U.end+': <b>'+panFmtDay(E.end,E.date)+'</b></div>'+
+        '<div class="pan-er">'+U.parana+': <b>'+panFmtDay(E.pStart,E.pDay)+' – '+panFmtDay(E.pEnd,E.pDay)+'</b></div></div>';
+    }
+    h+='<button type="button" class="pan-loc" id="panLoc">'+(panMsg||(D.loc.mine?U.locMine:U.locDef))+'</button>'+
+       '<button type="button" class="pan-cal" id="panCal">'+U.cal+'</button>'+
+       '<div class="pan-note">'+U.note+'</div></div>';
+  }
+  box.innerHTML=h;
+  document.getElementById("panHead").onclick=function(){ panOpen=!panOpen; panRender(); };
+  var lb=document.getElementById("panLoc");
+  if(lb) lb.onclick=function(){
+    if(!navigator.geolocation){ panMsg=U.locFail; panRender(); return; }
+    panMsg=U.locWait; panRender();
+    navigator.geolocation.getCurrentPosition(function(pos){
+      lsSet("krishna_loc",JSON.stringify({lat:pos.coords.latitude,lon:pos.coords.longitude})); panMsg=""; panRender();
+    },function(){ panMsg=U.locFail; panRender(); setTimeout(function(){ panMsg=""; panRender(); },3500); },{timeout:12000,maximumAge:3600000});
+  };
+  var cb=document.getElementById("panCal"); if(cb) cb.onclick=function(){ document.getElementById("menuCalBtn").click(); };
+}
+(function(){
+  var _ast=applyStaticText; applyStaticText=function(){ var r=_ast.apply(this,arguments); try{ panRender(); }catch(e){} return r; };
+  panRender();
+  document.addEventListener("visibilitychange",function(){ if(!document.hidden) panRender(); });   // new day, fresh panchang
 })();
 </script>
 <script src="connect.js"></script>
