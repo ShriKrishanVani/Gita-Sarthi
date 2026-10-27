@@ -17,7 +17,6 @@
     {id:"notes", href:"gita.html#notes",     label:T("🔖 बुकमार्क और नोट्स","🔖 Bookmarks & Notes")},
     {id:"aarti", href:"aarti.html",         label:T("🪔 आरती","🪔 Aarti")},
     {id:"japa",  href:"index.html#japa",    label:T("📿 जप काउंटर","📿 Japa Counter")},
-    {id:"med",   href:"index.html#med",     label:T("🧘 ध्यान और ॐ टाइमर","🧘 Meditation & ॐ Timer")},
     {id:"panchang",href:"panchang.html",     label:T("🗓 पंचांग","🗓 Panchang")},
     {id:"cal",   href:"index.html#cal",     label:T("📅 पर्व-तिथि कैलेंडर","📅 Festival Calendar")},
     {id:"fav",   href:"index.html#fav",     label:T("❤️ मेरे पसंदीदा","❤️ Favourites")},
