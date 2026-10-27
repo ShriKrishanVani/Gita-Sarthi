@@ -327,6 +327,50 @@ body.gsing #resumeBox,body.gsing #votd,body.gsing #groups{display:none}
 .np-empty{margin:40px 10px;text-align:center;font-size:14.5px;line-height:1.9;color:var(--muted)}
 .np-share{display:block;width:100%;margin:6px 0 0;height:44px;border-radius:22px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:14px;cursor:pointer}
 body.gsing #notesBox{display:none}
+/* ---- Daily learning path ---- */
+#pathPanel{position:fixed;inset:0;z-index:41;background:var(--bg);display:none;flex-direction:column}
+#pathPanel.show{display:flex}
+.pt-card{margin:0 0 14px;padding:16px;border-radius:22px;border:1px solid var(--line);background:var(--panel-solid);box-shadow:var(--shadow)}
+.pt-big{display:flex;align-items:baseline;justify-content:center;gap:6px;font-family:'Yatra One','Tiro Devanagari Hindi',serif;color:var(--gold)}
+.pt-big b{font-weight:400;font-size:46px;line-height:1}
+.pt-big span{font-size:18px;color:var(--muted)}
+.pt-bar{height:10px;border-radius:6px;background:var(--chip);border:1px solid var(--line);overflow:hidden;margin:12px 0 8px}
+.pt-bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--teal),var(--gold))}
+.pt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;text-align:center}
+.pt-stats div{padding:9px 4px;border-radius:14px;background:var(--gold-soft);border:1px solid var(--line)}
+.pt-stats b{display:block;font-size:20px;color:var(--text);font-weight:600;line-height:1.2}
+.pt-stats small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.pt-eta{margin-top:10px;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.6}
+.pt-h{margin:18px 2px 8px;font-size:13.5px;font-weight:600;color:var(--gold)}
+.pt-today{border-color:var(--gold);box-shadow:var(--shadow),0 0 0 4px var(--gold-soft)}
+.pt-tag{display:inline-block;padding:4px 14px;border-radius:999px;background:var(--gold);color:var(--on-gold);font-size:12.5px;font-weight:600;margin-bottom:10px}
+.pt-ref{font-size:13px;font-weight:600;color:var(--gold);margin:10px 0 6px}
+.pt-sa{font-family:'Tiro Devanagari Hindi',serif;font-size:calc(var(--fs) * 1.15);line-height:1.95;color:var(--gold);white-space:pre-line;text-align:center}
+.pt-sp{text-align:center;font-family:'Tiro Devanagari Hindi',serif;font-style:italic;font-size:14px;color:var(--teal)}
+.pt-me{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--chip);border-left:3px solid var(--gold);font-size:var(--fs);line-height:1.75;color:var(--text)}
+.pt-me.en{font-family:'Cormorant Garamond',serif;font-size:calc(var(--fs) * 1.1);border-color:var(--teal)}
+.pt-me small{display:block;font-size:12px;color:var(--muted);font-style:italic;margin-bottom:3px}
+.pt-sep{height:1px;margin:14px 0;background:linear-gradient(90deg,transparent,var(--line),transparent)}
+.pt-btn{display:block;width:100%;margin-top:12px;height:48px;border-radius:24px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:14.5px;cursor:pointer}
+.pt-btn.pri{border:0;background:linear-gradient(135deg,#F3D68A,#D9A93F);color:#2A1F05;font-weight:600;box-shadow:0 8px 20px rgba(217,169,63,.3)}
+.pt-btn.sm{height:40px;font-size:13px}
+.pt-done{text-align:center;font-size:15px;line-height:1.8;color:var(--text)}
+.pt-done b{display:block;font-size:19px;color:var(--gold);margin-bottom:4px}
+.pt-goals{display:flex;gap:8px;flex-wrap:wrap}
+.pt-goals button{flex:1;min-width:58px;height:40px;border-radius:20px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-family:inherit;font-size:13.5px;cursor:pointer}
+.pt-goals button[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold);font-weight:600}
+.pt-ch{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;margin:0 0 8px;border-radius:16px;border:1px solid var(--line);background:var(--panel-solid);cursor:pointer;text-align:left;font-family:inherit;color:var(--text)}
+.pt-ch .n{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gold-soft);border:1px solid var(--line);font-family:'Tiro Devanagari Hindi',serif;font-size:15px;color:var(--gold)}
+.pt-ch.cur{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.pt-ch.full .n{background:var(--gold);color:var(--on-gold)}
+.pt-ch .m{flex:1;min-width:0}
+.pt-ch .t{display:block;font-family:'Tiro Devanagari Hindi',serif;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt-ch .b{display:block;height:6px;border-radius:4px;background:var(--chip);margin-top:6px;overflow:hidden}
+.pt-ch .b i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold))}
+.pt-ch .c{flex-shrink:0;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pt-reset{display:block;margin:18px auto 0;background:none;border:0;color:var(--muted);font-family:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer}
+body.gsing #pathBox{display:none}
+
 </style></head><body class="onlist">
 
 <div id="prog"></div>
@@ -362,6 +406,7 @@ body.gsing #notesBox{display:none}
           <div class="gs-chips" id="gsChips"></div>
           <div id="gsResults" aria-live="polite"></div>
         </div>
+        <div id="pathBox"></div>
         <div id="notesBox"></div>
         <div id="resumeBox"></div>
         <div id="votd"></div>
@@ -399,6 +444,13 @@ body.gsing #notesBox{display:none}
     <p class="credit" id="credit2"></p>
   </section>
 </main>
+<div id="pathPanel" role="dialog" aria-modal="true" aria-labelledby="ptTitle">
+  <div class="np-head">
+    <button class="icon-btn" id="ptBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <h2 id="ptTitle"></h2>
+  </div>
+  <div class="np-body" id="ptBody"></div>
+</div>
 <div id="notesPanel" role="dialog" aria-modal="true" aria-labelledby="npTitle">
   <div class="np-head">
     <button class="icon-btn" id="npBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
@@ -431,6 +483,12 @@ var UI = {
        chapter:"अध्याय", verses:"श्लोक", hiBtn:"हिंदी", enBtn:"English", prev:"पिछला अध्याय", next:"अगला अध्याय",
        sumLbl:"इस अध्याय का सार", hiLbl:"हिंदी अर्थ", enLbl:"English meaning", copy:"कॉपी", share:"शेयर",
        copied:"कॉपी हो गया", jump:"श्लोक पर जाएँ",
+       pTitle:"गीता पाठ पथ", pEntry:"🛤 गीता पाठ पथ", pEntrySub:"{n} / {t} श्लोक पूरे · {s} दिन की लगातार साधना", pEntryNew:"रोज़ 1 श्लोक पढ़ें, पूरी गीता पूरी करें",
+       pRead:"श्लोक पूरे", pStreak:"दिन लगातार", pLeft:"श्लोक बाकी", pEta:"इसी गति से गीता पूरी होगी: {d}", pToday:"आज का पाठ",
+       pMark:"✓ आज का पाठ पूरा हुआ", pOpen:"अध्याय में खोलें", pDoneT:"आज का पाठ पूरा हुआ 🙏", pDoneS:"कल नया श्लोक मिलेगा। जय श्री कृष्ण!", pMore:"एक और श्लोक पढ़ें",
+       pGoal:"रोज़ कितने श्लोक?", pGoalU:"{n} श्लोक", pCh:"अध्यायवार प्रगति", pChTip:"किसी अध्याय पर दबाकर वहाँ से शुरू करें",
+       pFrom:"अध्याय {c} से शुरू करें? अभी की प्रगति वहीं से गिनी जाएगी।", pUndo:"↩ पिछला पाठ वापस करें", pReset:"शुरू से फिर शुरू करें", pResetAsk:"पूरी प्रगति मिटाकर शुरू से शुरू करें?",
+       pEnd:"🎉 आपने पूरी गीता पढ़ ली!", pEndS:"श्री कृष्ण की कृपा बनी रहे। चाहें तो फिर से शुरू करें।", pDone:"पूरा", pSaved:"पाठ दर्ज हो गया",
        nBm:"बुकमार्क", nBmOn:"बुकमार्क किया", nHl:"रंग", nNote:"नोट", nMy:"✏️ मेरा नोट", nPh:"इस श्लोक पर अपना विचार लिखें…", nSave:"सहेजें", nCancel:"रद्द करें", nDel:"हटाएँ",
        nSaved:"नोट सहेज लिया", nDeleted:"नोट हटाया", nBmAdded:"बुकमार्क जुड़ गया", nBmGone:"बुकमार्क हटाया",
        nTitle:"मेरे बुकमार्क और नोट्स", nEntry:"🔖 मेरे बुकमार्क और नोट्स", nEntrySub:"{n} श्लोक सहेजे गए", nEntryNone:"श्लोक पर 🔖, रंग या नोट जोड़ें",
@@ -447,6 +505,12 @@ var UI = {
        chapter:"Chapter", verses:"verses", hiBtn:"Hindi", enBtn:"English", prev:"Previous chapter", next:"Next chapter",
        sumLbl:"Summary of this chapter", hiLbl:"हिंदी अर्थ", enLbl:"English meaning", copy:"Copy", share:"Share",
        copied:"Copied", jump:"Jump to verse",
+       pTitle:"Gita reading path", pEntry:"🛤 Gita reading path", pEntrySub:"{n} / {t} verses read · {s}-day streak", pEntryNew:"Read 1 verse a day and finish the whole Gita",
+       pRead:"verses read", pStreak:"day streak", pLeft:"verses left", pEta:"At this pace you will finish on {d}", pToday:"Today's reading",
+       pMark:"✓ Mark today's reading done", pOpen:"Open in chapter", pDoneT:"Today's reading is done 🙏", pDoneS:"A new verse awaits you tomorrow. Jai Shri Krishna!", pMore:"Read one more verse",
+       pGoal:"Verses per day", pGoalU:"{n} / day", pCh:"Progress by chapter", pChTip:"Tap a chapter to continue from there",
+       pFrom:"Start from chapter {c}? Your progress will count from there.", pUndo:"↩ Undo last reading", pReset:"Start over", pResetAsk:"Erase all progress and start from the beginning?",
+       pEnd:"🎉 You have read the whole Gita!", pEndS:"May Shri Krishna's grace stay with you. You can start again anytime.", pDone:"done", pSaved:"Reading saved",
        nBm:"Bookmark", nBmOn:"Bookmarked", nHl:"Colour", nNote:"Note", nMy:"✏️ My note", nPh:"Write your thoughts on this verse…", nSave:"Save", nCancel:"Cancel", nDel:"Delete",
        nSaved:"Note saved", nDeleted:"Note deleted", nBmAdded:"Bookmarked", nBmGone:"Bookmark removed",
        nTitle:"My bookmarks & notes", nEntry:"🔖 My bookmarks & notes", nEntrySub:"{n} verses saved", nEntryNone:"Add a 🔖, colour or note on any verse",
@@ -503,6 +567,7 @@ function renderList(){
   var nn = nCount();
   $("notesBox").innerHTML = '<button class="notes-entry" id="notesEntry"><span class="rl"><strong>'+esc(T("nEntry"))+'</strong><small>'+esc(nn ? fill(T("nEntrySub"),{n:dv(nn)}) : T("nEntryNone"))+'</small></span>'+CHEV+'</button>';
   $("notesEntry").onclick = openNotes;
+  pathEntryRender();
   var last = parseInt(lsGet("gita_last"),10);
   $("resumeBox").innerHTML = (last>=1 && last<=18)
     ? '<button class="resume" data-n="'+last+'"><span class="rl"><small>'+esc(T("cont"))+'</small><strong>'+esc(T("chapter"))+' '+dv(last)+' · '+esc(GITA[last-1].sa)+'</strong></span>'+CHEV+'</button>' : '';
@@ -600,6 +665,7 @@ function renderChapter(n){
 function setHash(n,v){ return n ? "#c=" + n + (v ? "&v=" + v : "") : ""; }
 function go(n, v, push){
   if(typeof notesHide === "function") notesHide();
+  if(typeof pathHide === "function") pathHide();
   cur = n;
   if(n){
     document.body.classList.remove("onlist");
@@ -658,6 +724,121 @@ function notesAct(btn){
   else if(act === "del"){ nSet(c,n,{n:""}); refreshVerse(c,n); toast(T("nDeleted")); }
 }
 
+
+/* ================= Daily learning path =================
+ * Read the Gita one verse a day, in order. Progress is stored on the phone:
+ * gita_path = { idx: verses finished, goal: verses per day, days: {"2026-10-27": count}, last: last batch size }
+ * Missed days never break the order: tomorrow simply continues from the next unread verse. */
+var PATH = (function(){
+  var o={}; try{ o=JSON.parse(lsGet("gita_path")||"{}")||{}; }catch(e){ o={}; }
+  if(typeof o!=="object"||Array.isArray(o)) o={};
+  o.idx=Math.max(0,parseInt(o.idx,10)||0); o.goal=[1,2,3,5].indexOf(o.goal)>-1?o.goal:1;
+  if(!o.days||typeof o.days!=="object") o.days={}; o.last=parseInt(o.last,10)||0; return o;
+})();
+var FLAT=null, OFFS=null, pathExtra=false;
+function pathFlat(){
+  if(FLAT) return FLAT;
+  FLAT=[]; OFFS=[];
+  GITA.forEach(function(ch){ OFFS.push(FLAT.length); ch.v.forEach(function(x){ FLAT.push({c:ch.n,x:x}); }); });
+  return FLAT;
+}
+function pathSave(){ lsSet("gita_path",JSON.stringify(PATH)); }
+function pDK(d){ function p(n){return n<10?"0"+n:""+n;} return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
+function pathTodayKey(){ return pDK(new Date()); }
+function pathStreak(){
+  var d=new Date(); d=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  function has(x){ return (PATH.days[pDK(x)]||0)>0; }
+  if(!has(d)) d.setDate(d.getDate()-1);
+  var n=0; while(has(d)){ n++; d.setDate(d.getDate()-1); } return n;
+}
+function pathMeaning(c,x){          // text to read; verses that share a meaning point to the first verse of the group
+  var from = x.at ? getV(c,x.at) : x;
+  return {txt: lang==="hi" ? (from.hi||"") : (from.en||""), grp: x.at ? {a:x.at,b:from.to} : (x.to ? {a:x.n,b:x.to} : null)};
+}
+function pathEntryRender(){
+  var t=pathFlat().length, n=Math.min(PATH.idx,t), st=pathStreak();
+  $("pathBox").innerHTML = '<button class="notes-entry" id="pathEntry"><span class="rl"><strong>'+esc(T("pEntry"))+'</strong><small>'+esc(n>0 ? fill(T("pEntrySub"),{n:dv(n),t:dv(t),s:dv(st)}) : T("pEntryNew"))+'</small></span>'+CHEV+'</button>';
+  $("pathEntry").onclick=openPath;
+}
+function pathVerseHtml(c,x){
+  var m=pathMeaning(c,x), h='<div class="pt-ref">'+esc(T("chapter"))+' '+dv(c)+' · '+esc(T("verses"))+' '+dv(x.n)+'</div>';
+  if(x.sp) h+='<div class="pt-sp">'+esc(x.sp)+'</div>';
+  h+='<div class="pt-sa">'+esc(x.sa)+'</div>';
+  if(m.txt){
+    h+='<div class="pt-me'+(lang==="en"?' en':'')+'">'+(m.grp?'<small>'+esc(fill(T("together"),{a:dv(m.grp.a),b:dv(m.grp.b)}))+'</small>':'')+esc(m.txt)+'</div>';
+  }
+  return h;
+}
+function pathRender(){
+  var F=pathFlat(), total=F.length, idx=Math.min(PATH.idx,total), tk=pathTodayKey(), doneToday=PATH.days[tk]||0, goal=PATH.goal;
+  var pct=Math.round(idx/total*100), st=pathStreak(), left=total-idx, finished=idx>=total;
+  $("ptTitle").textContent=T("pTitle");
+  var h='<div class="pt-card"><div class="pt-big"><b>'+dv(idx)+'</b><span>/ '+dv(total)+'</span></div>'+
+    '<div class="pt-bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+idx+'"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="pt-stats"><div><b>'+dv(pct)+'%</b><small>'+esc(T("pRead"))+'</small></div><div><b>🔥 '+dv(st)+'</b><small>'+esc(T("pStreak"))+'</small></div><div><b>'+dv(left)+'</b><small>'+esc(T("pLeft"))+'</small></div></div>';
+  if(!finished){
+    var days=Math.ceil(left/goal)+(doneToday>=goal?1:0), eta=new Date(); eta=new Date(eta.getFullYear(),eta.getMonth(),eta.getDate()+days-1);
+    h+='<div class="pt-eta">'+esc(fill(T("pEta"),{d:eta.getDate()+" "+CAL_MONTHS_P[lang][eta.getMonth()]+" "+eta.getFullYear()}))+'</div>';
+  }
+  h+='</div>';
+  if(finished){
+    h+='<div class="pt-card pt-today"><div class="pt-done"><b>'+esc(T("pEnd"))+'</b>'+esc(T("pEndS"))+'</div></div>';
+  } else if(doneToday>=goal && !pathExtra){
+    h+='<div class="pt-card pt-today"><div class="pt-done"><b>'+esc(T("pDoneT"))+'</b>'+esc(T("pDoneS"))+'</div>'+
+       '<button class="pt-btn sm" data-pact="more">'+esc(T("pMore"))+'</button></div>';
+  } else {
+    var k=(doneToday>=goal) ? 1 : Math.min(goal-doneToday,left), shown=F.slice(idx,idx+k);
+    h+='<div class="pt-card pt-today"><span class="pt-tag">'+esc(T("pToday"))+((goal>1 && doneToday<goal)?' · '+dv(doneToday)+'/'+dv(goal):'')+'</span>'+
+      shown.map(function(o){ return pathVerseHtml(o.c,o.x); }).join('<div class="pt-sep"></div>')+
+      '<button class="pt-btn pri" data-pact="done" data-k="'+k+'">'+esc(T("pMark"))+'</button>'+
+      '<button class="pt-btn sm" data-n="'+shown[0].c+'" data-v="'+shown[0].x.n+'">'+esc(T("pOpen"))+'</button></div>';
+  }
+  if(PATH.last>0 && doneToday>=PATH.last) h+='<button class="pt-btn sm" data-pact="undo">'+esc(T("pUndo"))+'</button>';
+  h+='<div class="pt-h">'+esc(T("pGoal"))+'</div><div class="pt-goals">'+[1,2,3,5].map(function(g){ return '<button data-pact="goal" data-g="'+g+'" aria-pressed="'+(goal===g)+'">'+esc(fill(T("pGoalU"),{n:dv(g)}))+'</button>'; }).join("")+'</div>';
+  h+='<div class="pt-h">'+esc(T("pCh"))+'</div><div class="np-empty" style="margin:0 2px 10px;text-align:left;font-size:12.5px">'+esc(T("pChTip"))+'</div>';
+  GITA.forEach(function(ch,i){
+    var cnt=Math.max(0,Math.min(ch.v.length,idx-OFFS[i])), cur=(idx>=OFFS[i] && idx<OFFS[i]+ch.v.length && !finished), full=cnt>=ch.v.length;
+    h+='<button class="pt-ch'+(cur?' cur':'')+(full?' full':'')+'" data-pact="from" data-c="'+ch.n+'"><span class="n">'+dvAlways(ch.n)+'</span>'+
+      '<span class="m"><span class="t">'+esc(chTitle(ch))+'</span><span class="b"><i style="width:'+Math.round(cnt/ch.v.length*100)+'%"></i></span></span>'+
+      '<span class="c">'+(full?'✓':dv(cnt)+'/'+dv(ch.v.length))+'</span></button>';
+  });
+  h+='<button class="pt-reset" data-pact="reset">'+esc(T("pReset"))+'</button>';
+  var top=$("ptBody").scrollTop; $("ptBody").innerHTML=h; $("ptBody").scrollTop=top;
+}
+var CAL_MONTHS_P={hi:["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"],en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
+function pathAct(btn){
+  var act=btn.getAttribute("data-pact"), total=pathFlat().length, tk=pathTodayKey();
+  if(act==="done"){
+    var k=parseInt(btn.getAttribute("data-k"),10)||1;
+    PATH.idx=Math.min(total,PATH.idx+k); PATH.days[tk]=(PATH.days[tk]||0)+k; PATH.last=k; pathExtra=false; pathSave(); pathRender(); toast(T("pSaved"));
+    $("ptBody").scrollTop=0;
+  } else if(act==="more"){
+    pathExtra=true; pathRender(); $("ptBody").scrollTop=0;
+  } else if(act==="undo"){
+    var u=Math.min(PATH.last,PATH.idx); PATH.idx-=u; PATH.days[tk]=Math.max(0,(PATH.days[tk]||0)-u); if(!PATH.days[tk]) delete PATH.days[tk]; PATH.last=0; pathSave(); pathRender();
+  } else if(act==="goal"){
+    PATH.goal=parseInt(btn.getAttribute("data-g"),10)||1; pathSave(); pathRender();
+  } else if(act==="from"){
+    var c=parseInt(btn.getAttribute("data-c"),10);
+    if(confirm(fill(T("pFrom"),{c:dv(c)}))){ PATH.idx=OFFS[c-1]; PATH.last=0; pathSave(); pathRender(); $("ptBody").scrollTop=0; }
+  } else if(act==="reset"){
+    if(confirm(T("pResetAsk"))){ PATH.idx=0; PATH.days={}; PATH.last=0; pathSave(); pathRender(); }
+  }
+}
+var pathOpen=false;
+function openPath(){
+  pathExtra=false; pathRender(); $("pathPanel").classList.add("show"); pathOpen=true; $("ptBody").scrollTop=0;
+  try{ history.pushState({path:1}, ""); }catch(e){}
+}
+function pathHide(){ if(!pathOpen) return; pathOpen=false; $("pathPanel").classList.remove("show"); }
+function closePath(){
+  if(!pathOpen) return;
+  pathHide();
+  if(history.state && history.state.path){ try{ history.back(); }catch(e){} }
+  if(!cur) renderList();
+}
+$("ptBack").addEventListener("click", closePath);
+
 /* ---- "My bookmarks & notes" screen ---- */
 var notesFilter = "all", notesOpen = false;
 function notesList(){
@@ -710,6 +891,7 @@ $("npBody").addEventListener("click", function(e){
 
 document.addEventListener("click",function(e){
   var nb = e.target.closest("[data-nact]"); if(nb){ notesAct(nb); return; }
+  var pb = e.target.closest("[data-pact]"); if(pb){ pathAct(pb); return; }
   var b = e.target.closest("[data-n]");
   if(b){ var v = b.getAttribute("data-v"); go(parseInt(b.getAttribute("data-n"),10), v ? parseInt(v,10) : 0, true); return; }
   var a = e.target.closest("[data-act]");
@@ -734,10 +916,14 @@ function fromHash(){
   return n>=1 && n<=18 ? [n, m[2] ? parseInt(m[2],10) : 0] : [0,0];
 }
 window.addEventListener("popstate",function(){
+  if(pathOpen){ pathHide(); if(!cur) renderList(); return; }
   if(notesOpen){ notesHide(); if(!cur) renderList(); return; }
   var h = fromHash(); go(h[0], h[1], false);
 });
-window.addEventListener("hashchange",function(){ if(location.hash === "#notes"){ if(!notesOpen) openNotes(); } });
+window.addEventListener("hashchange",function(){
+  if(location.hash === "#notes"){ if(!notesOpen) openNotes(); }
+  else if(location.hash === "#path"){ if(!pathOpen) openPath(); }
+});
 
 /* ================= Gita search: by word or by feeling =================
  * Type a word (Hindi / English / Sanskrit) or a feeling ("डर", "क्रोध", "gussa", "anxiety").
@@ -907,6 +1093,7 @@ document.documentElement.style.setProperty("--hero-img", 'url("' + $("heroImg").
 applyTheme(); applyFont();
 var h0 = fromHash(); go(h0[0], h0[1], false);
 if(location.hash === "#notes") openNotes();
+else if(location.hash === "#path") openPath();
 })();
 </script>
 <script src="menu.js" defer></script>
