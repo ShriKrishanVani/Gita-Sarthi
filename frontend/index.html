@@ -1381,9 +1381,8 @@ function addHeartBtn(bubble,text,verse){
   hb.onclick=function(){ favToggle(text,verse); refreshHearts(); };
   bubble.appendChild(hb);
 }
-function addActionBtns(bubble,text,verse){     // heart + share under an answer
-  addHeartBtn(bubble,text,verse);
-  addShareBtn(bubble,text,verse);
+function addActionBtns(bubble,text,verse){     // heart + share buttons removed from chat messages
+  /* intentionally empty: no like/share buttons under answers */
 }
 
 var favPanel=document.getElementById("favPanel");
